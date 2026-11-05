@@ -1,0 +1,196 @@
+---
+// Every screen of a project, grouped, with a full-size viewer. Images decrypt in the private view like any Shot.
+// `phone` shows each screen in a device frame, all groups on one horizontally scrolling strip with jump chips.
+import Phone from "./Phone.astro";
+interface Group { title: string; ids: string[]; short?: string; }
+interface Props { slug: string; groups: Group[]; tall?: boolean; phone?: boolean; bars?: Record<string, string>; label?: string; }
+const { slug, groups, tall = false, phone = false, bars = {}, label = "Screens" } = Astro.props;
+const data = (await import(`../data/${slug}.json`)).default;
+let n = 0;
+---
+<div class:list={["gallery", { tall, phones: phone }]} data-gallery>
+  {phone && (
+    <div class="pbar">
+      <div class="jump" role="group" aria-label={`Jump to a group: ${label}`}>
+        {groups.map((g, k) => <button type="button" class="chip" data-jump={k} aria-pressed={k === 0 ? "true" : "false"}>{g.short ?? g.title}</button>)}
+      </div>
+      <div class="pnav">
+        <button type="button" class="chip" data-step="-1" aria-label="Scroll back">←</button>
+        <button type="button" class="chip" data-step="1" aria-label="Scroll forward">→</button>
+      </div>
+    </div>
+  )}
+  <div class="groups" role={phone ? "region" : undefined} aria-label={phone ? label : undefined}>
+  {groups.map(g => (
+    <section class="ggroup">
+      <h3 class="mono">{g.title} <span>{g.ids.length}</span></h3>
+      <ul>
+        {g.ids.map(id => {
+          const img = data.images[id];
+          const locked = img.public !== "clear";
+          return (
+            <li>
+              <button type="button" class="thumb" data-idx={n++} aria-label={`Open: ${img.alt}`}>
+                {phone
+                  ? <Phone slug={slug} id={id} bar={bars[id]} bare />
+                  : <img src={`/img/${slug}/${id}.webp`} width={img.w} height={img.h} alt="" loading="lazy" decoding="async" data-vault={locked ? `${slug}/${id}` : undefined} />}
+                <span class="cap">{img.alt}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  ))}
+  </div>
+  <dialog class="lb" aria-label="Screen viewer">
+    <div class="lb-top">
+      <p class="lb-cap"></p>
+      <span class="mono lb-count"></span>
+      <button type="button" class="lb-btn" data-lb="close" aria-label="Close viewer">✕</button>
+    </div>
+    <div class="lb-stage"><img alt="" /></div>
+    <button type="button" class="lb-btn lb-nav prev" data-lb="prev" aria-label="Previous screen">←</button>
+    <button type="button" class="lb-btn lb-nav next" data-lb="next" aria-label="Next screen">→</button>
+  </dialog>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-gallery]").forEach(g => {
+    const thumbs = [...g.querySelectorAll<HTMLButtonElement>(".thumb")];
+    const dlg = g.querySelector<HTMLDialogElement>(".lb")!;
+    const img = dlg.querySelector<HTMLImageElement>(".lb-stage img")!;
+    const stage = dlg.querySelector<HTMLElement>(".lb-stage")!;
+    const cap = dlg.querySelector<HTMLElement>(".lb-cap")!;
+    const count = dlg.querySelector<HTMLElement>(".lb-count")!;
+    let i = 0, opener: HTMLElement | null = null;
+    const show = (k: number) => {
+      i = (k + thumbs.length) % thumbs.length;
+      const t = thumbs[i], src = t.querySelector("img")!;
+      img.src = src.currentSrc || src.src;
+      img.alt = t.querySelector(".cap")!.textContent ?? "";
+      cap.textContent = img.alt;
+      count.textContent = `${i + 1} / ${thumbs.length}`;
+      dlg.classList.toggle("blurred", !document.documentElement.classList.contains("private"));
+      stage.scrollTop = 0;
+    };
+    thumbs.forEach((t, k) => t.addEventListener("click", () => { opener = t; show(k); dlg.showModal(); }));
+    dlg.addEventListener("click", e => {
+      const a = (e.target as HTMLElement).closest<HTMLElement>("[data-lb]")?.dataset.lb;
+      if (a === "close") dlg.close();
+      else if (a === "prev") show(i - 1);
+      else if (a === "next") show(i + 1);
+      else if (e.target === dlg) dlg.close();
+    });
+    dlg.addEventListener("keydown", e => {
+      if (e.key === "ArrowRight") { e.preventDefault(); show(i + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); }
+    });
+    dlg.addEventListener("close", () => opener?.focus());
+
+    // Phone strip: jump chips follow the scroll position; arrows page through.
+    const strip = g.querySelector<HTMLElement>(".phones .groups");
+    if (!strip) return;
+    const secs = [...strip.querySelectorAll<HTMLElement>(".ggroup")];
+    const chips = [...g.querySelectorAll<HTMLButtonElement>("[data-jump]")];
+    const behavior = () => (matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth") as ScrollBehavior;
+    const pad = () => parseFloat(getComputedStyle(strip).scrollPaddingInlineStart) || 0;
+    chips.forEach(c => c.addEventListener("click", () => {
+      strip.scrollTo({ left: secs[+c.dataset.jump!].offsetLeft - pad(), behavior: behavior() });
+    }));
+    g.querySelectorAll<HTMLButtonElement>("[data-step]").forEach(b => b.addEventListener("click", () => {
+      strip.scrollBy({ left: +b.dataset.step! * strip.clientWidth * 0.8, behavior: behavior() });
+    }));
+    let raf = 0;
+    const sync = () => {
+      raf = 0;
+      const x = strip.scrollLeft + pad() + 24;
+      let k = 0;
+      secs.forEach((s, j) => { if (s.offsetLeft <= x) k = j; });
+      if (strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 4) k = secs.length - 1;
+      chips.forEach((c, j) => {
+        const on = j === k;
+        if (on && c.getAttribute("aria-pressed") !== "true") c.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "auto" });
+        c.setAttribute("aria-pressed", String(on));
+      });
+    };
+    strip.addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(sync); }, { passive: true });
+  });
+</script>
+
+<style>
+  .gallery { display: grid; gap: 40px; margin-top: 40px; }
+  .ggroup h3 { margin-bottom: 14px; display: flex; gap: 8px; align-items: center; letter-spacing: .02em; }
+  .ggroup h3 span { background: var(--surface-2); color: var(--ink-2); border-radius: 999px; padding: 1px 8px; font-size: 11px; }
+  .ggroup ul { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .thumb { all: unset; cursor: zoom-in; display: grid; gap: 8px; width: 100%; }
+  .thumb img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-radius: var(--r-md); border: 1px solid var(--line); background: var(--surface); transition: transform var(--t-panel) var(--ease), box-shadow var(--t-panel); }
+  .thumb:hover img, .thumb:focus-visible img { transform: translateY(-3px); box-shadow: 0 16px 32px -20px rgba(15,16,18,.4); }
+  .thumb:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: var(--r-md); }
+  .cap { font-size: 14px; color: var(--ink-2); }
+  .tall ul { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+  .tall .thumb img { aspect-ratio: 3 / 5; }
+  .tall .lb-stage { padding-inline: max(64px, calc(50% - 300px)); }
+
+  .lb { width: min(1280px, 100vw - 32px); max-width: none; height: min(92dvh, 960px); padding: 0; border: 0; border-radius: var(--r-lg); background: var(--ink); color: var(--bg); overflow: hidden; }
+  .lb[open] { display: grid; grid-template-rows: auto 1fr; animation: lbIn .3s var(--ease); }
+  .lb::backdrop { background: rgba(15,16,18,.72); backdrop-filter: blur(6px); }
+  @keyframes lbIn { from { opacity: 0; transform: scale(.97); } }
+  .lb-top { display: flex; align-items: center; gap: 12px; padding: 14px 16px 14px 20px; }
+  .lb-cap { flex: 1; margin: 0; font-weight: 500; }
+  .lb-count { color: inherit; opacity: .6; }
+  .lb-stage { overflow: auto; padding: 0 64px 24px; }
+  .lb-stage img { width: 100%; height: auto; border-radius: var(--r-md); background: #fff; }
+  .lb.blurred .lb-stage img { filter: none; }
+  .lb-btn { border: 0; background: rgba(255,255,255,.12); color: inherit; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 16px; transition: background var(--t-micro); }
+  .lb-btn:hover { background: rgba(255,255,255,.24); }
+  .lb-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .lb-nav { position: absolute; top: 50%; transform: translateY(-50%); }
+  .lb-nav.prev { left: 12px; } .lb-nav.next { right: 12px; }
+  @media (max-width: 820px) {
+    .ggroup ul { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .lb { width: 100vw; height: 100dvh; border-radius: 0; }
+    .lb-stage { padding: 0 12px 72px; }
+    .lb-nav { top: auto; bottom: 16px; transform: none; width: 48px; height: 48px; }
+    .cap { font-size: 13px; }
+  }
+  .groups { display: contents; }
+
+  /* Phone mode: one strip, full-bleed, first phone aligned with the text column */
+  .phones { --edge: max(var(--gutter), calc(50vw - var(--wrap) / 2 + var(--gutter))); gap: 20px; grid-template-columns: minmax(0, 1fr); }
+  .phones > * { min-width: 0; }
+  .pbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+  .jump { display: flex; gap: 6px; flex-wrap: wrap; }
+  .pnav { display: flex; gap: 6px; flex: none; }
+  .pnav .chip { font-size: 14px; width: 40px; height: 36px; justify-content: center; }
+  .phones .groups {
+    position: relative; display: flex; gap: 48px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity;
+    margin-inline: calc(50% - 50vw); padding: 6px var(--edge) 28px; scroll-padding-inline: var(--edge);
+    scrollbar-width: thin; scrollbar-color: var(--line-strong) transparent;
+  }
+  .phones .ggroup { flex: none; }
+  .phones .ggroup h3 { position: sticky; left: 0; width: max-content; max-width: calc(100vw - 2 * var(--gutter)); }
+  .phones .ggroup ul { display: flex; gap: 28px; padding-left: 6px; }
+  .phones .ggroup li { flex: none; width: 236px; scroll-snap-align: start; }
+  .phones .thumb { gap: 14px; padding: 6px 0; }
+  .phones .thumb :global(.pmock) { transition: transform var(--t-panel) var(--ease); }
+  .phones .thumb:hover :global(.pmock), .phones .thumb:focus-visible :global(.pmock) { transform: translateY(-6px); }
+  .phones .thumb:focus-visible { border-radius: 40px; }
+  .phones .cap { font-size: 13px; line-height: 1.4; }
+  .phones .lb { width: min(720px, 100vw - 32px); }
+  .phones .lb-stage { display: grid; place-items: start center; padding: 0 64px 24px; }
+  .phones .lb-stage img { width: auto; max-width: 100%; height: auto; max-height: calc(min(92dvh, 960px) - 96px); border-radius: 28px; }
+  @media (max-width: 820px) {
+    .pbar { flex-direction: column; align-items: stretch; }
+    .jump { flex-wrap: nowrap; overflow-x: auto; margin-inline: calc(-1 * var(--gutter)); padding: 2px var(--gutter) 6px; scrollbar-width: none; }
+    .jump .chip { flex: none; }
+    .pnav { display: none; }
+    .phones .groups { gap: 32px; }
+    .phones .ggroup ul { gap: 18px; }
+    .phones .ggroup li { width: 196px; }
+    .phones .lb { width: 100vw; }
+    .phones .lb-stage { padding: 0 12px 72px; }
+    .phones .lb-stage img { max-height: calc(100dvh - 150px); border-radius: 22px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lb[open] { animation: none; } .phones .thumb:hover :global(.pmock) { transform: none; } }
+</style>

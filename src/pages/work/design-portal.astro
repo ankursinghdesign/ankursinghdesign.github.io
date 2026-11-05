@@ -1,0 +1,629 @@
+---
+import Base from "../../layouts/Base.astro";
+import Shot from "../../components/Shot.astro";
+import P from "../../components/P.astro";
+import Gallery from "../../components/Gallery.astro";
+import Demo from "../../components/Demo.astro";
+import Phone from "../../components/Phone.astro";
+
+const S = "portal";
+const people = [
+  { id: "des", label: "Designer", x: 10, y: 22, ax: 8, ay: 50 },
+  { id: "am", label: "Account manager", x: 46, y: 10, ax: 30, ay: 50 },
+  { id: "head", label: "Design head", x: 84, y: 24, ax: 52, ay: 50 },
+  { id: "buyer", label: "Retailer buyer", x: 18, y: 80, ax: 74, ay: 50 },
+  { id: "lic", label: "Licensor", x: 74, y: 84, ax: 94, ay: 50 },
+];
+const messy = [
+  ["des", "am", "WhatsApp"], ["am", "head", "Phone"], ["am", "buyer", "Email"], ["buyer", "des", "Email"],
+  ["head", "des", "In person"], ["buyer", "lic", "Email"], ["lic", "am", "Spreadsheet"], ["des", "lic", "Phone"],
+];
+const pos = Object.fromEntries(people.map(p => [p.id, p]));
+const stages = [
+  { name: "To Do", note: "Brief arrives" },
+  { name: "In Progress", note: "The one manual move" },
+  { name: "In Selection", note: "Board shared with the retailer" },
+  { name: "Complete", note: "Selection locked, or every design rejected" },
+];
+const lane = ["Awaiting CADs", "PLM pending", "Submitted", "Approved"];
+// Phone screens, captured at 390 × 844, in the app's navigation order (same grouping as the desktop gallery)
+const phoneGroups = [
+  { title: "Sign in and access", short: "Sign in", ids: ["m-login", "m-redirecting", "m-session-error", "m-offline", "m-access-refused"] },
+  { title: "Menu 1 · Project Board", short: "Project Board", ids: ["m-board-table", "m-board-kanban", "m-board-gantt"] },
+  { title: "Project Board › Inside a brief", short: "Inside a brief", ids: ["m-brief", "m-brief-approved", "m-brief-partial", "m-brief-rejected", "m-brief-resubmitted"] },
+  { title: "Menu 2 · Team Capacity", short: "Team Capacity", ids: ["m-capacity"] },
+  { title: "Menu 3 · Design Library", short: "Design Library", ids: ["m-library", "m-item-detail"] },
+  { title: "Menu 4 · Trends", short: "Trends", ids: ["m-trends", "m-trends-filters", "m-trends-detail", "m-trends-boards", "m-trends-board-new", "m-trends-board", "m-trends-board-empty", "m-trends-add", "m-trends-uploads", "m-upload", "m-upload-extract", "m-upload-review", "m-upload-details", "m-upload-done"] },
+  { title: "Menu 5 · Visualisation", short: "Visualisation", ids: ["m-visualisation"] },
+  { title: "Menu 6 · Apparel Blanks", short: "Apparel Blanks", ids: ["m-blanks"] },
+  { title: "Menu 7 · Insights", short: "Insights", ids: ["m-insights", "m-coming-soon"] },
+  { title: "Menu 8 · Settings", short: "Settings", ids: ["m-settings"] },
+  { title: "Account menu · Notifications", short: "Notifications", ids: ["m-notifications"] },
+  { title: "Retailer portal › Received projects", short: "Retailer projects", ids: ["m-r-home", "m-r-library"] },
+  { title: "Retailer portal › Responses and notifications", short: "Retailer responses", ids: ["m-r-responses", "m-r-notifications"] },
+];
+// Voice-to-brief failure states as the phone bottom sheet (vsp-*), same groups as the desktop drawer captures (vs-*)
+const voicePhoneGroups = [
+  { title: "A · Starting and the microphone", short: "A · Starting", ids: ["A1", "A2", "A3", "A4", "A5", "A6", "A7"] },
+  { title: "B · While recording", short: "B · Recording", ids: ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8"] },
+  { title: "C · Connection and service", short: "C · Connection", ids: ["C1", "C2", "C3", "C4", "C5", "C6", "C7"] },
+  { title: "D · Leaving and coming back", short: "D · Leaving", ids: ["D1", "D2", "D3", "D4"] },
+  { title: "E · Understanding what was said", short: "E · Understanding", ids: ["E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9"] },
+  { title: "F · Review and access", short: "F · Review", ids: ["F1", "F2"] },
+].map(g => ({ ...g, ids: g.ids.map(k => `vsp-${k}`) }));
+// The sheet sits over the dimmed app, so the status bar takes the scrim colour
+const voiceBars = Object.fromEntries(voicePhoneGroups.flatMap(g => g.ids).map(id => [id, "#92949B"]));
+const phoneCount = phoneGroups.reduce((n, g) => n + g.ids.length, 0);
+// Status bar colour = the top row of each screen, so the bar reads as part of the app
+const phoneBars = {
+  "m-login": "#F9F9FB", "m-redirecting": "#F9F9FB", "m-session-error": "#F9F9FB", "m-offline": "#F9F9FB", "m-trends-filters": "#F9F9FB",
+  "m-trends-add": "#FFFFFF", "m-trends-board-new": "#FFFFFF", "m-trends-detail": "#FFFFFF", "m-upload-details": "#92949C",
+};
+---
+<Base title="Design approvals portal · Ankur Singh" description="Case study: replacing a design-approval lifecycle run over WhatsApp, email and phone with one portal and a design system built from scratch.">
+  <article>
+    <header class="hero wrap">
+      <p class="mono reveal"><a href="/">Work</a> / 01 · B2B platform · Design system · Live</p>
+      <h1 class="reveal">From scattered approvals to one pipeline.</h1>
+      <p class="lede reveal">
+        My client, <P slug={S} field="client" />, ran its whole design-approval lifecycle over phone calls, WhatsApp, email and conversations.
+        I designed the portal that replaced it: around 40 screens across two connected portals, built on a design system I created from scratch.
+      </p>
+      <dl class="meta reveal">
+        <div><dt class="mono">Client</dt><dd><P slug={S} field="client" /></dd></div>
+        <div><dt class="mono">My role</dt><dd>Forward-deployed product designer: research, design system, every screen and its spec</dd></div>
+        <div><dt class="mono">Timeline</dt><dd>Live 6+ months</dd></div>
+        <div><dt class="mono">Outcome</dt><dd>Thousands of users · 300%+ productivity, client-reported</dd></div>
+      </dl>
+    </header>
+
+    <div class="wrap reveal">
+      <Shot slug={S} id="board" eager caption="Project Board: every live brief, by department. Tap the numbers for notes."
+        spots={[
+          { x: 9, y: 26, title: "One tree for the whole business", text: "Department, then retailer, then brief. A design head sees everything; a designer filters to their own." },
+          { x: 58, y: 13, title: "Three views of the same briefs", text: "Table, Kanban and timeline, with nothing re-entered between them." },
+          { x: 66, y: 49, title: "Deadlines that warn you", text: "Overdue and due-soon dates carry colour and an icon, never colour alone." },
+        ]} />
+    </div>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">01 / The problem</p><h2>Approvals lived in people's phones.</h2></div>
+      <div class="b reveal">
+        <p>A single licensed-apparel brief moves through designers, account managers, design heads, retailer buyers and the licensor. Each hand-off happened in a different channel, so nobody could answer three basic questions: <em>where is this brief, who is waiting on whom, and who has too much on?</em></p>
+        <p class="muted small">Diagram reconstructed from my interviews, for this case study.</p>
+      </div>
+    </section>
+
+    <section class="wrap">
+      <figure class="flow reveal" data-state="before">
+        <div class="flow-bar">
+          <span class="mono">How a brief travelled</span>
+          <div class="seg" role="group" aria-label="Before or after the portal">
+            <button type="button" aria-pressed="true" data-set="before">Before</button>
+            <button type="button" aria-pressed="false" data-set="after">With the portal</button>
+          </div>
+        </div>
+        <div class="stage">
+          <svg class="lines before" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            {messy.map(([a, b]) => <line x1={pos[a].x} y1={pos[a].y} x2={pos[b].x} y2={pos[b].y} />)}
+          </svg>
+          <svg class="lines after" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="8" y1="50" x2="94" y2="50" />
+          </svg>
+          {messy.map(([a, b, ch]) => (
+            <span class="chan mono" style={`left:${(pos[a].x + pos[b].x) / 2}%;top:${(pos[a].y + pos[b].y) / 2}%`}>{ch}</span>
+          ))}
+          <span class="portal mono">One portal: brief → board → selection → approval</span>
+          {people.map(p => (
+            <span class="node" style={`--bx:${p.x}%;--by:${p.y}%;--ax:${p.ax}%;--ay:${p.ay}%`}>{p.label}</span>
+          ))}
+        </div>
+        <figcaption class="sr">Before: five roles connected by eight different channels. With the portal: the same five roles on one line.</figcaption>
+      </figure>
+    </section>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">02 / Research</p><h2>Ten people, five roles, several rounds.</h2></div>
+      <div class="b reveal">
+        <p>I interviewed about ten people: fashion designers, apparel designers, department heads, the global head of design and retailer buyers. Then I went back to real users in several rounds while designing.</p>
+        <p>Each round ended with a design presentation to the client's head of design, who signed it off. I checked every pattern with the development architect, so what I designed could be built.</p>
+        <ul class="ticks">
+          <li>One place to see every brief, whatever its stage</li>
+          <li>The retailer answers inside the same system, not by email</li>
+          <li>Status should change itself; people shouldn't have to remember to</li>
+          <li>See overload before it becomes a missed deadline</li>
+        </ul>
+        <p class="muted small">What the interviews pointed to, and what the design is built around.</p>
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">03 / Decision</p><h2>One lifecycle, four statuses, one manual move.</h2></div>
+        <div class="b reveal">
+          <p>A brief has four statuses everywhere: To Do, In Progress, In Selection, Complete. People make only one move by hand, To Do to In Progress, and only once the brief has a designer, a start date and the expected boards. Everything after that is set by what actually happens: sharing a board, the retailer locking a selection.</p>
+          <p>Licensor approval runs on its own lane, design by design, and never sends a brief backwards.</p>
+        </div>
+      </div>
+      <div class="life reveal" aria-label="Brief lifecycle">
+        <ol class="stages">
+          {stages.map((s, i) => <li style={`--i:${i}`}><b>{s.name}</b><span class="mono">{s.note}</span></li>)}
+        </ol>
+        <div class="lane"><span class="mono">Per design, after selection</span><ol>{lane.map((l, i) => <li style={`--i:${i + 4}`}>{l}</li>)}</ol></div>
+      </div>
+      <div class="pair2 reveal">
+        <Shot slug={S} id="brief" caption="The brief page: overview left, the work right"
+          spots={[
+            { x: 64, y: 47, title: "Two routes to a board", text: "Upload a finished PDF, or build one from the library. Both end in the same selection flow." },
+            { x: 20, y: 62, title: "Complexity vs time available", text: "Captured when the brief is created, so a tight brief is visible before work starts." },
+            { x: 52, y: 80, title: "References stay references", text: "Trends and library picks give context but never land on the board by accident." },
+          ]} />
+        <Shot slug={S} id="board-ready" caption="Board ready to share with the retailer" />
+      </div>
+    </section>
+
+    <section class="focus" aria-labelledby="voice-title">
+      <div class="wrap">
+        <div class="grid12">
+          <div class="h reveal"><p class="mono kick">Focus · Voice to brief</p><h2 id="voice-title">Speak a brief. The portal fills it in.</h2></div>
+          <div class="b reveal">
+            <p>Briefs often start as a conversation: a call with a buyer, a quick chat after a meeting. Typing nine fields from memory afterwards is where details get lost. So I designed a way to speak the brief instead. You talk the way you would to a colleague, the form fills itself in as you go, and the portal asks about whatever you left out.</p>
+          </div>
+        </div>
+
+        <div class="vdemo reveal">
+          <Demo slug={S} id="voice-demo" caption="The working prototype, recorded end to end: tap the mic, talk, answer what's missing, review, create." />
+        </div>
+
+        <div class="grid12 vblock">
+          <div class="h reveal"><p class="mono">Decision</p><h3>Three ways in. One recommended.</h3></div>
+          <div class="b reveal">
+            <ul class="opts">
+              <li><b>1a · Mic inside the form</b><span class="tag">Chosen</span><p>New brief opens the usual drawer, and the first thing in it is "Speak it instead". Nobody has to learn a new entry point, and people who prefer the form never meet an extra step.</p></li>
+              <li><b>1b · Choose how to start</b><p>Voice gets equal billing, but everyone pays one extra tap, every time, even for the path they always pick.</p></li>
+              <li><b>1c · Split button</b><p>A mic beside New brief starts recording straight away, which suits someone walking out of a call. It can be added on top of 1a later.</p></li>
+            </ul>
+          </div>
+        </div>
+        <div class="reveal vimg"><Shot slug={S} id="v-entry" caption="The three explored entry points" /></div>
+
+        <div class="grid12 vblock">
+          <div class="h reveal"><p class="mono">The flow</p><h3>Listen, ask what's missing, review, create.</h3></div>
+          <div class="b reveal"><p>Step through it. Every screen here is from the working prototype, recorded while playing a sample call.</p></div>
+        </div>
+        <div class="vflow reveal">
+          <div class="seg dark" role="tablist" aria-label="Voice flow step">
+            <button type="button" role="tab" aria-selected="true" data-vf="v-ready">1 · Start</button>
+            <button type="button" role="tab" aria-selected="false" data-vf="v-listen">2 · Listen</button>
+            <button type="button" role="tab" aria-selected="false" data-vf="v-ask">3 · Ask</button>
+            <button type="button" role="tab" aria-selected="false" data-vf="v-review">4 · Review</button>
+          </div>
+          <div class="vstack2">
+            <div class="vf on" data-for="v-ready"><Shot slug={S} id="v-ready" caption="Tap and talk. Typing is always one tap away." /></div>
+            <div class="vf" data-for="v-listen"><Shot slug={S} id="v-listen" caption="What it understood is highlighted, and the brief fills in live"
+              spots={[
+                { x: 74, y: 20, title: "Highlighted as it's heard", text: "Every word it turned into a field is marked, so you can see what it understood." },
+                { x: 74, y: 52, title: "The form fills itself in", text: "Fields complete as you talk: 6 of 9 after a few seconds." },
+              ]} /></div>
+            <div class="vf" data-for="v-ask"><Shot slug={S} id="v-ask" caption="One question per gap, answer by voice or skip"
+              spots={[{ x: 74, y: 14, title: "Asked once", text: "Each missing field gets one spoken question. Skip it, and it's flagged instead of asked again." }]} /></div>
+            <div class="vf" data-for="v-review"><Shot slug={S} id="v-review" caption="Heard vs inferred, and nothing skipped slips through"
+              spots={[
+                { x: 92, y: 8, title: "Heard vs inferred", text: "Anything the portal worked out for itself, like a full name from 'Amira', gets a dashed Inferred tag." },
+                { x: 80, y: 51, title: "Needed, not forgotten", text: "A skipped required field shows as Needed, and Create stays locked until it's filled." },
+                { x: 74, y: 70, title: "Designs from the conversation", text: "'Six pyjama sets, eight nightdresses' becomes placeholder design rows, ready to assign." },
+              ]} /></div>
+          </div>
+        </div>
+
+        <div class="grid12 vblock">
+          <div class="h reveal"><p class="mono">Principles</p><h3>Fast, but never a black box.</h3></div>
+          <div class="b reveal">
+            <ul class="vrules">
+              <li><b>Asked once, then flagged</b><p>No interrogation. One question per gap; skipped answers become a visible to-do.</p></li>
+              <li><b>Heard vs inferred</b><p>What you said shows plainly. What the portal guessed is tagged, with the reason on hover.</p></li>
+              <li><b>Typing is one tap away</b><p>Voice is an option, never a trap. "Type it instead" sits in every state.</p></li>
+              <li><b>The recording stays</b><p>The audio and transcript are saved on the brief, so anyone can check what was actually said.</p></li>
+            </ul>
+          </div>
+        </div>
+        <div class="vphone reveal">
+          <Shot slug={S} id="v-phone" class="phone" caption="On a phone: the same flow as a bottom sheet, primary action under the thumb" />
+          <div>
+            <p class="mono">Edge cases</p>
+            <h3 class="big3">37 ways it can go wrong, each one designed.</h3>
+            <p>Voice fails in ways forms don't: a blocked microphone, a headset unplugged mid-sentence, a laptop that sleeps, a dropped connection after "I'm done", two people with the same first name, a licence that has expired. I mapped every failure from the test list into six groups and designed what the user sees for each, so a broken moment always ends with a clear next step and nothing said is lost.</p>
+            <p class="muted">Open any state below to see it full size.</p>
+          </div>
+        </div>
+
+        <div class="vdev">
+          <div class="seg dark" role="tablist" aria-label="Show the states on">
+            <button type="button" role="tab" id="vd-tab-phone" aria-controls="vd-phone" aria-selected="true" data-vd="phone">Phone</button>
+            <button type="button" role="tab" id="vd-tab-desk" aria-controls="vd-desk" aria-selected="false" tabindex="-1" data-vd="desk">Desktop</button>
+          </div>
+          <div class="vd" id="vd-phone" role="tabpanel" aria-labelledby="vd-tab-phone">
+            <Gallery slug={S} phone label="Voice states on a phone" bars={voiceBars} groups={voicePhoneGroups} />
+          </div>
+          <div class="vd" id="vd-desk" role="tabpanel" aria-labelledby="vd-tab-desk" hidden>
+            <Gallery slug={S} tall groups={[
+            { title: "A · Starting and the microphone", ids: ["vs-A1", "vs-A2", "vs-A3", "vs-A4", "vs-A5", "vs-A6", "vs-A7"] },
+            { title: "B · While recording", ids: ["vs-B1", "vs-B2", "vs-B3", "vs-B4", "vs-B5", "vs-B6", "vs-B7", "vs-B8"] },
+            { title: "C · Connection and service", ids: ["vs-C1", "vs-C2", "vs-C3", "vs-C4", "vs-C5", "vs-C6", "vs-C7"] },
+            { title: "D · Leaving and coming back", ids: ["vs-D1", "vs-D2", "vs-D3", "vs-D4"] },
+            { title: "E · Understanding what was said", ids: ["vs-E1", "vs-E2", "vs-E3", "vs-E4", "vs-E5", "vs-E6", "vs-E7", "vs-E8", "vs-E9"] },
+            { title: "F · Review and access", ids: ["vs-F1", "vs-F2"] },
+            ]} />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">04 / Decision</p><h2>Three views, one truth.</h2></div>
+        <div class="b reveal"><p>Design heads plan in timelines, designers work in columns, account managers scan tables. Rather than pick one, the same briefs show three ways, with filters that follow you between them.</p></div>
+      </div>
+      <div class="views reveal" data-view="board">
+        <div class="seg" role="tablist" aria-label="Project Board view">
+          <button type="button" role="tab" aria-selected="true" data-v="board">Table</button>
+          <button type="button" role="tab" aria-selected="false" data-v="kanban">Kanban</button>
+          <button type="button" role="tab" aria-selected="false" data-v="gantt">Timeline</button>
+        </div>
+        <div class="vstack">
+          <div class="v" data-for="kanban"><Shot slug={S} id="kanban" /></div>
+          <div class="v" data-for="gantt"><Shot slug={S} id="gantt" /></div>
+          <div class="v on" data-for="board"><Shot slug={S} id="board" /></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">05 / Decision</p><h2>Close the loop with the retailer.</h2></div>
+        <div class="b reveal">
+          <p>The biggest leak in the old process was the retailer's answer: it came back as an email, a call or a meeting. So I designed a second, connected portal for buyers. They approve everything in one tap, make a partial selection with comments on individual designs, or reject with required feedback.</p>
+          <p>On the supplier side, a partial answer lets the designer lock what was approved and revise the rest at the same time, instead of waiting for one before starting the other.</p>
+        </div>
+      </div>
+      <div class="pair2 reveal">
+        <Shot slug={S} id="retailer-review" caption="The buyer's side"
+          spots={[
+            { x: 80, y: 27, title: "Three ways to answer", text: "Approve all, make a selection, or reject. Feedback is only required for a rejection." },
+            { x: 18, y: 27, title: "Read-only context", text: "The buyer sees the brief they asked for, never the supplier's internal workflow." },
+          ]} />
+        <Shot slug={S} id="partial" caption="The designer's side: a partial approval"
+          spots={[
+            { x: 64, y: 33, title: "The answer, in one line", text: "Who responded, when, and how many designs need changes." },
+            { x: 59, y: 66, title: "Comments stay on the design", text: "Feedback is pinned under the tile it's about, not lost in a thread." },
+            { x: 80, y: 96, title: "Two tracks at once", text: "Revise and resubmit the three, or proceed with the seven, or both." },
+          ]} />
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">06 / Iteration</p><h2>Team Capacity answers one question.</h2></div>
+        <div class="b reveal">
+          <p>The first version had six equal KPI cards, and they answered nothing. I reframed the page around one question, <em>who is overloaded this week, and how do we fix it</em>, and explored three directions for the top of the page: exceptions first, three action cards, or a sentence with two lists.</p>
+          <p>Three action cards won. Hours lead and percentages follow. Each designer's bar carries a <strong>peak-week marker</strong>, because 60/60/190/60 averages to about 92% and reads as healthy when one week is nearly double. The page never changes the board by itself: it proposes a move, and the brief owner approves it.</p>
+        </div>
+      </div>
+      <div class="reveal"><Shot slug={S} id="capacity-options" caption="Explored: three directions built on the same decisions" /></div>
+      <div class="reveal spaced">
+        <Shot slug={S} id="capacity" caption="Shipped: 80 designers, eight weeks, three actions"
+          spots={[
+            { x: 23, y: 28, title: "Act, don't just count", text: "Over capacity, spare to give, delivery at risk, each with its next step." },
+            { x: 31, y: 53, title: "Average plus peak", text: "The bar fills to the average; the red tick marks the worst week." },
+            { x: 88, y: 18, title: "One page, three lenses", text: "Preview it as a designer, an account manager or a design head." },
+          ]} />
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">07 / AI</p><h2>AI that suggests, never decides.</h2></div>
+        <div class="b reveal">
+          <p>Trend reports arrive as long PDFs. The portal reads them page by page and pulls out every image with a suggested title, tags and category. Designers then confirm in batches, while a focus mode walks them through only the low-confidence ones. Duplicates start excluded. Nothing is published until a person says so.</p>
+          <p>Every AI feature can be switched off by an admin, with a monthly query limit and a budget alert. And in visualisation, the rule is written into the screen: <em>the artwork itself is never generated, only the world around it.</em></p>
+        </div>
+      </div>
+      <div class="pair2 reveal">
+        <Shot slug={S} id="trend-review" caption="Batch review with confidence scores"
+          spots={[
+            { x: 22, y: 33, title: "Filter by doubt", text: "Low confidence and duplicates are counted and one tap away." },
+            { x: 76, y: 25, title: "Focus mode", text: "Walks through just the images the model wasn't sure about." },
+          ]} />
+        <Shot slug={S} id="ai-config" caption="Admin controls and budget for every AI feature" />
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">08 / System</p><h2>A design system I built from scratch.</h2></div>
+        <div class="b reveal">
+          <p>I wrote the system before the screens: one brand yellow held back for actions, cool slate neutrals, Poppins, a 4px grid, pill-shaped controls and a single easing curve. Components only use semantic tokens, so re-theming is a token change. That's how dark mode arrived later as a remap, not a rewrite.</p>
+        </div>
+      </div>
+      <ul class="rules reveal">
+        <li class="card"><span class="mono">Decision</span><h3>Warning is burnt orange, never yellow</h3><p>Yellow means "do this". A yellow warning would read as a button.</p></li>
+        <li class="card"><span class="mono">Decision</span><h3>Focus ring is slate, not yellow</h3><p>Yellow on white fails the 3:1 contrast a focus indicator needs (WCAG 2.4.11).</p></li>
+        <li class="card"><span class="mono">Decision</span><h3>Colour is never the only signal</h3><p>Every status badge carries an icon or a word. Touch targets are at least 44px.</p></li>
+        <li class="card"><span class="mono">Decision</span><h3>Drawers for work, dialogs for decisions</h3><p>Forms and reviews open in a drawer. A dialog only ever asks one yes/no question, and never stacks on another.</p></li>
+      </ul>
+      <div class="reveal spaced"><Shot slug={S} id="ds-spec" caption="The design system reference: tokens, 21 components and the rules behind them" /></div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">09 / Craft</p><h2>Every state, every screen size.</h2></div>
+        <div class="b reveal"><p>I specified 41 app states (empty, loading, error, offline, permission) and a loading skeleton for every view at both desktop and phone widths. Every screen works on a phone: drag-and-drop becomes tap-to-place, and wide tables become cards.</p></div>
+      </div>
+      <div class="craft reveal">
+        <Shot slug={S} id="syncfail" caption="Sync failure: what got through, and how to retry" />
+        <Shot slug={S} id="session" caption="Session expired" />
+        <Phone slug={S} id="mobile-board" class="phone" caption="The board on a phone" />
+      </div>
+    </section>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">10 / Process</p><h2>AI as my production tool.</h2></div>
+      <div class="b reveal">
+        <p>I wrote the design system and a detailed spec for every screen, then used Claude Design to build them as working, clickable prototypes. A living rules file recorded every decision, from the overlay rule to how a filter applies, so each new screen followed the ones before it.</p>
+        <p>Three review cycles with the client went through that file, and every change was logged and rolled into the live screens in the same pass. AI did the production; the research, the system, the specs and every decision were mine.</p>
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">11 / Every screen</p><h2>The whole product.</h2></div>
+        <div class="b reveal"><p>The story above uses the screens that carry each decision. Here is everything, grouped by area: 64 screens across both portals, every state and every setting. Open any screen to see it full size, and use the arrow keys to move through them.</p></div>
+      </div>
+      <Gallery slug={S} groups={[
+        { title: "Sign in", ids: ["s-51", "s-53", "session"] },
+        { title: "Menu 1 · Project Board", ids: ["board", "kanban", "gantt", "s-04", "s-05", "s-01c", "s-01b"] },
+        { title: "Project Board › Inside a brief", ids: ["brief", "s-07", "board-ready", "s-09", "s-10", "s-11", "partial", "s-13", "s-14", "syncfail", "complete"] },
+        { title: "Menu 2 · Team Capacity", ids: ["capacity"] },
+        { title: "Menu 3 · Design Library", ids: ["s-17", "s-18"] },
+        { title: "Menu 4 · Trends", ids: ["s-19", "s-20", "trend-extract", "trend-review", "s-23"] },
+        { title: "Menu 5 · Visualisation", ids: ["s-24", "s-25", "s-26"] },
+        { title: "Menu 6 · Apparel Blanks", ids: ["s-27", "s-28", "s-29"] },
+        { title: "Menu 7 · Insights", ids: ["s-31"] },
+        { title: "Menu 8 · Settings", ids: ["s-33", "s-33b", "s-34", "s-34b", "s-34c", "roles", "s-36", "s-37", "ai-config", "s-37c", "s-38", "s-38b", "s-38c", "s-38d", "s-38e"] },
+        { title: "Account menu · Notifications", ids: ["s-32"] },
+        { title: "Retailer portal › Received projects", ids: ["retailer-home", "s-40", "retailer-review", "retailer-select", "s-43", "s-44", "s-45", "s-46", "s-48"] },
+        { title: "Retailer portal › Responses and notifications", ids: ["s-49", "s-50"] },
+        { title: "On a phone", ids: ["mobile-board"] },
+      ]} />
+
+      <section class="mob" aria-labelledby="mob-title">
+        <div class="grid12">
+          <div class="h reveal"><p class="mono">On a phone</p><h3 id="mob-title" class="mob-h">{phoneCount} phone screens</h3></div>
+          <div class="b reveal"><p>Every screen also has a phone layout: the nav rail becomes a bottom bar, drawers become sheets, and wide tables become cards. These are captured from the working prototype at 390 × 844, in the same order as the app's navigation. Scroll sideways, jump to an area, or open any screen to see it full size.</p></div>
+        </div>
+        <Gallery slug={S} phone label="Phone screens" bars={phoneBars} groups={phoneGroups} />
+      </section>
+    </section>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">12 / Impact</p><h2>Live, and it moved the numbers.</h2></div>
+      <div class="b">
+        <ul class="stats reveal">
+          <li class="stat"><b>300%+</b><span>productivity gain, reported by the client over six months</span></li>
+          <li class="stat"><b>~40</b><span>screens across two connected portals</span></li>
+          <li class="stat"><b>10</b><span>interviews across five roles</span></li>
+          <li class="stat"><b>41</b><span>app states specified, plus mobile for every screen</span></li>
+        </ul>
+        <p class="muted small reveal">Faster approvals, faster delivery, faster to market.</p>
+      </div>
+    </section>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">13 / Reflection</p><h2>What I'd do differently.</h2></div>
+      <div class="b reveal">
+        <p>I'd build measurement into the product from day one, so productivity comes from the portal's own data rather than a report, and I'd bring licensors into the research as early as the buyers.</p>
+        <p class="next"><a class="btn ghost" href="/">← All work</a></p>
+      </div>
+    </section>
+  </article>
+</Base>
+
+<script>
+  // Voice states: Phone / Desktop switch
+  document.querySelectorAll<HTMLElement>(".vdev").forEach(box => {
+    const tabs = [...box.querySelectorAll<HTMLButtonElement>("[data-vd]")];
+    const select = (btn: HTMLButtonElement) => {
+      tabs.forEach(t => { const on = t === btn; t.setAttribute("aria-selected", String(on)); t.tabIndex = on ? 0 : -1; });
+      box.querySelectorAll<HTMLElement>(".vd").forEach(p => { p.hidden = p.id !== btn.getAttribute("aria-controls"); });
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(t));
+      t.addEventListener("keydown", e => {
+        const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); select(n); }
+      });
+    });
+  });
+  // Voice flow stepper
+  document.querySelectorAll<HTMLElement>(".vflow").forEach(box => {
+    const tabs = [...box.querySelectorAll<HTMLButtonElement>("[data-vf]")];
+    const select = (btn: HTMLButtonElement) => {
+      tabs.forEach(t => t.setAttribute("aria-selected", String(t === btn)));
+      box.querySelectorAll<HTMLElement>(".vf").forEach(v => v.classList.toggle("on", v.dataset.for === btn.dataset.vf));
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(t));
+      t.addEventListener("keydown", e => {
+        const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); select(n); }
+      });
+    });
+  });
+  // Before/after flow toggle
+  document.querySelectorAll<HTMLElement>(".flow").forEach(fig => {
+    fig.querySelectorAll<HTMLButtonElement>("[data-set]").forEach(btn => btn.addEventListener("click", () => {
+      fig.dataset.state = btn.dataset.set!;
+      fig.querySelectorAll("[data-set]").forEach(b => b.setAttribute("aria-pressed", String(b === btn)));
+    }));
+  });
+  // Table / Kanban / Timeline switcher
+  document.querySelectorAll<HTMLElement>(".views").forEach(box => {
+    const tabs = [...box.querySelectorAll<HTMLButtonElement>("[data-v]")];
+    const select = (btn: HTMLButtonElement) => {
+      tabs.forEach(t => t.setAttribute("aria-selected", String(t === btn)));
+      box.querySelectorAll<HTMLElement>(".v").forEach(v => v.classList.toggle("on", v.dataset.for === btn.dataset.v));
+    };
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(t));
+      t.addEventListener("keydown", e => {
+        const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); select(n); }
+      });
+    });
+  });
+</script>
+
+<style>
+  .hero { padding: 88px var(--gutter) 48px; }
+  .hero h1 { max-width: 15ch; margin: 16px 0 24px; }
+  .hero .mono a { text-decoration: none; }
+  .lede { font-size: clamp(18px, 1.6vw, 22px); color: var(--ink-2); max-width: 60ch; }
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 56px; border-top: 1px solid var(--ink); padding-top: 16px; }
+  .meta dd { margin: 6px 0 0; font-size: 15px; }
+
+  .sec { padding-top: 120px; }
+  .h { grid-column: 1 / 5; }
+  .h h2 { margin-top: 10px; }
+  .b { grid-column: 5 / 13; display: grid; gap: 16px; align-content: start; }
+  .small { font-size: 14px; }
+  .spaced { margin-top: 32px; }
+  .pair2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; align-items: start; }
+  .ticks { list-style: none; padding: 0; display: grid; gap: 8px; }
+  .ticks li { padding-left: 28px; position: relative; }
+  .ticks li::before { content: ""; position: absolute; left: 4px; top: 7px; width: 12px; height: 7px; border-left: 2px solid var(--accent); border-bottom: 2px solid var(--accent); transform: rotate(-45deg); }
+
+  /* before / after flow */
+  .flow { margin: 40px 0 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; }
+  .flow-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .seg { display: inline-flex; background: var(--surface-2); border-radius: 999px; padding: 4px; gap: 2px; }
+  .seg button { font: 500 14px var(--font); border: 0; background: transparent; color: var(--ink-2); padding: 8px 14px; border-radius: 999px; cursor: pointer; transition: background var(--t-micro), color var(--t-micro); }
+  .seg button:hover { color: var(--ink); }
+  .seg button[aria-pressed="true"], .seg button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+  .stage { position: relative; height: 380px; margin-top: 16px; }
+  .lines { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity .6s var(--ease); }
+  .lines line { stroke: var(--line-strong); stroke-width: .35; stroke-dasharray: 1.4 1; vector-effect: non-scaling-stroke; }
+  .lines.before line { stroke: color-mix(in srgb, var(--note) 55%, transparent); stroke-width: 1.5; }
+  .lines.after line { stroke: var(--accent); stroke-width: 3; stroke-dasharray: none; }
+  .flow[data-state="before"] .lines.after, .flow[data-state="after"] .lines.before { opacity: 0; }
+  .node { position: absolute; left: var(--bx); top: var(--by); transform: translate(-50%, -50%); background: var(--ink); color: var(--bg); font: 500 14px var(--font); padding: 8px 14px; border-radius: 999px; white-space: nowrap; transition: left .9s var(--ease), top .9s var(--ease), background .4s; z-index: 2; }
+  .flow[data-state="after"] .node { left: var(--ax); top: var(--ay); background: var(--accent); color: #fff; }
+  .chan { position: absolute; transform: translate(-50%, -50%); background: var(--surface); color: var(--note); padding: 2px 8px; border: 1px solid color-mix(in srgb, var(--note) 35%, transparent); border-radius: 999px; font-size: 11px; transition: opacity .4s; z-index: 1; }
+  .flow[data-state="after"] .chan { opacity: 0; }
+  .portal { position: absolute; left: 50%; top: 70%; transform: translateX(-50%); color: var(--accent); opacity: 0; transition: opacity .5s .4s; text-align: center; }
+  .flow[data-state="after"] .portal { opacity: 1; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+
+  /* lifecycle */
+  .life { margin-top: 40px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; }
+  .stages { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; counter-reset: s; }
+  .stages li, .lane li { opacity: 0; transform: translateY(8px); transition: opacity .5s var(--ease), transform .5s var(--ease); transition-delay: calc(var(--i) * 120ms); }
+  .life.in .stages li, .life.in .lane li { opacity: 1; transform: none; }
+  .stages li { position: relative; border-top: 3px solid var(--accent); padding-top: 12px; display: grid; gap: 4px; }
+  .stages li b { font-weight: 500; font-size: 18px; }
+  .stages li .mono { text-transform: none; }
+  .stages li:nth-child(2) { border-top-color: var(--note); }
+  .lane { margin-top: 24px; padding-top: 16px; border-top: 1px dashed var(--line-strong); display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+  .lane ol { list-style: none; padding: 0; display: flex; gap: 8px; flex-wrap: wrap; }
+  .lane li { font: 500 13px var(--mono); background: var(--surface-2); border-radius: 999px; padding: 6px 12px; }
+  .lane li:last-child { background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); }
+
+  /* views switcher */
+  .views { margin-top: 40px; display: grid; gap: 16px; }
+  .views > .seg { justify-self: start; }
+  .vstack { display: grid; }
+  .vstack > .v { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: scale(.985); transition: opacity .35s var(--ease), transform .45s var(--ease), visibility 0s .35s; }
+  .vstack > .v.on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+
+  .rules { list-style: none; padding: 0; margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .rules .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; display: grid; gap: 8px; align-content: start; transition: transform var(--t-panel) var(--ease), box-shadow var(--t-panel); }
+  .rules .card:hover { transform: translateY(-3px); box-shadow: 0 16px 32px -20px rgba(15,16,18,.35); }
+  .rules p { font-size: 15px; color: var(--ink-2); }
+
+  .craft { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr 0.42fr; gap: 24px; align-items: start; }
+
+  .mob { margin-top: 96px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .mob-h { font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -.025em; margin-top: 10px; }
+
+  .stats { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 22px; display: grid; gap: 6px; }
+  .stat b { font-size: 44px; font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+  .stat span { color: var(--ink-2); font-size: 15px; }
+  .next { margin-top: 24px; }
+
+
+  /* Focus band: voice to brief */
+  /* Always a dark band: pin ink and bg to their light-theme values so the band never flips in dark mode */
+  .focus { --ink: #0F1012; --bg: #F6F6F4; margin-top: 140px; padding: 110px 0 120px; color: var(--bg);
+    background: radial-gradient(1100px 420px at 50% 0, rgba(255,202,51,.07), transparent 70%), var(--band);
+    border-block: 1px solid color-mix(in srgb, var(--bg) 8%, transparent); }
+  .focus .mono { color: color-mix(in srgb, var(--bg) 62%, transparent); }
+  .focus .kick { color: #FFCA33; }
+  .focus .muted { color: color-mix(in srgb, var(--bg) 65%, transparent); }
+  .focus h3 { font-size: 26px; margin-top: 8px; }
+  .focus .big3 { font-size: clamp(26px, 2.6vw, 36px); margin: 10px 0 14px; letter-spacing: -.025em; }
+  .focus :global(figcaption) { color: color-mix(in srgb, var(--bg) 62%, transparent); }
+  .focus :global(.frame) { border-color: transparent; }
+  .vblock { margin-top: 96px; }
+  .vdemo { margin-top: 48px; }
+  .vimg { margin-top: 32px; }
+  .opts, .vrules { list-style: none; padding: 0; display: grid; gap: 10px; }
+  .opts li, .vrules li { background: color-mix(in srgb, var(--bg) 7%, transparent); border: 1px solid color-mix(in srgb, var(--bg) 12%, transparent); border-radius: var(--r-md); padding: 16px 18px; }
+  .opts li:first-child { border-color: #FFCA33; }
+  .opts b, .vrules b { font-weight: 500; }
+  .opts p, .vrules p { color: color-mix(in srgb, var(--bg) 72%, transparent); font-size: 15px; margin-top: 4px; }
+  .tag { margin-left: 8px; background: #FFCA33; color: #111; font: 600 11px var(--mono); padding: 2px 8px; border-radius: 999px; }
+  .vrules { grid-template-columns: 1fr 1fr; }
+  .vflow { margin-top: 32px; display: grid; gap: 16px; }
+  .seg.dark { background: color-mix(in srgb, var(--bg) 10%, transparent); justify-self: start; }
+  .seg.dark button { color: color-mix(in srgb, var(--bg) 70%, transparent); }
+  .seg.dark button:hover { color: var(--bg); }
+  .seg.dark button[aria-selected="true"] { background: #FFCA33; color: #111; }
+  .vstack2 { display: grid; }
+  .vstack2 > .vf { grid-area: 1 / 1; opacity: 0; visibility: hidden; transform: translateX(16px); transition: opacity .35s var(--ease), transform .5s var(--ease), visibility 0s .35s; }
+  .vstack2 > .vf.on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  .vphone { margin-top: 56px; display: grid; grid-template-columns: 300px 1fr; gap: 48px; align-items: center; }
+  .focus :global(.gallery .cap) { color: color-mix(in srgb, var(--bg) 70%, transparent); }
+  .focus :global(.gallery h3) { color: var(--bg); }
+  .vdev { margin-top: 40px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .vdev > .seg { justify-self: start; }
+  .vd[hidden] { display: none; }
+  .vd :global(.gallery) { margin-top: 24px; }
+  .focus :global(.phones .chip) { background: transparent; color: color-mix(in srgb, var(--bg) 78%, transparent); border-color: color-mix(in srgb, var(--bg) 18%, transparent); }
+  .focus :global(.phones .chip:hover) { border-color: color-mix(in srgb, var(--bg) 60%, transparent); }
+  .focus :global(.phones .chip[aria-pressed="true"]) { background: #FFCA33; color: #111; border-color: #FFCA33; }
+  .focus :global(.phones .ggroup h3 span) { background: color-mix(in srgb, var(--bg) 12%, transparent); color: color-mix(in srgb, var(--bg) 75%, transparent); }
+  .focus :global(.pmock .dev) { box-shadow: 0 0 0 .45cqw #55565C, 0 0 0 .7cqw #2A2B2F, inset 0 0 0 .35cqw #26272B, 0 30px 60px -30px rgba(0, 0, 0, .8); }
+  @media (max-width: 820px) {
+    .focus { margin-top: 80px; padding: 72px 0 80px; }
+    .vblock { margin-top: 64px; }
+    .vrules { grid-template-columns: 1fr; }
+    .vphone { grid-template-columns: 1fr; gap: 24px; }
+    .vphone :global(.phone) { max-width: 260px; }
+  }
+  @media (max-width: 1000px) { .rules { grid-template-columns: 1fr 1fr; } .craft { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 820px) {
+    .hero { padding-top: 48px; }
+    .meta, .pair2, .stats, .rules, .stages { grid-template-columns: 1fr; }
+    .craft { grid-template-columns: 1fr; }
+    .craft :global(.phone) { max-width: 260px; }
+    .mob { margin-top: 64px; }
+    .sec { padding-top: 80px; }
+    .stage { height: 460px; }
+    .node { font-size: 12px; padding: 6px 10px; }
+    .flow[data-state="after"] .node { left: 50%; top: calc(8% + var(--ax) * .82); }
+    .lines.after { opacity: 0 !important; }
+    .stage::before { content: ""; position: absolute; left: 50%; top: 14%; height: 72%; width: 3px; margin-left: -1.5px; background: var(--accent); opacity: 0; transition: opacity .5s .3s; }
+    .flow[data-state="after"] .stage::before { opacity: 1; }
+    .portal { top: 92%; width: 90%; }
+  }
+</style>

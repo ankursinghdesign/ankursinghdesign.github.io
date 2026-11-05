@@ -1,0 +1,6 @@
+---
+// Marks a claim that still needs Ankur's confirmation. The leak check blocks these from production.
+interface Props { note?: string; }
+const { note = "To confirm with Ankur" } = Astro.props;
+---
+<span data-confirm title={note}><slot /></span>

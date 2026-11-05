@@ -1,0 +1,76 @@
+---
+// A phone screen inside an iPhone-style frame (bezel, Dynamic Island, status bar, side buttons, home indicator).
+// The screen image goes through the same pipeline as Shot: blurred in public, decrypted in the private view.
+// `bare` renders only spans, so the frame can sit inside a button (Gallery phone mode); no caption or badge.
+interface Props { slug: string; id: string; caption?: string; bar?: string; eager?: boolean; bare?: boolean; class?: string; }
+const { slug, id, caption, bar = "#F0F1F5", eager = false, bare = false, class: cls = "" } = Astro.props;
+const data = (await import(`../data/${slug}.json`)).default;
+const img = data.images[id];
+if (!img) throw new Error(`Unknown image ${slug}/${id}`);
+const locked = img.public !== "clear";
+const Tag = bare ? "span" : "figure";
+---
+<Tag class:list={["pmock", cls, { locked }]}>
+  <span class="dev" style={`--bar:${bar}`}>
+    <span class="btn-side act" aria-hidden="true"></span>
+    <span class="btn-side vol1" aria-hidden="true"></span>
+    <span class="btn-side vol2" aria-hidden="true"></span>
+    <span class="btn-side pwr" aria-hidden="true"></span>
+    <span class="scr">
+      <span class="status" aria-hidden="true">
+        <span class="time">9:41</span>
+        <span class="island"></span>
+        <span class="icons">
+          <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1" /><rect x="5" y="5.5" width="3" height="6.5" rx="1" /><rect x="10" y="3" width="3" height="9" rx="1" /><rect x="15" y="0" width="3" height="12" rx="1" /></svg>
+          <svg viewBox="0 0 16 12"><path d="M8 2.2c2.4 0 4.6.9 6.2 2.5l1.2-1.3A10.4 10.4 0 0 0 8 .4C5.1.4 2.5 1.5.6 3.4l1.2 1.3A8.6 8.6 0 0 1 8 2.2Zm0 3.6c1.4 0 2.7.5 3.6 1.4l1.3-1.3A7 7 0 0 0 8 4a7 7 0 0 0-4.9 1.9l1.3 1.3A5.2 5.2 0 0 1 8 5.8Zm0 3.5c-.6 0-1.1.2-1.5.6L8 11.5l1.5-1.6c-.4-.4-.9-.6-1.5-.6Z" /></svg>
+          <svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="23" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".4" /><rect x="2" y="2" width="20" height="8" rx="1.9" /><path d="M25 4v4c.8-.3 1.4-1.1 1.4-2S25.8 4.3 25 4Z" opacity=".45" /></svg>
+        </span>
+      </span>
+      <img
+        src={`/img/${slug}/${id}.webp`}
+        width={img.w}
+        height={img.h}
+        alt={bare ? "" : img.alt}
+        loading={eager ? "eager" : "lazy"}
+        decoding="async"
+        data-vault={locked ? `${slug}/${id}` : undefined}
+      />
+      <span class="home" aria-hidden="true"></span>
+      {!bare && locked && <span class="nda mono">Blurred · NDA</span>}
+    </span>
+  </span>
+  {!bare && caption && <figcaption class="mono">{caption}</figcaption>}
+</Tag>
+
+<style>
+  /* Sizes are in cqw of .pmock (the device's outer width), so the frame scales cleanly at any width. */
+  .pmock { margin: 0; display: block; container-type: inline-size; }
+  .dev {
+    position: relative; display: block; padding: 3.4cqw;
+    border-radius: 15.5cqw; background: #0B0B0C;
+    box-shadow:
+      0 0 0 .45cqw #3A3B40,                  /* titanium edge, visible on dark backgrounds */
+      0 0 0 .7cqw #1C1D20,
+      inset 0 0 0 .35cqw #26272B,
+      0 30px 60px -32px rgba(15, 16, 18, .55);
+  }
+  .btn-side { position: absolute; width: 1.1cqw; border-radius: 1cqw; background: linear-gradient(90deg, #2A2B2F, #45464B 60%, #2A2B2F); }
+  .act  { left: -1.6cqw; top: 18%; height: 6.5%; }
+  .vol1 { left: -1.6cqw; top: 28%; height: 11%; }
+  .vol2 { left: -1.6cqw; top: 41%; height: 11%; }
+  .pwr  { right: -1.6cqw; top: 31%; height: 17%; }
+
+  .scr { position: relative; display: block; overflow: hidden; border-radius: 12.4cqw; background: var(--bar); isolation: isolate; }
+  .status { display: flex; align-items: center; justify-content: space-between; height: 12.2cqw; padding: 0 7.2cqw 0 9.6cqw; background: var(--bar); color: #101114; }
+  .time { font: 600 4.05cqw/1 -apple-system, "SF Pro Text", var(--font); letter-spacing: -.01em; }
+  .island { position: absolute; left: 50%; top: 2.6cqw; width: 29.5cqw; height: 8.6cqw; margin-left: -14.75cqw; border-radius: 99px; background: #000; }
+  .icons { display: flex; align-items: center; gap: 1.4cqw; }
+  .icons svg { height: 3cqw; width: auto; fill: currentColor; }
+  .icons svg:last-child { height: 3.1cqw; }
+  .scr img { width: 100%; height: auto; display: block; background: #fff; }
+  .home { position: absolute; left: 50%; bottom: 2cqw; width: 33cqw; height: 1.25cqw; margin-left: -16.5cqw; border-radius: 99px; background: rgba(16, 17, 20, .82); }
+
+  .nda { position: absolute; right: 4cqw; top: 15cqw; background: var(--ink); color: var(--bg); padding: 5px 9px; border-radius: 999px; font-size: 11px; transition: opacity .3s; }
+  .unlocked .nda { opacity: 0; }
+  figcaption { margin-top: 14px; text-transform: none; letter-spacing: 0; font-size: 13px; }
+</style>

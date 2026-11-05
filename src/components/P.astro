@@ -1,0 +1,7 @@
+---
+// Private text: public wording by default, replaced with the real name in the private view.
+interface Props { slug: string; field: string; }
+const { slug, field } = Astro.props;
+const data = (await import(`../data/${slug}.json`)).default;
+---
+<span data-ptext={`${slug}:${field}`}>{data.text[field]}</span>

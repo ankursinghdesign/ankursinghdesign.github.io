@@ -1,0 +1,220 @@
+---
+import Base from "../../layouts/Base.astro";
+import Shot from "../../components/Shot.astro";
+import P from "../../components/P.astro";
+import Gallery from "../../components/Gallery.astro";
+
+const S = "edu";
+const roles = [
+  { id: "state", label: "State oversight", img: "comp-dash", job: "Watches the whole programme: money allocated and spent, students approved, and anything that looks wrong.",
+    spots: [
+      { x: 50, y: 17, title: "The programme in four numbers", text: "Allocated, disbursed, students, approved students, each with its trend." },
+      { x: 82, y: 40, title: "Alerts that say what to look at", text: "Certifications about to expire, possible misuse of funds, a legislative report due." },
+    ] },
+  { id: "admin", label: "Programme administrator", img: "ceao-dash", job: "Runs accounts day to day: approves the schools and tutors that can be paid, and the families' applications.",
+    spots: [{ x: 88, y: 52, title: "Decide in the row", text: "Approve or reject a provider without opening another page." }] },
+  { id: "provider", label: "Service provider", img: "esp-dash", job: "Schools, tutors and therapists: list their services, see who is enrolled, and get paid.", spots: [] },
+  { id: "family", label: "Family", img: "family", job: "Applies for an account, checks where the application stands, and finds out what to do next.",
+    spots: [
+      { x: 22, y: 46, title: "Status in plain words", text: "Under review, when it was sent, when it last changed, and what that means." },
+      { x: 50, y: 85, title: "What happens next", text: "Three next steps instead of silence while the application is reviewed." },
+    ] },
+];
+---
+<Base title="Education funds platform · Ankur Singh" description="Case study: one platform for every role that touches a state's education savings funds, from oversight to families.">
+  <article>
+    <header class="hero wrap">
+      <p class="mono reveal"><a href="/">Work</a> / 03 · Gov-tech · Multi-role platform · Bid</p>
+      <h1 class="reveal">Four roles, one source of public money.</h1>
+      <p class="lede reveal">
+        My client, <P slug={S} field="client" />, needed one platform for everyone who touches the funds: the state, the organisations that administer the accounts, schools and tutors, and families.
+        I designed every role's experience, from the dashboards to the public site.
+      </p>
+      <dl class="meta reveal">
+        <div><dt class="mono">Client</dt><dd><P slug={S} field="client" /></dd></div>
+        <div><dt class="mono">My role</dt><dd>Product designer for all four roles: flows, dashboards, applications and the public site</dd></div>
+        <div><dt class="mono">Timeline</dt><dd>2025 · a few weeks</dd></div>
+        <div><dt class="mono">Outcome</dt><dd>Designed for the bid. The client didn't win the contract, for financial reasons unrelated to the design.</dd></div>
+      </dl>
+    </header>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">01 / Context</p><h2>Public money needs every hand-off on record.</h2></div>
+      <div class="b reveal">
+        <p>An education savings programme gives families state funds to spend on approved schooling, tutoring and therapies. The money passes through four groups, and the state has to see all of it: who was approved, who was paid, and what looks out of place.</p>
+        <p>The client defined the four roles. My job was to make one product feel right for each of them, without four products' worth of complexity.</p>
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">02 / The roles</p><h2>Same platform, four different jobs.</h2></div>
+        <div class="b reveal"><p>Each role starts on a dashboard built around its one job. Switch roles to see how the same platform reorganises itself.</p></div>
+      </div>
+      <div class="roles reveal">
+        <div class="seg" role="tablist" aria-label="Choose a role">
+          {roles.map((r, i) => <button type="button" role="tab" aria-selected={i === 0 ? "true" : "false"} data-r={r.id}>{r.label}</button>)}
+        </div>
+        <div class="rstack">
+          {roles.map((r, i) => (
+            <div class:list={["r", { on: i === 0 }]} data-for={r.id} role="tabpanel" aria-label={r.label}>
+              <p class="job"><span class="mono">Their job</span>{r.job}</p>
+              <Shot slug={S} id={r.img} spots={r.spots} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">03 / Decision</p><h2>Commitments you tick, not terms you scroll past.</h2></div>
+        <div class="b reveal">
+          <p>Organisations apply in three steps: details, terms, submission. The terms aren't a wall of legal text. They're grouped into what the organisation is actually agreeing to (compliance, how funds are handled, data security), and each one is ticked on its own, so the state has a record of exactly what was promised.</p>
+        </div>
+      </div>
+      <div class="reveal spaced">
+        <Shot slug={S} id="apply" caption="Step 2 of 3: commitments grouped by what they cover"
+          spots={[
+            { x: 50, y: 31, title: "Three steps, always visible", text: "Details, terms, submission. Nobody wonders how long this will take." },
+            { x: 34, y: 50, title: "One promise per tick", text: "Eligibility, documentation, fund use, payment deadlines and data security, each confirmed separately." },
+          ]} />
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">04 / Decision</p><h2>Money on a schedule, with a person in charge.</h2></div>
+        <div class="b reveal">
+          <p>Most payments to administrators repeat on a schedule, but some can't wait. Each row shows what's left of the allocation, when the last payment went and when the next is due, with two clear routes: a one-off manual payment, or an automated schedule set once (amount, frequency and number of instalments), with the administrator told by email.</p>
+        </div>
+      </div>
+      <div class="money reveal">
+        <Shot slug={S} id="disburse" caption="Every administrator's allocation, remaining funds and payment dates"
+          spots={[
+            { x: 50, y: 22, title: "Where the year stands", text: "Allocated, disbursed to date, and what's due in the next 30 days." },
+            { x: 89, y: 49, title: "Two routes, side by side", text: "Pay now, or put it on a schedule." },
+          ]} />
+        <Shot slug={S} id="auto-setup" class="modal" caption="Set it once: amount, dates, frequency, instalments" />
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">05 / Decision</p><h2>Oversight that tells you where to look.</h2></div>
+        <div class="b reveal">
+          <p>A state oversight team doesn't need another chart to read. The dashboard leads with the programme's four numbers and a short list of <strong>programme alerts</strong>: certifications about to expire, possible misuse of funds at a named school, a legislative report due. Each alert is a task, not a statistic.</p>
+          <p><button type="button" class="btn ghost" data-goto-role="state">See the oversight dashboard ↑</button></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">06 / Families</p><h2>A front door that explains before it asks.</h2></div>
+        <div class="b reveal">
+          <p>Families arrive knowing nothing about the programme. The public site answers the questions in the order people ask them: what it is, how it works, whether it's real (its reach in numbers), where to learn more, and the questions everyone has. Only then does it ask them to apply.</p>
+          <p class="hand">hover to scroll the page →</p>
+        </div>
+      </div>
+      <div class="tall reveal">
+        <Shot slug={S} id="landing" caption="The public site for families, top to bottom" />
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">07 / Every screen</p><h2>The whole platform.</h2></div>
+        <div class="b reveal"><p>The story above uses a handful of screens. Here is all of it, grouped by who uses it. Open any screen to see it full size, and use the arrow keys to move through them.</p></div>
+      </div>
+      <Gallery slug={S} groups={[
+        { title: "Signing in", ids: ["g-login", "g-2fa"] },
+        { title: "State oversight", ids: ["g-comp-full", "g-ceao-mgmt", "g-fund-mgmt", "disburse", "g-manual", "auto-setup", "g-reports", "g-report-new", "g-config", "g-disburse2", "g-add-user"] },
+        { title: "Programme administrators", ids: ["ceao-dash", "g-esp-mgmt", "g-esa-apps", "g-esa-apps2"] },
+        { title: "Service providers", ids: ["g-esp-apply", "apply", "g-esp-apply3", "g-esp-full", "g-services", "g-add-service", "g-services2"] },
+        { title: "Families and the public site", ids: ["g-land", "g-land2", "g-land3", "g-faq", "g-land5", "g-land6", "g-status"] },
+      ]} />
+    </section>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">08 / Outcome</p><h2>A bid that didn't win, and what it proved.</h2></div>
+      <div class="b reveal">
+        <p>The platform was designed for the client's bid for the state contract. They didn't win it, for financial reasons unrelated to the design, so it never shipped.</p>
+        <p>What it shows is how I approach a system with several sides: give each role one job and one starting point, put every decision about money where it can be audited, and use plain language wherever families are involved.</p>
+        <p>If I did it again, I'd test the family application with real parents before the bid, because that's the journey a state evaluator is most likely to try for themselves.</p>
+        <p class="next"><a class="btn ghost" href="/">← All work</a></p>
+      </div>
+    </section>
+  </article>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLElement>(".roles").forEach(box => {
+    const tabs = [...box.querySelectorAll<HTMLButtonElement>("[data-r]")];
+    const select = (btn: HTMLButtonElement) => {
+      tabs.forEach(t => t.setAttribute("aria-selected", String(t === btn)));
+      box.querySelectorAll<HTMLElement>(".r").forEach(p => p.classList.toggle("on", p.dataset.for === btn.dataset.r));
+    };
+    document.querySelectorAll<HTMLButtonElement>("[data-goto-role]").forEach(b => b.addEventListener("click", () => {
+      const tab = tabs.find(t => t.dataset.r === b.dataset.gotoRole);
+      if (!tab) return;
+      select(tab);
+      box.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+      tab.focus({ preventScroll: true });
+    }));
+    tabs.forEach((t, i) => {
+      t.addEventListener("click", () => select(t));
+      t.addEventListener("keydown", e => {
+        const d = e.key === "ArrowRight" ? 1 : e.key === "ArrowLeft" ? -1 : 0;
+        if (d) { const n = tabs[(i + d + tabs.length) % tabs.length]; n.focus(); select(n); }
+      });
+    });
+  });
+</script>
+
+<style>
+  .hero { padding: 88px var(--gutter) 48px; }
+  .hero h1 { max-width: 15ch; margin: 16px 0 24px; }
+  .hero .mono a { text-decoration: none; }
+  .lede { font-size: clamp(18px, 1.6vw, 22px); color: var(--ink-2); max-width: 60ch; }
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 56px; border-top: 1px solid var(--ink); padding-top: 16px; }
+  .meta dd { margin: 6px 0 0; font-size: 15px; }
+  .sec { padding-top: 120px; }
+  .h { grid-column: 1 / 5; }
+  .h h2 { margin-top: 10px; }
+  .b { grid-column: 5 / 13; display: grid; gap: 16px; align-content: start; }
+
+  .seg { display: inline-flex; flex-wrap: wrap; background: var(--surface-2); border-radius: 999px; padding: 4px; gap: 2px; justify-self: start; }
+  .seg button { font: 500 14px var(--font); border: 0; background: transparent; color: var(--ink-2); padding: 8px 14px; border-radius: 999px; cursor: pointer; transition: background var(--t-micro), color var(--t-micro); }
+  .seg button:hover { color: var(--ink); }
+  .seg button[aria-selected="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+
+  .roles { margin-top: 40px; display: grid; gap: 16px; scroll-margin-top: 80px; }
+  .spaced { margin-top: 40px; }
+  .rstack { display: grid; }
+  .rstack > .r { grid-area: 1 / 1; display: grid; gap: 14px; align-content: start; opacity: 0; visibility: hidden; transform: translateY(8px); transition: opacity .35s var(--ease), transform .45s var(--ease), visibility 0s .35s; }
+  .rstack > .r.on { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+  .job { display: flex; gap: 12px; align-items: baseline; font-size: 18px; max-width: none; }
+  .job .mono { flex: none; }
+
+  .money { margin-top: 40px; display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; align-items: start; }
+  .next { margin-top: 24px; }
+
+  /* tall page scrolls inside its frame on hover */
+  .tall { margin-top: 40px; }
+  .tall :global(.frame) { height: 640px; overflow: hidden; }
+  .tall :global(.frame img) { transition: transform 9s cubic-bezier(.45, 0, .55, 1); }
+  .tall:hover :global(.frame img), .tall:focus-within :global(.frame img) { transform: translateY(calc(-100% + 640px)); transition-duration: 9s; }
+  @media (hover: none), (prefers-reduced-motion: reduce) {
+    .tall :global(.frame) { overflow-y: auto; }
+    .tall:hover :global(.frame img) { transform: none; }
+  }
+  @media (max-width: 820px) { .tall :global(.frame) { height: 520px; } }
+
+  @media (max-width: 820px) {
+    .hero { padding-top: 48px; }
+    .meta, .money { grid-template-columns: 1fr; }
+    .sec { padding-top: 80px; }
+    .job { display: grid; gap: 4px; font-size: 16px; }
+  }
+</style>

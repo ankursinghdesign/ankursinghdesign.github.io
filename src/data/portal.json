@@ -1,0 +1,1165 @@
+{
+  "images": {
+    "board": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Project Board: every live brief by department, with designer, account manager, retailer, licence and deadline",
+      "public": "blur"
+    },
+    "kanban": {
+      "w": 1500,
+      "h": 1051,
+      "alt": "The same briefs as a Kanban board by status",
+      "public": "blur"
+    },
+    "gantt": {
+      "w": 1500,
+      "h": 1051,
+      "alt": "The same briefs on a timeline, from start date to deadline",
+      "public": "blur"
+    },
+    "brief": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Brief page: overview on the left, the two ways to create a board on the right",
+      "public": "blur"
+    },
+    "board-ready": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Board ready to submit to the retailer",
+      "public": "blur"
+    },
+    "partial": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer response: seven of ten designs approved, three need changes, with comments pinned to each design",
+      "public": "blur"
+    },
+    "syncfail": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Sync failure: what got through, what didn't, and how to retry",
+      "public": "blur"
+    },
+    "complete": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Brief complete: selection locked, board PDF on file, item details per design",
+      "public": "blur"
+    },
+    "retailer-home": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer portal home: every project shared with the buyer and what needs a response",
+      "public": "blur"
+    },
+    "retailer-review": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer review: approve all, make a selection, or reject with feedback",
+      "public": "blur"
+    },
+    "retailer-select": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer making a selection, with comments on individual designs",
+      "public": "blur"
+    },
+    "capacity": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Team Capacity: three action cards and a week-by-week load heatmap for 80 designers",
+      "public": "blur"
+    },
+    "capacity-options": {
+      "w": 1500,
+      "h": 1081,
+      "alt": "Three explored directions for the top of Team Capacity: exceptions first, three action cards, and a sentence with two lists",
+      "public": "blur"
+    },
+    "trend-extract": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Trend report PDFs being read page by page",
+      "public": "blur"
+    },
+    "trend-review": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Review extracted trend images in batches, with confidence scores, low-confidence focus mode and duplicates",
+      "public": "blur"
+    },
+    "ai-config": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Admin controls for every AI feature, with a monthly query limit and budget alert",
+      "public": "blur"
+    },
+    "roles": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Seven roles and a permissions matrix",
+      "public": "blur"
+    },
+    "session": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Session expired state",
+      "public": "blur"
+    },
+    "mobile-board": {
+      "w": 780,
+      "h": 1688,
+      "alt": "Project Board on a phone: briefs as cards, the nav rail as a bottom bar",
+      "public": "blur"
+    },
+    "ds-spec": {
+      "w": 1440,
+      "h": 1300,
+      "alt": "The design system specification: brand colour, colour ramps and the semantic token layer",
+      "public": "blur"
+    },
+    "s-01b": {
+      "w": 1500,
+      "h": 877,
+      "alt": "New brief",
+      "public": "blur"
+    },
+    "s-01c": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Filters panel",
+      "public": "blur"
+    },
+    "s-04": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Selections tab",
+      "public": "blur"
+    },
+    "s-05": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Selections, a brief expanded",
+      "public": "blur"
+    },
+    "s-07": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Board PDF uploaded, designs extracted",
+      "public": "blur"
+    },
+    "s-09": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Selection made",
+      "public": "blur"
+    },
+    "s-10": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Board submitted to the retailer",
+      "public": "blur"
+    },
+    "s-11": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer approved every design",
+      "public": "blur"
+    },
+    "s-13": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer rejected the board, with feedback",
+      "public": "blur"
+    },
+    "s-14": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Revised board resubmitted as v2",
+      "public": "blur"
+    },
+    "s-17": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Design library",
+      "public": "blur"
+    },
+    "s-18": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Design detail",
+      "public": "blur"
+    },
+    "s-19": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Trends wall",
+      "public": "blur"
+    },
+    "s-20": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Upload trend reports",
+      "public": "blur"
+    },
+    "s-23": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Trends published",
+      "public": "blur"
+    },
+    "s-24": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Visualisation",
+      "public": "blur"
+    },
+    "s-25": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Visualisation results",
+      "public": "blur"
+    },
+    "s-26": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Visualisation settings and recipes",
+      "public": "blur"
+    },
+    "s-27": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Apparel blanks",
+      "public": "blur"
+    },
+    "s-28": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Blank colourways",
+      "public": "blur"
+    },
+    "s-29": {
+      "w": 1500,
+      "h": 877,
+      "alt": "Create a blank",
+      "public": "blur"
+    },
+    "s-31": {
+      "w": 1500,
+      "h": 1051,
+      "alt": "Insights (reporting embed)",
+      "public": "blur"
+    },
+    "s-32": {
+      "w": 1500,
+      "h": 1051,
+      "alt": "Notifications",
+      "public": "blur"
+    },
+    "s-33": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: users",
+      "public": "blur"
+    },
+    "s-33b": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: new joiners from directory sync",
+      "public": "blur"
+    },
+    "s-34": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: retailers and departments",
+      "public": "blur"
+    },
+    "s-34b": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Add a retailer",
+      "public": "blur"
+    },
+    "s-34c": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Add a retailer member",
+      "public": "blur"
+    },
+    "s-36": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Roles as seen by an admin",
+      "public": "blur"
+    },
+    "s-37": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: Kanban stages",
+      "public": "blur"
+    },
+    "s-37c": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: brief types",
+      "public": "blur"
+    },
+    "s-38": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: PLM integration and field mapping",
+      "public": "blur"
+    },
+    "s-38b": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: notification rules",
+      "public": "blur"
+    },
+    "s-38c": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: workspace and branding",
+      "public": "blur"
+    },
+    "s-38d": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: audit log",
+      "public": "blur"
+    },
+    "s-38e": {
+      "w": 1524,
+      "h": 1068,
+      "alt": "Settings: data export and session",
+      "public": "blur"
+    },
+    "s-40": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer home, several departments",
+      "public": "blur"
+    },
+    "s-43": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer reviews their response",
+      "public": "blur"
+    },
+    "s-44": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Selection locked",
+      "public": "blur"
+    },
+    "s-45": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer rejected the project",
+      "public": "blur"
+    },
+    "s-46": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer reviews the revised board",
+      "public": "blur"
+    },
+    "s-48": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Retailer design library",
+      "public": "blur"
+    },
+    "s-49": {
+      "w": 1500,
+      "h": 1051,
+      "alt": "Retailer response history",
+      "public": "blur"
+    },
+    "s-50": {
+      "w": 1500,
+      "h": 1051,
+      "alt": "Retailer notifications",
+      "public": "blur"
+    },
+    "s-51": {
+      "w": 1500,
+      "h": 1008,
+      "alt": "Sign in",
+      "public": "blur"
+    },
+    "s-53": {
+      "w": 1500,
+      "h": 1051,
+      "alt": "Verifying identity",
+      "public": "blur"
+    },
+    "v-entry": {
+      "w": 1665,
+      "h": 990,
+      "alt": "Three explored ways into voice: a mic inside the form, a choice of how to start, or a split button",
+      "public": "blur"
+    },
+    "v-split": {
+      "w": 840,
+      "h": 780,
+      "alt": "Option 1c: a mic beside New brief that starts recording straight away",
+      "public": "blur"
+    },
+    "v-ready": {
+      "w": 1770,
+      "h": 1230,
+      "alt": "Ready: tap and talk the way you would to a colleague",
+      "public": "blur"
+    },
+    "v-listen": {
+      "w": 1770,
+      "h": 1230,
+      "alt": "Listening: the transcript highlights what it understood and the brief fills in as you talk",
+      "public": "blur"
+    },
+    "v-ask": {
+      "w": 1770,
+      "h": 1230,
+      "alt": "Asking: one spoken question for each detail you left out",
+      "public": "blur"
+    },
+    "v-review": {
+      "w": 1770,
+      "h": 1230,
+      "alt": "Review: inferred values tagged, skipped fields marked Needed, Create locked until they're filled",
+      "public": "blur"
+    },
+    "v-phone": {
+      "w": 780,
+      "h": 1268,
+      "alt": "The same flow on a phone",
+      "public": "blur"
+    },
+    "vs-A1": {
+      "w": 690,
+      "h": 1217,
+      "alt": "A1 · Ready to record",
+      "public": "blur"
+    },
+    "vs-A2": {
+      "w": 690,
+      "h": 1187,
+      "alt": "A2 · Asking for permission",
+      "public": "blur"
+    },
+    "vs-A3": {
+      "w": 690,
+      "h": 1187,
+      "alt": "A3 · Microphone blocked",
+      "public": "blur"
+    },
+    "vs-A4": {
+      "w": 690,
+      "h": 1187,
+      "alt": "A4 · No microphone found",
+      "public": "blur"
+    },
+    "vs-A5": {
+      "w": 690,
+      "h": 1218,
+      "alt": "A5 · Choose a microphone",
+      "public": "blur"
+    },
+    "vs-A6": {
+      "w": 690,
+      "h": 1187,
+      "alt": "A6 · Microphone in use",
+      "public": "blur"
+    },
+    "vs-A7": {
+      "w": 690,
+      "h": 1187,
+      "alt": "A7 · Voice not available here",
+      "public": "blur"
+    },
+    "vs-B1": {
+      "w": 690,
+      "h": 1187,
+      "alt": "B1 · We can’t hear you",
+      "public": "blur"
+    },
+    "vs-B2": {
+      "w": 690,
+      "h": 1187,
+      "alt": "B2 · Headset disconnected",
+      "public": "blur"
+    },
+    "vs-B3": {
+      "w": 690,
+      "h": 1187,
+      "alt": "B3 · Nothing was said",
+      "public": "blur"
+    },
+    "vs-B4": {
+      "w": 690,
+      "h": 1187,
+      "alt": "B4 · Other voices or noise",
+      "public": "blur"
+    },
+    "vs-B5": {
+      "w": 690,
+      "h": 1188,
+      "alt": "B5 · Nearly at the limit",
+      "public": "blur"
+    },
+    "vs-B6": {
+      "w": 690,
+      "h": 1187,
+      "alt": "B6 · Limit reached",
+      "public": "blur"
+    },
+    "vs-B7": {
+      "w": 690,
+      "h": 1187,
+      "alt": "B7 · Paused while you were away",
+      "public": "blur"
+    },
+    "vs-B8": {
+      "w": 690,
+      "h": 1187,
+      "alt": "B8 · Already recording in another tab",
+      "public": "blur"
+    },
+    "vs-C1": {
+      "w": 690,
+      "h": 1187,
+      "alt": "C1 · Offline while recording",
+      "public": "blur"
+    },
+    "vs-C2": {
+      "w": 690,
+      "h": 1187,
+      "alt": "C2 · Offline after “I’m done”",
+      "public": "blur"
+    },
+    "vs-C3": {
+      "w": 690,
+      "h": 1187,
+      "alt": "C3 · Taking longer than usual",
+      "public": "blur"
+    },
+    "vs-C4": {
+      "w": 690,
+      "h": 1188,
+      "alt": "C4 · Couldn’t process the recording",
+      "public": "blur"
+    },
+    "vs-C5": {
+      "w": 690,
+      "h": 1187,
+      "alt": "C5 · Creating: checking first",
+      "public": "blur"
+    },
+    "vs-C6": {
+      "w": 690,
+      "h": 1187,
+      "alt": "C6 · Brief not created",
+      "public": "blur"
+    },
+    "vs-C7": {
+      "w": 690,
+      "h": 1217,
+      "alt": "C7 · Created, files still uploading",
+      "public": "blur"
+    },
+    "vs-D1": {
+      "w": 690,
+      "h": 1188,
+      "alt": "D1 · Discard this brief?",
+      "public": "blur"
+    },
+    "vs-D2": {
+      "w": 690,
+      "h": 1187,
+      "alt": "D2 · Start over?",
+      "public": "blur"
+    },
+    "vs-D3": {
+      "w": 690,
+      "h": 1217,
+      "alt": "D3 · Leaving the page",
+      "public": "blur"
+    },
+    "vs-D4": {
+      "w": 690,
+      "h": 1187,
+      "alt": "D4 · Buttons lock after one tap",
+      "public": "blur"
+    },
+    "vs-E1": {
+      "w": 690,
+      "h": 1187,
+      "alt": "E1 · Nothing recognised",
+      "public": "blur"
+    },
+    "vs-E2": {
+      "w": 690,
+      "h": 1187,
+      "alt": "E2 · Two people match",
+      "public": "blur"
+    },
+    "vs-E3": {
+      "w": 690,
+      "h": 1187,
+      "alt": "E3 · Not found: did you mean…",
+      "public": "blur"
+    },
+    "vs-E4": {
+      "w": 690,
+      "h": 1187,
+      "alt": "E4 · Licence has ended",
+      "public": "blur"
+    },
+    "vs-E5": {
+      "w": 690,
+      "h": 1187,
+      "alt": "E5 · Department not set up",
+      "public": "blur"
+    },
+    "vs-E6": {
+      "w": 690,
+      "h": 1188,
+      "alt": "E6 · Changed your mind",
+      "public": "blur"
+    },
+    "vs-E7": {
+      "w": 690,
+      "h": 1187,
+      "alt": "E7 · Which month?",
+      "public": "blur"
+    },
+    "vs-E8": {
+      "w": 690,
+      "h": 1187,
+      "alt": "E8 · Date has passed",
+      "public": "blur"
+    },
+    "vs-E9": {
+      "w": 690,
+      "h": 1187,
+      "alt": "E9 · Answer doesn’t fit",
+      "public": "blur"
+    },
+    "vs-F1": {
+      "w": 690,
+      "h": 1187,
+      "alt": "F1 · Required fields skipped",
+      "public": "blur"
+    },
+    "vs-F2": {
+      "w": 690,
+      "h": 1187,
+      "alt": "F2 · Retailer outside your scope",
+      "public": "blur"
+    },
+    "voice-demo-poster": {
+      "w": 1240,
+      "h": 860,
+      "alt": "Voice to brief demo",
+      "public": "blur"
+    },
+    "m-login": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Sign in, with a single company sign-on button",
+      "public": "blur"
+    },
+    "m-redirecting": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Verifying identity after sign-in",
+      "public": "blur"
+    },
+    "m-session-error": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Session expired, with one way back in",
+      "public": "blur"
+    },
+    "m-offline": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Offline: retries on its own and keeps unsaved work on the device",
+      "public": "blur"
+    },
+    "m-access-refused": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "No access to a page, with a way back and a way to ask",
+      "public": "blur"
+    },
+    "m-board-table": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Project Board: briefs as cards grouped by department, the nav rail as a bottom bar",
+      "public": "blur"
+    },
+    "m-board-kanban": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Kanban on a phone: one status lane at a time, with a lane switcher",
+      "public": "blur"
+    },
+    "m-board-gantt": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Timeline on a phone: briefs grouped by department beside the dates",
+      "public": "blur"
+    },
+    "m-brief": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Inside a brief: overview and brief details stacked in one column",
+      "public": "blur"
+    },
+    "m-brief-approved": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Brief after the retailer approved every design",
+      "public": "blur"
+    },
+    "m-brief-partial": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Brief after a partial approval",
+      "public": "blur"
+    },
+    "m-brief-rejected": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Brief after the retailer rejected the board",
+      "public": "blur"
+    },
+    "m-brief-resubmitted": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Brief with a revised board resubmitted",
+      "public": "blur"
+    },
+    "m-capacity": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Team Capacity: the three action cards stacked above the designer list",
+      "public": "blur"
+    },
+    "m-library": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Design Library: a two-up grid with a selection bar above the nav",
+      "public": "blur"
+    },
+    "m-item-detail": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Design detail: status, tabs and item details in one column",
+      "public": "blur"
+    },
+    "m-trends": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Trends: season themes on top, then the trend wall",
+      "public": "blur"
+    },
+    "m-trends-filters": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Trend filters as a full-screen sheet",
+      "public": "blur"
+    },
+    "m-trends-detail": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "A single trend, full-bleed image with save and share",
+      "public": "blur"
+    },
+    "m-trends-boards": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "My trend boards",
+      "public": "blur"
+    },
+    "m-trends-board-new": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Create a trend board",
+      "public": "blur"
+    },
+    "m-trends-board": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "A trend board open",
+      "public": "blur"
+    },
+    "m-trends-board-empty": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "An empty trend board, with one action to fill it",
+      "public": "blur"
+    },
+    "m-trends-add": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Add trends to a board: search, filter and pick",
+      "public": "blur"
+    },
+    "m-trends-uploads": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Upload history for the trend library",
+      "public": "blur"
+    },
+    "m-upload": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Add trends: upload reports or single images, or publish a season theme",
+      "public": "blur"
+    },
+    "m-upload-extract": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Extracting images from uploaded reports, with a failed file and its fix",
+      "public": "blur"
+    },
+    "m-upload-review": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Review and publish: one image at a time, with exclude, add details and keep below it",
+      "public": "blur"
+    },
+    "m-upload-details": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Trend details as a bottom sheet",
+      "public": "blur"
+    },
+    "m-upload-done": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Trends published",
+      "public": "blur"
+    },
+    "m-visualisation": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Visualisation: brief and assets, with the prompt dock above the nav",
+      "public": "blur"
+    },
+    "m-blanks": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Apparel blanks in a two-up grid",
+      "public": "blur"
+    },
+    "m-insights": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Insights placeholder for the reporting embed",
+      "public": "blur"
+    },
+    "m-coming-soon": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "A module that isn't switched on yet",
+      "public": "blur"
+    },
+    "m-settings": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Settings: user management with tabs and filters",
+      "public": "blur"
+    },
+    "m-notifications": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Notifications, grouped by day, with filters",
+      "public": "blur"
+    },
+    "m-r-home": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Retailer portal home: every project with its status steps",
+      "public": "blur"
+    },
+    "m-r-library": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Retailer design library with a selection bar",
+      "public": "blur"
+    },
+    "m-r-responses": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Retailer responses: selections, confirmations and rejections",
+      "public": "blur"
+    },
+    "m-r-notifications": {
+      "w": 1170,
+      "h": 2532,
+      "alt": "Retailer notifications",
+      "public": "blur"
+    },
+    "vsp-A1": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "A1 · Ready to record",
+      "public": "blur"
+    },
+    "vsp-A2": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "A2 · Asking for permission",
+      "public": "blur"
+    },
+    "vsp-A3": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "A3 · Microphone blocked",
+      "public": "blur"
+    },
+    "vsp-A4": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "A4 · No microphone found",
+      "public": "blur"
+    },
+    "vsp-A5": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "A5 · Choose a microphone",
+      "public": "blur"
+    },
+    "vsp-A6": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "A6 · Microphone in use",
+      "public": "blur"
+    },
+    "vsp-A7": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "A7 · Voice not available here",
+      "public": "blur"
+    },
+    "vsp-B1": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "B1 · We can’t hear you",
+      "public": "blur"
+    },
+    "vsp-B2": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "B2 · Headset disconnected",
+      "public": "blur"
+    },
+    "vsp-B3": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "B3 · Nothing was said",
+      "public": "blur"
+    },
+    "vsp-B4": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "B4 · Other voices or noise",
+      "public": "blur"
+    },
+    "vsp-B5": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "B5 · Nearly at the limit",
+      "public": "blur"
+    },
+    "vsp-B6": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "B6 · Limit reached",
+      "public": "blur"
+    },
+    "vsp-B7": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "B7 · Paused while you were away",
+      "public": "blur"
+    },
+    "vsp-B8": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "B8 · Already recording in another tab",
+      "public": "blur"
+    },
+    "vsp-C1": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "C1 · Offline while recording",
+      "public": "blur"
+    },
+    "vsp-C2": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "C2 · Offline after “I’m done”",
+      "public": "blur"
+    },
+    "vsp-C3": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "C3 · Taking longer than usual",
+      "public": "blur"
+    },
+    "vsp-C4": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "C4 · Couldn’t process the recording",
+      "public": "blur"
+    },
+    "vsp-C5": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "C5 · Creating: checking first",
+      "public": "blur"
+    },
+    "vsp-C6": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "C6 · Brief not created",
+      "public": "blur"
+    },
+    "vsp-C7": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "C7 · Created, files still uploading",
+      "public": "blur"
+    },
+    "vsp-D1": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "D1 · Discard this brief?",
+      "public": "blur"
+    },
+    "vsp-D2": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "D2 · Start over?",
+      "public": "blur"
+    },
+    "vsp-D3": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "D3 · Leaving the page",
+      "public": "blur"
+    },
+    "vsp-D4": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "D4 · Buttons lock after one tap",
+      "public": "blur"
+    },
+    "vsp-E1": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E1 · Nothing recognised",
+      "public": "blur"
+    },
+    "vsp-E2": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E2 · Two people match",
+      "public": "blur"
+    },
+    "vsp-E3": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E3 · Not found: did you mean…",
+      "public": "blur"
+    },
+    "vsp-E4": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E4 · Licence has ended",
+      "public": "blur"
+    },
+    "vsp-E5": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E5 · Department not set up",
+      "public": "blur"
+    },
+    "vsp-E6": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E6 · Changed your mind",
+      "public": "blur"
+    },
+    "vsp-E7": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E7 · Which month?",
+      "public": "blur"
+    },
+    "vsp-E8": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E8 · Date has passed",
+      "public": "blur"
+    },
+    "vsp-E9": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "E9 · Answer doesn’t fit",
+      "public": "blur"
+    },
+    "vsp-F1": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "F1 · Required fields skipped",
+      "public": "blur"
+    },
+    "vsp-F2": {
+      "w": 1170,
+      "h": 2535,
+      "alt": "F2 · Retailer outside your scope",
+      "public": "blur"
+    }
+  },
+  "text": {
+    "client": "a UK licensed-apparel supplier",
+    "client_short": "the supplier",
+    "retailer": "the retailer"
+  },
+  "videos": {
+    "voice-demo": {
+      "poster": "voice-demo-poster",
+      "chapters": [
+        {
+          "t": 0.05,
+          "name": "Start"
+        },
+        {
+          "t": 2.35,
+          "name": "Listen"
+        },
+        {
+          "t": 28.64,
+          "name": "Ask what's missing"
+        },
+        {
+          "t": 42.92,
+          "name": "Review"
+        },
+        {
+          "t": 52.48,
+          "name": "Create"
+        }
+      ],
+      "duration": 52.8
+    }
+  }
+}

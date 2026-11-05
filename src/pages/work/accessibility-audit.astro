@@ -1,0 +1,624 @@
+---
+import Base from "../../layouts/Base.astro";
+
+// The 10 failed items the report itemises, plus the 8 passed checks. Every finding below comes from the audit report; no screens are reused.
+type Check = { lane: string; status: "fail" | "pass"; title: string; ref?: string; found: string; next: string; demo?: string };
+const checks: Check[] = [
+  { lane: "P", status: "fail", title: "Headings and labels", ref: "2.4.6 · AA · 1.3.1 · A", found: "Headings didn't follow a logical hierarchy, and some were too small to stand out.", next: "One H1 for the page title, an H2 for each section, and slightly larger heading sizes." },
+  { lane: "P", status: "fail", title: "Colour contrast", ref: "1.4.3 · AA", found: "Four colour pairs measured between 1.16:1 and 2.73:1. Body text needs at least 4.5:1.", next: "Darken text or lighten backgrounds until every pair passes 4.5:1.", demo: "contrast" },
+  { lane: "P", status: "fail", title: "Target size and spacing", ref: "2.5.5 · AAA", found: "Buttons and links were too small and too close together to tap reliably.", next: "Targets of at least 44px, with at least 8px between them.", demo: "small" },
+  { lane: "P", status: "fail", title: "Buttons say what they do", ref: "3.3.2 · A", found: "The theme button showed the current mode, not the action, so it was unclear what a click would do.", next: "Label the action (“Switch to light mode”) and expose the state with aria-pressed.", demo: "words" },
+  { lane: "O", status: "fail", title: "Everything works with a keyboard", ref: "2.1.1 · A · 2.4.7 · AA", found: "Keyboard users couldn't move through menus and forms with a visible focus at every step.", next: "Every control reachable with Tab and usable with Enter or Space, with a visible focus.", demo: "focus" },
+  { lane: "O", status: "fail", title: "Focus is visible", ref: "2.1.1 · A · 2.4.7 · AA", found: "When tabbing, a focused button looked the same as an idle one.", next: "Add a visible border or highlight to whatever has focus.", demo: "focus" },
+  { lane: "O", status: "fail", title: "Users know where they are", ref: "2.4.3 · A", found: "Some buttons showed focus and some showed nothing, so users lost their place.", next: "One consistent focus style, in a logical tab order.", demo: "focus" },
+  { lane: "O", status: "fail", title: "Consistent controls", ref: "3.2.3 · 3.2.4 · AA", found: "Too many button styles to learn what each one does.", next: "A small set of button types, each with one meaning.", demo: "small" },
+  { lane: "U", status: "fail", title: "Clear instructions and feedback", found: "The delete dialog didn't name the thread or say if deleting could be undone, and the backdrop hid the name behind it.", next: "Name the item and state the consequence inside the dialog itself.", demo: "words" },
+  { lane: "U", status: "fail", title: "No surprises", found: "Some buttons opened a modal that played a video automatically, with no warning.", next: "Add an icon or label so people know a video will play.", demo: "small" },
+  ...Array.from({ length: 8 }, (_, i) => ({ lane: "S", status: "pass" as const, title: `Passed check ${i + 1}`, found: "This check passed.", next: "The report itemises only the problems, so passed checks aren't listed one by one." })),
+];
+const lanes = [
+  { k: "P", name: "Perceivable", sub: "Design" },
+  { k: "O", name: "Operable", sub: "Development" },
+  { k: "U", name: "Understandable", sub: "Content and UX" },
+  { k: "S", name: "Passed", sub: "Not itemised" },
+];
+const statusName = { fail: "Failed", pass: "Passed" };
+const count = (s: string) => checks.filter(c => c.status === s).length;
+const [nFail, nPass] = [count("fail"), count("pass")];
+const C = 2 * Math.PI * 70;
+const seg = [
+  { cls: "fail", n: nFail, off: 0 },
+  { cls: "pass", n: nPass, off: nFail },
+];
+
+// Colours recreated to reproduce the four measured ratios exactly; the product's real palette isn't shown.
+const pairs = [
+  { fg: "#979DA7", bg: "#FFFFFF", ratio: "2.73", label: "Pair A" },
+  { fg: "#F0EDF5", bg: "#FFFFFF", ratio: "1.16", label: "Pair B" },
+  { fg: "#E3DFEC", bg: "#F3F1FA", ratio: "1.17", label: "Pair C" },
+  { fg: "#E8D9CA", bg: "#FFFFFF", ratio: "1.38", label: "Pair D" },
+];
+const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab", words: "See the rewrite", small: "See the fix" } as Record<string, string>;
+---
+<Base title="Accessibility audit · Ankur Singh" description="Case study: an 18-point WCAG 2.1 audit of a live web app, rebuilt as interactive demos.">
+  <article>
+    <header class="hero wrap">
+      <p class="mono reveal"><a href="/">Work</a> / 04 · Accessibility · Audit</p>
+      <h1 class="reveal">18 checks. 10 barriers. One honest scorecard.</h1>
+      <p class="lede reveal">I audited a live consumer web app against WCAG 2.1 to answer one question: can everyone use it? Every screen below is rebuilt in code, so you can try the problems, and the fixes, yourself.</p>
+      <dl class="meta reveal">
+        <div><dt class="mono">My role</dt><dd>Sole auditor: method, testing, findings and recommendations</dd></div>
+        <div><dt class="mono">Standard</dt><dd>WCAG 2.1, Levels A and AA, with AAA where noted</dd></div>
+        <div><dt class="mono">Method</dt><dd>Manual review of key screens in Chrome, 18-point checklist</dd></div>
+        <div><dt class="mono">Year</dt><dd>2025 · for a client</dd></div>
+      </dl>
+    </header>
+
+    <!-- 01 Scorecard -->
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">01 / Scorecard</p><h2>More than half failed.</h2></div>
+      <div class="b reveal score">
+        <figure class="donut" aria-label={`${nFail} failed and ${nPass} passed, of ${checks.length} checks`}>
+          <svg viewBox="0 0 180 180" aria-hidden="true">
+            <circle cx="90" cy="90" r="70" class="track" />
+            {seg.map(s => (
+              <circle cx="90" cy="90" r="70" class={`arc ${s.cls}`}
+                style={`--len:${(s.n / checks.length) * C - 3};--gap:${C};--off:${-(s.off / checks.length) * C}`} />
+            ))}
+          </svg>
+          <div class="mid"><b data-count={checks.length}>0</b><span class="mono">checks</span></div>
+        </figure>
+        <ul class="legend">
+          <li class="fail"><b data-count={nFail}>0</b><span>Failed<small>{Math.round(nFail / checks.length * 100)}% · keyboard, focus and contrast lead the list</small></span></li>
+          <li class="pass"><b data-count={nPass}>0</b><span>Passed<small>{Math.round(nPass / checks.length * 100)}% · some areas were well built</small></span></li>
+        </ul>
+        <p class="muted">I grouped the findings by WCAG principle and gave each one an owner, so every finding lands with the team that can fix it: <strong>perceivable</strong> → design, <strong>operable</strong> → development and <strong>understandable</strong> → content and UX.</p>
+      </div>
+    </section>
+
+    <!-- 02 The board -->
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">02 / The audit board</p><h2>Every check, on one wall.</h2></div>
+        <div class="b reveal">
+          <p>Here's the whole audit from a distance. Pick a card to zoom in and see what I found and what I recommended. Use the filters to see only the failures.</p>
+          <div class="filters" role="group" aria-label="Filter checks">
+            <button class="chip" aria-pressed="true" data-filter="all">All {checks.length}</button>
+            <button class="chip" aria-pressed="false" data-filter="fail"><i class="dot fail"></i>Failed {nFail}</button>
+            <button class="chip" aria-pressed="false" data-filter="pass"><i class="dot pass"></i>Passed {nPass}</button>
+          </div>
+        </div>
+      </div>
+      <div class="board reveal" id="board" data-filter="all">
+        <p class="hand hint" aria-hidden="true">pick any card to zoom in ↘</p>
+        <div class="canvas">
+          {lanes.map(l => (
+            <section class={`lane lane-${l.k}`} aria-label={l.name}>
+              <header><span class="mono">{l.sub}</span><h3>{l.name}</h3></header>
+              <ul>
+                {checks.map((c, i) => c.lane === l.k && (
+                  <li><button class="card" data-i={i} data-status={c.status} aria-expanded="false" aria-controls="pop">
+                    <i class={`dot ${c.status}`}></i>
+                    <span class="t">{c.status === "pass" ? "Passed" : c.title}</span>
+                    {c.ref && <span class="r mono">{c.ref}</span>}
+                    <span class="sr">{statusName[c.status]}</span>
+                  </button></li>
+                ))}
+              </ul>
+            </section>
+          ))}
+        </div>
+        <div class="pop" id="pop" role="dialog" aria-modal="false" aria-labelledby="popTitle" hidden>
+          <div class="pophead">
+            <span class="mono" id="popCount"></span>
+            <div class="popnav">
+              <button class="pbtn" data-step="-1" aria-label="Previous check">←</button>
+              <button class="pbtn" data-step="1" aria-label="Next check">→</button>
+              <button class="pbtn" data-close aria-label="Zoom out">✕</button>
+            </div>
+          </div>
+          {checks.map((c, i) => (
+            <div class="detail" data-for={i} hidden>
+              <p class={`badge ${c.status}`}><i class={`dot ${c.status}`}></i>{statusName[c.status]}{c.ref && <span> · WCAG {c.ref}</span>}</p>
+              <h3 tabindex="-1">{c.status === "pass" ? "A passed check" : c.title}</h3>
+              <div class="pair2">
+                <div><span class="mono">{c.status === "fail" ? "What I found" : "Result"}</span><p>{c.found}</p></div>
+                <div><span class="mono">{c.status === "fail" ? "What I recommended" : "Note"}</span><p>{c.next}</p></div>
+              </div>
+              {c.demo && <a class="btn demo-link" href={`#${c.demo}`}>{demoLink[c.demo]} ↓</a>}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 Contrast lab -->
+    <section class="wrap sec" id="contrast">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">03 / Contrast lab</p><h2>1.16:1 is almost invisible.</h2></div>
+        <div class="b reveal"><p>I measured four foreground and background pairs. The best scored 2.73:1, and the worst 1.16:1. WCAG AA asks for 4.5:1 for body text. Pick a pair, then drag the slider to fix it.</p></div>
+      </div>
+      <div class="lab reveal" data-lab="contrast">
+        <div class="tabs" role="tablist" aria-label="Measured colour pairs">
+          {pairs.map((p, i) => (
+            <button role="tab" class="tab" aria-selected={i === 0 ? "true" : "false"} data-fg={p.fg} data-bg={p.bg}>
+              <span class="sw" style={`background:${p.bg};color:${p.fg}`}>Aa</span>
+              <span><b>{p.ratio}:1</b><span class="mono">{p.label}</span></span>
+            </button>
+          ))}
+        </div>
+        <div class="cstage">
+          <div class="sample" id="sample">
+            <p class="s-meta">Weeknight dinners · 24 replies</p>
+            <p class="s-title">Five-ingredient dal, three ways</p>
+            <p class="s-body">Temper the spices first, then add the lentils. Readers who can't see this line can't follow the recipe.</p>
+          </div>
+          <div class="readout">
+            <p class="ratio"><b id="ratio">2.73</b><span>:1</span></p>
+            <ul class="grades">
+              <li data-min="3">AA large text <span>3:1</span></li>
+              <li data-min="4.5">AA body text <span>4.5:1</span></li>
+              <li data-min="7">AAA <span>7:1</span></li>
+            </ul>
+            <label class="mono" for="fix">Darken the text</label>
+            <input type="range" id="fix" min="0" max="100" value="0" />
+            <p class="hand note-c">drag until AA turns green →</p>
+          </div>
+        </div>
+        <p class="mono cap">Colours rebuilt to reproduce the measured ratios exactly. The product's real palette isn't shown.</p>
+      </div>
+    </section>
+
+    <!-- 04 Focus lab -->
+    <section class="wrap sec" id="focus">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">04 / Focus lab</p><h2>Where am I?</h2></div>
+        <div class="b reveal"><p>Three of the operable failures had one root cause: you couldn't see keyboard focus. Some buttons showed a faint change and others showed nothing. Click the first button below, then press <kbd>Tab</kbd> to move through the rest. Then switch to the recommended version.</p></div>
+      </div>
+      <div class="lab reveal">
+        <div class="seg" role="radiogroup" aria-label="Version">
+          <button role="radio" aria-checked="true" data-mode="found">As found</button>
+          <button role="radio" aria-checked="false" data-mode="fixed">Recommended</button>
+        </div>
+        <div class="fstage" id="fdemo" data-mode="found">
+          <div class="post">
+            <p class="s-meta">Posted by Meera · 2h</p>
+            <p class="s-title">Five-ingredient dal, three ways</p>
+            <div class="acts">
+              <button class="act faint">Reply</button>
+              <button class="act">Like</button>
+              <button class="act faint">Share</button>
+              <button class="act">Save</button>
+              <button class="act">Report</button>
+            </div>
+          </div>
+          <p class="hand note-f" aria-hidden="true">← pressing Tab… but which one is selected?</p>
+        </div>
+        <p class="tracker mono" aria-live="polite">Keyboard focus: <b id="where">not in the demo yet</b></p>
+        <p class="mono cap">The "as found" version hides focus on purpose, inside this demo only. The line above always tells you where focus is.</p>
+      </div>
+    </section>
+
+    <!-- 05 Words -->
+    <section class="wrap sec" id="words">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">05 / Words are interface</p><h2>Say what it does, and what it costs.</h2></div>
+        <div class="b reveal"><p>Two failures were about copy, not code. A button labelled with its state left people guessing what it would do. A delete dialog asked "Are you sure?" without saying what would be deleted, or whether deleting could be undone.</p></div>
+      </div>
+      <div class="duo reveal">
+        <figure class="cardx">
+          <figcaption class="mono">Theme button · try both</figcaption>
+          <div class="tw">
+            <div class="mini" data-theme-demo="found">
+              <span class="mono tag-x bad">As found</span>
+              <p class="s-title">Five-ingredient dal</p>
+              <button class="tbtn" data-found>🌙 Dark mode</button>
+            </div>
+            <div class="mini" data-theme-demo="fixed">
+              <span class="mono tag-x good">Recommended</span>
+              <p class="s-title">Five-ingredient dal</p>
+              <button class="tbtn" data-fixed aria-pressed="false">🌙 Switch to dark mode</button>
+            </div>
+          </div>
+          <p class="hand">"Dark mode": is it on, or will it turn it on?</p>
+        </figure>
+        <figure class="cardx">
+          <figcaption class="mono">Delete dialog</figcaption>
+          <div class="tw">
+            <div class="dlg found">
+              <span class="mono tag-x bad">As found</span>
+              <div class="behind" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="box"><b>Delete thread?</b><p>Are you sure?</p><div class="r2"><span>Cancel</span><span class="danger">Delete</span></div></div>
+            </div>
+            <div class="dlg fixed">
+              <span class="mono tag-x good">Recommended</span>
+              <div class="behind" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="box"><b>Delete "Five-ingredient dal"?</b><p>This removes the thread and its 24 replies for everyone. You can't undo this.</p><div class="r2"><span>Keep thread</span><span class="danger">Delete thread</span></div></div>
+            </div>
+          </div>
+          <p class="hand">which thread? can I get it back?</p>
+        </figure>
+      </div>
+      <p class="mono cap wrapcap">Example content. The real product's copy isn't shown.</p>
+    </section>
+
+    <!-- 06 Small fixes -->
+    <section class="wrap sec" id="small">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">06 / Small fixes</p><h2>Three quick wins.</h2></div>
+        <div class="b reveal"><p>Some findings need no new feature, just a rule applied everywhere. Hover or tap each "after" to see why it works.</p></div>
+      </div>
+      <ol class="wins reveal">
+        <li>
+          <span class="mono">Target size · 2.5.5</span>
+          <div class="ba">
+            <div class="cell"><span class="mono tag-x bad">Before</span><div class="icons tight"><i>♥</i><i>↗</i><i>⋯</i></div></div>
+            <div class="cell zones" tabindex="0"><span class="mono tag-x good">After</span><div class="icons roomy"><i>♥</i><i>↗</i><i>⋯</i></div><span class="pop2">Each target 44px or larger, with 8px between them.</span></div>
+          </div>
+        </li>
+        <li>
+          <span class="mono">Consistency · 3.2.4</span>
+          <div class="ba">
+            <div class="cell"><span class="mono tag-x bad">Before</span><div class="btns many"><span>Save</span><span>Save</span><span>Post</span><span>Send</span><span>Done</span><span>OK</span></div></div>
+            <div class="cell zones" tabindex="0"><span class="mono tag-x good">After</span><div class="btns few"><span class="p1">Primary</span><span class="p2">Secondary</span><span class="p3">Text</span></div><span class="pop2">Three button types, each with one meaning, learned once.</span></div>
+          </div>
+        </li>
+        <li>
+          <span class="mono">No surprises · predictable</span>
+          <div class="ba">
+            <div class="cell"><span class="mono tag-x bad">Before</span><div class="vbtn">Watch recipe</div></div>
+            <div class="cell zones" tabindex="0"><span class="mono tag-x good">After</span><div class="vbtn">▶ Watch recipe <small>Video · 2 min</small></div><span class="pop2">The label warns that a video will play before you click.</span></div>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+
+    <!-- 07 Since -->
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">07 / Since then</p><h2>Accessibility as a floor, not a fix.</h2></div>
+      <div class="b reveal">
+        <p>Auditing someone else's product is the cheapest way to learn what to build in from day one. In the design system I wrote in 2026, the floor is part of the tokens:</p>
+        <ul class="stats">
+          <li class="stat"><b>AA</b><span>contrast for every text and surface pair</span></li>
+          <li class="stat"><b>44px</b><span>minimum touch target</span></li>
+          <li class="stat"><b>3:1</b><span>focus ring contrast, so slate, not yellow</span></li>
+          <li class="stat"><b>≠ colour</b><span>status never shown by colour alone</span></li>
+        </ul>
+        <p class="muted">The recommendations went to the product team as a checklist with a WCAG reference for every item.</p>
+        <p class="next"><a class="btn ghost" href="/">← All work</a></p>
+      </div>
+    </section>
+  </article>
+</Base>
+
+<script>
+  const $ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => r.querySelector(s) as T;
+  const $$ = <T extends Element = HTMLElement>(s: string, r: ParentNode = document) => [...r.querySelectorAll(s)] as T[];
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const wide = matchMedia("(min-width: 821px)");
+
+  // Count-up numbers when the scorecard comes into view
+  const score = $(".score");
+  new IntersectionObserver(([e], o) => {
+    if (!e.isIntersecting) return;
+    o.disconnect();
+    score.classList.add("drawn");
+    $$("[data-count]").forEach(el => {
+      const n = Number(el.dataset.count);
+      if (still) { el.textContent = String(n); return; }
+      const t0 = performance.now();
+      const tick = (t: number) => {
+        const p = Math.min((t - t0) / 1100, 1);
+        el.textContent = String(Math.round(n * (1 - (1 - p) ** 3)));
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }, { threshold: 0.4 }).observe(score);
+
+  // Audit board: zoom into a card, show its detail beside it
+  const board = $("#board"), canvas = $(".canvas", board), pop = $("#pop");
+  const cards = $$<HTMLButtonElement>(".card", board);
+  const visible = () => cards.filter(c => board.dataset.filter === "all" || c.dataset.status === board.dataset.filter);
+  let active: HTMLButtonElement | null = null;
+
+  function open(card: HTMLButtonElement) {
+    active = card;
+    cards.forEach(c => { c.classList.toggle("on", c === card); c.setAttribute("aria-expanded", String(c === card)); });
+    const i = card.dataset.i;
+    $$(".detail", pop).forEach(d => (d.hidden = d.dataset.for !== i));
+    const list = visible();
+    $("#popCount").textContent = `Check ${list.indexOf(card) + 1} of ${list.length}`;
+    pop.hidden = false;
+    board.classList.add("zoomed");
+    if (wide.matches) {
+      const s = 1.9;
+      const cx = card.offsetLeft + card.offsetWidth / 2, cy = card.offsetTop + card.offsetHeight / 2;
+      canvas.style.transform = `translate(${board.clientWidth * 0.27 - cx * s}px, ${board.clientHeight / 2 - cy * s}px) scale(${s})`;
+    }
+    $<HTMLElement>(`.detail[data-for="${i}"] h3`, pop).focus({ preventScroll: true });
+  }
+  function close() {
+    if (!active) return;
+    const was = active;
+    active = null;
+    canvas.style.transform = "";
+    board.classList.remove("zoomed");
+    cards.forEach(c => { c.classList.remove("on"); c.setAttribute("aria-expanded", "false"); });
+    pop.hidden = true;
+    was.focus({ preventScroll: true });
+  }
+  function step(d: number) {
+    if (!active) return;
+    const list = visible();
+    open(list[(list.indexOf(active) + d + list.length) % list.length]);
+  }
+  cards.forEach(c => c.addEventListener("click", () => (active === c ? close() : open(c))));
+  $$("[data-step]", pop).forEach(b => b.addEventListener("click", () => step(Number(b.dataset.step))));
+  $("[data-close]", pop).addEventListener("click", close);
+  $$(".demo-link", pop).forEach(a => a.addEventListener("click", () => close()));
+  board.addEventListener("keydown", e => {
+    if (e.key === "Escape") close();
+    if (active && (e.key === "ArrowRight" || e.key === "ArrowLeft")) { e.preventDefault(); step(e.key === "ArrowRight" ? 1 : -1); }
+  });
+  wide.addEventListener("change", () => active && open(active));
+
+  $$<HTMLButtonElement>("[data-filter]").forEach(b => b.addEventListener("click", () => {
+    $$("[data-filter]").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    board.dataset.filter = b.dataset.filter!;
+    if (active && !visible().includes(active)) close();
+  }));
+
+  // Contrast lab: WCAG relative luminance, live as the text darkens
+  const hex = (h: string) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  const lum = (rgb: number[]) => {
+    const [r, g, b] = rgb.map(v => (v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (a: number[], b: number[]) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  const DARK = [31, 36, 48];
+  const sample = $("#sample"), ratioEl = $("#ratio"), fix = $<HTMLInputElement>("#fix");
+  let fg = [0, 0, 0], bg = [255, 255, 255];
+  function paint() {
+    const t = Number(fix.value) / 100;
+    const c = fg.map((v, i) => Math.round(v + (DARK[i] - v) * t));
+    const rgb = `rgb(${c.join(",")})`;
+    sample.style.color = rgb;
+    sample.style.background = `rgb(${bg.join(",")})`;
+    const r = contrast(c, bg);
+    ratioEl.textContent = r.toFixed(2);
+    $$("[data-min]").forEach(li => li.classList.toggle("ok", r >= Number(li.dataset.min)));
+  }
+  $$<HTMLButtonElement>(".tab").forEach(tab => tab.addEventListener("click", () => {
+    $$(".tab").forEach(t => t.setAttribute("aria-selected", String(t === tab)));
+    fg = hex(tab.dataset.fg!); bg = hex(tab.dataset.bg!);
+    fix.value = "0";
+    paint();
+  }));
+  fix.addEventListener("input", paint);
+  $<HTMLButtonElement>(".tab").click();
+
+  // Focus lab
+  const fdemo = $("#fdemo"), where = $("#where");
+  $$<HTMLButtonElement>(".seg [data-mode]").forEach(b => b.addEventListener("click", () => {
+    $$(".seg [data-mode]").forEach(x => x.setAttribute("aria-checked", String(x === b)));
+    fdemo.dataset.mode = b.dataset.mode!;
+  }));
+  fdemo.addEventListener("focusin", e => (where.textContent = `"${(e.target as HTMLElement).textContent}" button`));
+  fdemo.addEventListener("focusout", e => { if (!fdemo.contains(e.relatedTarget as Node)) where.textContent = "outside the demo"; });
+
+  // Theme buttons: same behaviour, different labels
+  $$<HTMLButtonElement>("[data-found]").forEach(b => b.addEventListener("click", () => {
+    const m = b.closest(".mini")!, dark = m.classList.toggle("dark");
+    b.textContent = dark ? "☀️ Light mode" : "🌙 Dark mode";
+  }));
+  $$<HTMLButtonElement>("[data-fixed]").forEach(b => b.addEventListener("click", () => {
+    const m = b.closest(".mini")!, dark = m.classList.toggle("dark");
+    b.setAttribute("aria-pressed", String(dark));
+    b.textContent = dark ? "☀️ Switch to light mode" : "🌙 Switch to dark mode";
+  }));
+</script>
+
+<style>
+  .hero { padding: 88px var(--gutter) 48px; }
+  .hero h1 { max-width: 15ch; margin: 16px 0 24px; }
+  .hero .mono a { text-decoration: none; }
+  .lede { font-size: clamp(18px, 1.6vw, 22px); color: var(--ink-2); max-width: 58ch; }
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 56px; border-top: 1px solid var(--ink); padding-top: 16px; }
+  .meta dd { margin: 6px 0 0; font-size: 15px; }
+
+  .sec { padding-top: 120px; }
+  .sec > .grid12, .sec.grid12 { row-gap: 16px; }
+  .h { grid-column: 1 / 5; }
+  .h h2 { margin-top: 10px; }
+  .b { grid-column: 5 / 13; display: grid; gap: 16px; align-content: start; }
+  .cap { text-transform: none; letter-spacing: 0; font-size: 12px; margin-top: 12px; }
+  .wrapcap { margin-top: 12px; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+
+  /* status colours */
+  .score, .board, .lab, .filters { --fail: #C8432B; --pass: var(--ok); }
+  :global(:root[data-theme="dark"]) :is(.board, .score, .filters) { --pass: #4CC38A; }
+  @media (prefers-color-scheme: dark) { :global(:root:not([data-theme="light"])) :is(.board, .score, .filters) { --pass: #4CC38A; } }
+  .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex: none; }
+  .dot.fail { background: var(--fail); }
+  .dot.pass { background: var(--pass); }
+
+  /* scorecard */
+  .score { grid-template-columns: 220px 1fr; align-items: center; column-gap: 40px; }
+  .score > p { grid-column: 1 / -1; }
+  .donut { position: relative; margin: 0; width: 220px; }
+  .donut svg { width: 100%; transform: rotate(-90deg); }
+  .donut circle { fill: none; stroke-width: 22; }
+  .track { stroke: var(--surface-2); }
+  .arc { stroke-dasharray: 0 var(--gap); stroke-dashoffset: var(--off); transition: stroke-dasharray 1.2s var(--ease); }
+  .arc.fail { stroke: var(--fail); } .arc.pass { stroke: var(--pass); }
+  .drawn .arc { stroke-dasharray: calc(var(--len) * 1px) calc(var(--gap) * 1px); }
+  .arc.pass { transition-delay: .3s; }
+  .mid { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+  .mid b { font-size: 56px; font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+  .legend { list-style: none; padding: 0; display: grid; gap: 10px; }
+  .legend li { display: grid; grid-template-columns: 72px 1fr; align-items: center; gap: 12px; background: var(--surface); border: 1px solid var(--line); border-left: 4px solid; border-radius: var(--r-md); padding: 12px 16px; }
+  .legend li.fail { border-left-color: var(--fail); } .legend li.pass { border-left-color: var(--pass); }
+  .legend b { font-size: 40px; font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+  .legend span { font-weight: 500; display: grid; }
+  .legend small { font-weight: 400; color: var(--ink-2); font-size: 14px; }
+
+  /* board */
+  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+  .board { position: relative; height: 420px; margin-top: 40px; border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden;
+    background: var(--surface) radial-gradient(circle, var(--line-strong) 1px, transparent 1.2px) 0 0 / 22px 22px; }
+  .hint { position: absolute; right: 24px; top: 14px; z-index: 1; transition: opacity .3s; }
+  .zoomed .hint { opacity: 0; }
+  .canvas { position: absolute; inset: 0; padding: 48px 24px 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; transform-origin: 0 0; transition: transform .8s var(--ease); }
+  .lane header { padding: 0 4px 10px; border-bottom: 2px solid var(--ink); margin-bottom: 10px; }
+  .lane header h3 { font-size: 18px; margin-top: 2px; }
+  .lane ul { list-style: none; padding: 0; display: grid; gap: 8px; }
+  .lane-S ul { grid-template-columns: 1fr 1fr; }
+  .card { width: 100%; text-align: left; display: grid; grid-template-columns: auto 1fr; column-gap: 8px; align-items: start; padding: 10px; border-radius: var(--r-sm);
+    background: var(--bg); border: 1px solid var(--line); color: var(--ink); font: 500 13px/1.3 var(--font); cursor: pointer;
+    box-shadow: 0 6px 14px -12px rgba(15,16,18,.5); transition: opacity .35s, transform .25s var(--ease), border-color .2s, box-shadow .25s; }
+  .card .dot { margin-top: 3px; }
+  .card .r { grid-column: 2; font-size: 10px; color: var(--ink-3); margin-top: 4px; text-transform: none; }
+  .card[data-status="fail"] { border-left: 3px solid var(--fail); }
+  .card:hover { transform: translateY(-2px); border-color: var(--ink-3); }
+  .card.on { border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent), 0 12px 24px -12px rgba(15,16,18,.5); }
+  .lane-S .card { min-height: 44px; }
+  .board[data-filter="fail"] .card:not([data-status="fail"]),
+  .board[data-filter="pass"] .card:not([data-status="pass"]) { opacity: .15; pointer-events: none; }
+  .zoomed .card:not(.on) { opacity: .35; }
+
+  .pop { position: absolute; right: 20px; top: 20px; bottom: 20px; width: min(400px, 42%); background: var(--ink); color: var(--bg); border-radius: var(--r-lg); padding: 22px 24px; overflow: auto;
+    box-shadow: 0 30px 60px -20px rgba(15,16,18,.55); animation: popin .45s var(--ease); z-index: 3; }
+  .pop[hidden] { display: none; }
+  @keyframes popin { from { opacity: 0; transform: translateX(24px); } }
+  .pophead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .pophead .mono { color: color-mix(in srgb, var(--bg) 60%, transparent); }
+  .popnav { display: flex; gap: 6px; }
+  .pbtn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--bg) 30%, transparent); background: transparent; color: inherit; cursor: pointer; font-size: 14px; }
+  .pbtn:hover { background: color-mix(in srgb, var(--bg) 14%, transparent); }
+  .detail h3 { font-size: 26px; margin: 10px 0 18px; outline: none; }
+  .badge { display: inline-flex; align-items: center; gap: 8px; font: 500 12px var(--mono); padding: 5px 10px; border-radius: 999px; background: color-mix(in srgb, var(--bg) 12%, transparent); }
+  .pair2 { display: grid; gap: 16px; }
+  .pair2 .mono { color: color-mix(in srgb, var(--bg) 60%, transparent); }
+  .pair2 p { margin-top: 4px; font-size: 15px; }
+  .demo-link { margin-top: 20px; background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  /* labs */
+  .lab { margin-top: 40px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; }
+  .tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .tab { display: flex; gap: 12px; align-items: center; padding: 10px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--bg); color: var(--ink); cursor: pointer; text-align: left; font: inherit; }
+  .tab[aria-selected="true"] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+  .tab b { display: block; font-size: 18px; font-weight: 600; color: var(--fail); }
+  .sw { width: 44px; height: 44px; border-radius: 8px; display: grid; place-items: center; font: 600 18px var(--font); border: 1px solid #E3E3DF; flex: none; }
+  .cstage { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-top: 20px; align-items: stretch; }
+  .sample { border-radius: var(--r-md); padding: 32px; border: 1px solid #E3E3DF; display: grid; gap: 8px; align-content: center; min-height: 240px; transition: color .15s; }
+  .s-meta { font-size: 13px; }
+  .s-title { font-size: 26px; font-weight: 600; letter-spacing: -.02em; line-height: 1.15; }
+  .s-body { font-size: 16px; }
+  .readout { display: grid; gap: 12px; align-content: start; }
+  .ratio { font-size: 72px; font-weight: 500; letter-spacing: -.05em; line-height: 1; }
+  .ratio span { font-size: 32px; color: var(--ink-3); }
+  .grades { list-style: none; padding: 0; display: grid; gap: 6px; }
+  .grades li { display: flex; justify-content: space-between; padding: 8px 12px; border-radius: 8px; background: color-mix(in srgb, var(--fail) 12%, transparent); font-size: 14px; transition: background .25s; }
+  .grades li::before { content: "✕"; margin-right: 8px; color: var(--fail); font-weight: 700; }
+  .grades li.ok { background: color-mix(in srgb, var(--pass) 16%, transparent); }
+  .grades li.ok::before { content: "✓"; color: var(--pass); }
+  .grades li span { margin-left: auto; font: 500 12px var(--mono); color: var(--ink-2); }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .note-c { margin-top: 4px; }
+
+  .seg { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--surface-2); gap: 4px; }
+  .seg button { border: 0; background: transparent; color: var(--ink-2); font: 500 14px var(--font); padding: 8px 16px; border-radius: 999px; cursor: pointer; }
+  .seg button[aria-checked="true"] { background: var(--ink); color: var(--bg); }
+  .fstage { position: relative; margin-top: 20px; display: grid; grid-template-columns: minmax(0, 560px) 1fr; gap: 24px; align-items: center; }
+  .post { background: #FFFFFF; color: #1F2430; border: 1px solid #E3E3DF; border-radius: var(--r-md); padding: 24px; display: grid; gap: 6px; }
+  .post .s-meta { color: #5E6168; }
+  .acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .act { font: 500 14px var(--font); padding: 10px 14px; border-radius: 8px; border: 1px solid #DCDCE4; background: #FAFAFB; color: #1F2430; cursor: pointer; }
+  [data-mode="found"] .act:focus-visible { outline: none; }
+  [data-mode="found"] .act.faint:focus-visible { background: #F3F3F6; }
+  [data-mode="fixed"] .act:focus-visible { outline: 3px solid #3A4A63; outline-offset: 2px; background: #EEF1F6; }
+  .note-f { transition: opacity .3s; }
+  [data-mode="fixed"] .note-f { opacity: 0; }
+  .tracker { margin-top: 16px; text-transform: none; letter-spacing: 0; font-size: 13px; }
+  .tracker b { color: var(--ink); }
+
+  .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 40px; }
+  .cardx { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 20px; display: grid; gap: 14px; }
+  .cardx figcaption { text-transform: none; letter-spacing: 0; }
+  .tw { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .tag-x { display: inline-block; font-size: 10px; padding: 3px 8px; border-radius: 999px; justify-self: start; color: #fff; }
+  .tag-x.bad { background: #C8432B; } .tag-x.good { background: #11703A; }
+  .mini { background: #FFFFFF; color: #1F2430; border: 1px solid #E3E3DF; border-radius: var(--r-md); padding: 14px; display: grid; gap: 10px; align-content: start; transition: background .3s, color .3s; }
+  .mini .s-title { font-size: 16px; }
+  .mini.dark { background: #16171A; color: #F1F1EE; border-color: #33363C; }
+  .tbtn { font: 500 13px var(--font); padding: 10px 12px; border-radius: 8px; border: 1px solid currentColor; background: transparent; color: inherit; cursor: pointer; text-align: left; min-height: 44px; }
+  .dlg { position: relative; border-radius: var(--r-md); overflow: hidden; min-height: 210px; background: #FFFFFF; border: 1px solid #E3E3DF; padding: 10px; display: grid; align-content: start; }
+  .behind { display: grid; gap: 8px; margin-top: 10px; }
+  .behind i { height: 14px; border-radius: 4px; background: #DCDCE4; }
+  .dlg.found .behind { filter: blur(3px); opacity: .5; }
+  .dlg .box { position: absolute; left: 10px; right: 10px; bottom: 10px; background: #FFFFFF; color: #1F2430; border-radius: 10px; padding: 14px; box-shadow: 0 16px 32px -12px rgba(15,16,18,.45); display: grid; gap: 6px; font-size: 13px; }
+  .dlg.found::after { content: ""; position: absolute; inset: 0; background: rgba(15,16,18,.55); }
+  .dlg.found .box, .dlg.found .tag-x { z-index: 1; }
+  .dlg .box b { font-size: 15px; }
+  .r2 { display: flex; gap: 6px; justify-content: flex-end; margin-top: 4px; }
+  .r2 span { padding: 6px 10px; border-radius: 6px; border: 1px solid #DCDCE4; font-weight: 500; font-size: 12px; }
+  .r2 .danger { background: #C42B2B; border-color: #C42B2B; color: #fff; }
+
+  .wins { list-style: none; padding: 0; margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .wins > li { display: grid; gap: 10px; align-content: start; }
+  .wins > li > .mono { text-transform: none; letter-spacing: 0; }
+  .ba { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cell { position: relative; background: #FFFFFF; color: #1F2430; border: 1px solid #E3E3DF; border-radius: var(--r-md); padding: 10px; min-height: 140px; display: grid; gap: 12px; align-content: start; }
+  .icons { display: flex; align-items: center; }
+  .icons i { font-style: normal; display: grid; place-items: center; border-radius: 6px; background: #F1F1F4; }
+  .icons.tight { gap: 1px; } .icons.tight i { width: 22px; height: 22px; font-size: 11px; }
+  .icons.roomy { gap: 8px; } .icons.roomy i { width: 44px; height: 44px; font-size: 16px; }
+  .zones:is(:hover, :focus-visible) .icons.roomy i { outline: 1px dashed #2F5BFF; outline-offset: 0; background: #E7EDFF; }
+  .btns { display: flex; flex-wrap: wrap; gap: 4px; font-size: 11px; }
+  .btns span { padding: 4px 8px; }
+  .many span:nth-child(1) { background: #2F5BFF; color: #fff; border-radius: 2px; }
+  .many span:nth-child(2) { border: 1px solid #2F5BFF; color: #2F5BFF; border-radius: 999px; }
+  .many span:nth-child(3) { background: #11703A; color: #fff; border-radius: 8px; }
+  .many span:nth-child(4) { text-decoration: underline; color: #6B3FD6; }
+  .many span:nth-child(5) { background: #1F2430; color: #fff; }
+  .many span:nth-child(6) { border: 2px dashed #C8432B; }
+  .few span { border-radius: 6px; font-weight: 500; }
+  .few .p1 { background: #1F2430; color: #fff; } .few .p2 { border: 1px solid #1F2430; } .few .p3 { text-decoration: underline; }
+  .vbtn { font-size: 13px; font-weight: 500; padding: 10px 12px; border-radius: 8px; border: 1px solid #DCDCE4; display: grid; justify-items: start; }
+  .vbtn small { font-size: 11px; color: #5E6168; font-weight: 400; }
+  .pop2 { position: absolute; left: 8px; right: 8px; bottom: 8px; background: #0F1012; color: #F1F1EE; font-size: 12px; line-height: 1.4; padding: 8px 10px; border-radius: 8px; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .25s var(--ease); pointer-events: none; }
+  .zones:is(:hover, :focus-visible) .pop2 { opacity: 1; transform: none; }
+  .zones { cursor: help; }
+
+
+  .stats { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 22px; display: grid; gap: 6px; }
+  .stat b { font-size: 40px; font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+  .stat span { color: var(--ink-2); font-size: 15px; }
+  .next { margin-top: 24px; }
+
+  @media (max-width: 1080px) {
+    .duo, .wins { grid-template-columns: 1fr; }
+    .tabs { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 820px) {
+    .hero { padding-top: 48px; }
+    .meta, .stats, .cstage, .fstage { grid-template-columns: 1fr; }
+    .score { grid-template-columns: 1fr; justify-items: center; }
+    .legend { width: 100%; }
+    .sec { padding-top: 80px; }
+    .board { height: auto; overflow: visible; background-size: 18px 18px; }
+    .canvas { position: static; grid-template-columns: 1fr; padding: 16px; transform: none !important; }
+    .hint { display: none; }
+    .pop { position: fixed; left: 8px; right: 8px; top: auto; bottom: 8px; width: auto; max-height: 72vh; z-index: 60; }
+    .zoomed .card:not(.on) { opacity: 1; }
+    .tw { grid-template-columns: 1fr; }
+    .ratio { font-size: 56px; }
+    .lab { padding: 16px; }
+    .sample { padding: 20px; min-height: 0; }
+  }
+  @media (max-width: 480px) { .tabs { grid-template-columns: 1fr; } .ba { grid-template-columns: 1fr; } }
+</style>

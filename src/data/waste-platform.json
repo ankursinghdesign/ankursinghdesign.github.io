@@ -1,0 +1,105 @@
+{
+  "images": {
+    "dash-shipped": {
+      "w": 1920,
+      "h": 1340,
+      "alt": "Operations dashboard: customers by service type, billing and payments, dispatch summary, bin movement and customers by state",
+      "public": "blur"
+    },
+    "dash-v1": {
+      "w": 1920,
+      "h": 980,
+      "alt": "Dashboard iteration 1: KPI tiles and a hex-tile US map",
+      "public": "blur"
+    },
+    "dash-v2": {
+      "w": 1920,
+      "h": 1340,
+      "alt": "Dashboard iteration 2: billing, payments and a choropleth US map",
+      "public": "blur"
+    },
+    "dash-dark": {
+      "w": 1920,
+      "h": 1340,
+      "alt": "Dashboard in the dark theme",
+      "public": "blur"
+    },
+    "cf-concept": {
+      "w": 1920,
+      "h": 1340,
+      "alt": "Rejected concept: a three-step, single-column customer form",
+      "public": "blur"
+    },
+    "cf-shipped": {
+      "w": 1920,
+      "h": 1340,
+      "alt": "Shipped customer record: eight steps with the account number pinned",
+      "public": "blur"
+    },
+    "req-sheet": {
+      "w": 1378,
+      "h": 1147,
+      "alt": "Field-mapping sheet: every setup field with its control type, allowed values and conditional rules",
+      "public": "blur"
+    },
+    "setup-tabs": {
+      "w": 1920,
+      "h": 1047,
+      "alt": "Client setup wizard, step 2 of 4, with tabs for URL, client admin, API, data management, branding and other details",
+      "public": "blur"
+    },
+    "client-admin": {
+      "w": 1920,
+      "h": 1080,
+      "alt": "Creating a client admin, with generated credentials",
+      "public": "blur"
+    },
+    "email-alerts": {
+      "w": 1920,
+      "h": 1086,
+      "alt": "Success and failure email recipients for every automated import",
+      "public": "blur"
+    },
+    "c-textfield": {
+      "w": 453,
+      "h": 695,
+      "alt": "Text field states",
+      "public": "clear"
+    },
+    "c-dropdown": {
+      "w": 277,
+      "h": 464,
+      "alt": "Dropdown",
+      "public": "clear"
+    },
+    "c-datepicker": {
+      "w": 1115,
+      "h": 1123,
+      "alt": "Date picker",
+      "public": "clear"
+    },
+    "c-toast": {
+      "w": 596,
+      "h": 355,
+      "alt": "Toast messages",
+      "public": "clear"
+    },
+    "c-badges": {
+      "w": 334,
+      "h": 311,
+      "alt": "Status badges",
+      "public": "clear"
+    },
+    "c-tooltip": {
+      "w": 476,
+      "h": 398,
+      "alt": "Tooltip",
+      "public": "clear"
+    }
+  },
+  "text": {
+    "client": "a US waste-management software provider and its hauler customers",
+    "client_short": "the provider",
+    "hauler": "a large US hauler"
+  }
+}

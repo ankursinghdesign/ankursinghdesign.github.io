@@ -1,0 +1,218 @@
+{
+  "images": {
+    "comp-dash": {
+      "w": 1920,
+      "h": 1200,
+      "alt": "State oversight dashboard: funds allocated and disbursed, students approved, application trends, programme alerts and recent applications",
+      "public": "blur"
+    },
+    "ceao-dash": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Programme administrator dashboard: providers, disbursements and provider applications to approve or reject",
+      "public": "blur"
+    },
+    "esp-dash": {
+      "w": 1920,
+      "h": 1080,
+      "alt": "Service provider dashboard: services offered, students enrolled and payments received",
+      "public": "blur"
+    },
+    "family": {
+      "w": 1920,
+      "h": 1100,
+      "alt": "Family view: application status, what happens next, and answers to common questions",
+      "public": "blur"
+    },
+    "apply": {
+      "w": 1920,
+      "h": 1085,
+      "alt": "Three-step organisation application, with compliance commitments as explicit checkboxes",
+      "public": "blur"
+    },
+    "disburse": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Fund disbursement: allocation, amount remaining, last and next payment, with manual and automated options",
+      "public": "blur"
+    },
+    "auto-setup": {
+      "w": 768,
+      "h": 634,
+      "alt": "Setting up automated recurring payments: amount, dates, frequency and instalments",
+      "public": "blur"
+    },
+    "g-login": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Sign in",
+      "public": "blur"
+    },
+    "g-2fa": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Two-step verification",
+      "public": "blur"
+    },
+    "g-comp-full": {
+      "w": 1920,
+      "h": 1769,
+      "alt": "State oversight dashboard, full page",
+      "public": "blur"
+    },
+    "g-ceao-mgmt": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Administrator organisations",
+      "public": "blur"
+    },
+    "g-fund-mgmt": {
+      "w": 1920,
+      "h": 2077,
+      "alt": "Fund management and scheduled reports",
+      "public": "blur"
+    },
+    "g-disburse2": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Roles and permissions",
+      "public": "blur"
+    },
+    "g-manual": {
+      "w": 768,
+      "h": 537,
+      "alt": "One-off manual payment",
+      "public": "blur"
+    },
+    "g-reports": {
+      "w": 1920,
+      "h": 2086,
+      "alt": "System reports",
+      "public": "blur"
+    },
+    "g-report-new": {
+      "w": 768,
+      "h": 673,
+      "alt": "Generate a report",
+      "public": "blur"
+    },
+    "g-config": {
+      "w": 768,
+      "h": 509,
+      "alt": "Programme configuration",
+      "public": "blur"
+    },
+    "g-esp-mgmt": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Provider applications",
+      "public": "blur"
+    },
+    "g-esa-apps": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Family applications queue",
+      "public": "blur"
+    },
+    "g-esa-apps2": {
+      "w": 1920,
+      "h": 960,
+      "alt": "Payments to providers",
+      "public": "blur"
+    },
+    "g-esp-full": {
+      "w": 1920,
+      "h": 1742,
+      "alt": "Provider dashboard, full page",
+      "public": "blur"
+    },
+    "g-services": {
+      "w": 1920,
+      "h": 1027,
+      "alt": "Managing services",
+      "public": "blur"
+    },
+    "g-services2": {
+      "w": 1920,
+      "h": 1027,
+      "alt": "Provider payment methods and transactions",
+      "public": "blur"
+    },
+    "g-add-service": {
+      "w": 768,
+      "h": 769,
+      "alt": "Add a service",
+      "public": "blur"
+    },
+    "g-esp-apply": {
+      "w": 1920,
+      "h": 1712,
+      "alt": "Organisation application, step 1",
+      "public": "blur"
+    },
+    "g-esp-apply3": {
+      "w": 1920,
+      "h": 1473,
+      "alt": "Application submitted",
+      "public": "blur"
+    },
+    "g-land": {
+      "w": 1920,
+      "h": 4432,
+      "alt": "Public home page",
+      "public": "blur"
+    },
+    "g-land2": {
+      "w": 1920,
+      "h": 3315,
+      "alt": "Courses and programmes",
+      "public": "blur"
+    },
+    "g-land3": {
+      "w": 1920,
+      "h": 2698,
+      "alt": "Find a provider",
+      "public": "blur"
+    },
+    "g-faq": {
+      "w": 1920,
+      "h": 2475,
+      "alt": "Frequently asked questions",
+      "public": "blur"
+    },
+    "g-land5": {
+      "w": 1920,
+      "h": 4258,
+      "alt": "Family application",
+      "public": "blur"
+    },
+    "g-land6": {
+      "w": 1920,
+      "h": 2170,
+      "alt": "Application sent",
+      "public": "blur"
+    },
+    "g-status": {
+      "w": 1920,
+      "h": 1629,
+      "alt": "Application status",
+      "public": "blur"
+    },
+    "g-add-user": {
+      "w": 768,
+      "h": 806,
+      "alt": "Add a user",
+      "public": "blur"
+    },
+    "landing": {
+      "w": 1920,
+      "h": 3700,
+      "alt": "The public site for families: what the programme is, how it works, its reach, resources and answers",
+      "public": "blur"
+    }
+  },
+  "text": {
+    "client": "a company bidding to run a US state's education savings programme",
+    "client_short": "the client"
+  }
+}

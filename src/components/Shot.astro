@@ -1,0 +1,49 @@
+---
+// A screen: blurred public image, decrypted in the private view, with optional numbered annotations.
+interface Spot { x: number; y: number; title: string; text: string; }
+interface Props { slug: string; id: string; caption?: string; spots?: Spot[]; class?: string; eager?: boolean; }
+const { slug, id, caption, spots = [], class: cls = "", eager = false } = Astro.props;
+const data = (await import(`../data/${slug}.json`)).default;
+const img = data.images[id];
+if (!img) throw new Error(`Unknown image ${slug}/${id}`);
+const locked = img.public !== "clear";
+---
+<figure class:list={["shot", cls, { locked }]}>
+  <div class="frame">
+    <img
+      src={`/img/${slug}/${id}.webp`}
+      width={img.w}
+      height={img.h}
+      alt={img.alt}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+      data-vault={locked ? `${slug}/${id}` : undefined}
+    />
+    {locked && <span class="nda mono">Blurred · NDA</span>}
+    {spots.map((s, i) => (
+      <button class="spot" style={`left:${s.x}%;top:${s.y}%`} aria-expanded="false" aria-label={`Note ${i + 1}: ${s.title}`}>
+        <span class="n">{i + 1}</span>
+        <span class="note" role="note"><b>{s.title}</b>{s.text}</span>
+      </button>
+    ))}
+  </div>
+  {caption && <figcaption class="mono">{caption}</figcaption>}
+</figure>
+
+<style>
+  .shot { margin: 0; }
+  .frame { position: relative; border-radius: var(--r-md); overflow: visible; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 1px 0 rgba(0,0,0,.02), 0 24px 48px -28px rgba(15,16,18,.35); }
+  .frame img { width: 100%; border-radius: inherit; }
+  .nda { position: absolute; right: 12px; top: 12px; background: var(--ink); color: var(--bg); padding: 5px 9px; border-radius: 999px; font-size: 11px; transition: opacity .3s; }
+  .unlocked .nda { opacity: 0; }
+  figcaption { margin-top: 12px; text-transform: none; letter-spacing: 0; font-size: 13px; }
+
+  .spot { position: absolute; transform: translate(-50%, -50%); border: 0; background: none; padding: 0; cursor: pointer; z-index: 2; }
+  .spot .n { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: #fff; font: 600 13px var(--mono); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 25%, transparent); transition: transform var(--t-micro) var(--ease); }
+  .spot .n::after { content: ""; position: absolute; inset: -6px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; animation: ping 2.4s var(--ease) infinite; }
+  .spot:hover .n, .spot[aria-expanded="true"] .n { transform: scale(1.12); }
+  .note { position: absolute; left: 50%; top: calc(100% + 10px); transform: translate(-50%, 4px); width: min(300px, 70vw); background: var(--ink); color: var(--bg); text-align: left; font: 400 14px/1.45 var(--font); padding: 12px 14px; border-radius: var(--r-md); opacity: 0; pointer-events: none; transition: opacity .2s, transform .25s var(--ease); }
+  .note b { display: block; font-weight: 600; margin-bottom: 4px; }
+  .spot:hover .note, .spot:focus-visible .note, .spot[aria-expanded="true"] .note { opacity: 1; transform: translate(-50%, 0); }
+  @keyframes ping { 0% { opacity: .6; transform: scale(.8); } 70%, 100% { opacity: 0; transform: scale(1.6); } }
+</style>

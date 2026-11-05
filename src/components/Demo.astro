@@ -1,0 +1,119 @@
+---
+// A recorded prototype demo. Public: blurred poster and an unlock prompt. Private: the decrypted video,
+// muted autoplay when in view, with chapter jumps, progress and speed.
+interface Props { slug: string; id: string; caption?: string; }
+const { slug, id, caption } = Astro.props;
+const data = (await import(`../data/${slug}.json`)).default;
+const v = data.videos[id];
+const poster = data.images[v.poster];
+const fmt = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, "0")}`;
+---
+<figure class="demo" data-demo={`${slug}/${id}`} data-duration={v.duration}>
+  <div class="dstage">
+    <img class="poster" src={`/img/${slug}/${v.poster}.webp`} width={poster.w} height={poster.h} alt="" loading="lazy" data-vault={`${slug}/${v.poster}`} />
+    <video class="dvid" muted playsinline preload="none" aria-label={caption ?? "Prototype demo"} hidden></video>
+    <div class="dlock">
+      <span class="mono">Recorded from the working prototype · {fmt(v.duration)}</span>
+      <p>This demo shows client screens, so it plays in the private view.</p>
+      <button type="button" class="btn" data-unlock>🔒 Unlock to watch</button>
+    </div>
+    <span class="dload mono" hidden>Decrypting…</span>
+  </div>
+  <div class="dbar" hidden>
+    <button type="button" class="dbtn dpp" aria-label="Pause">❚❚</button>
+    <div class="dchap" role="group" aria-label="Jump to a step">
+      {v.chapters.map((c: { t: number; name: string }) => <button type="button" data-t={c.t}>{c.name}</button>)}
+    </div>
+    <div class="dprog" aria-hidden="true"><i></i></div>
+    <button type="button" class="dbtn dspd" aria-label="Playback speed">1×</button>
+  </div>
+  {caption && <figcaption class="mono">{caption}</figcaption>}
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-demo]").forEach(fig => {
+    const vid = fig.querySelector<HTMLVideoElement>(".dvid")!;
+    const lock = fig.querySelector<HTMLElement>(".dlock")!;
+    const load = fig.querySelector<HTMLElement>(".dload")!;
+    const bar = fig.querySelector<HTMLElement>(".dbar")!;
+    const pp = fig.querySelector<HTMLButtonElement>(".dpp")!;
+    const spd = fig.querySelector<HTMLButtonElement>(".dspd")!;
+    const prog = fig.querySelector<HTMLElement>(".dprog i")!;
+    const chaps = [...fig.querySelectorAll<HTMLButtonElement>(".dchap button")];
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let url = "", visible = false;
+
+    const setState = (on: boolean) => {
+      fig.classList.toggle("live", on);
+      vid.hidden = !on; bar.hidden = !on; lock.hidden = on;
+    };
+    const play = () => vid.play().catch(() => {});
+    const sync = () => { pp.textContent = vid.paused ? "▶" : "❚❚"; pp.setAttribute("aria-label", vid.paused ? "Play" : "Pause"); };
+
+    async function unlocked() {
+      if (url) return;
+      load.hidden = false;
+      try {
+        const bytes = await (window as any).__vault.fetch(`${fig.dataset.demo}.bin`);
+        url = URL.createObjectURL(new Blob([bytes], { type: "video/mp4" }));
+        vid.src = url;
+        setState(true);
+        if (visible && !still) play();
+      } finally { load.hidden = true; }
+    }
+    function locked() {
+      vid.pause(); vid.removeAttribute("src"); vid.load();
+      if (url) URL.revokeObjectURL(url);
+      url = ""; setState(false);
+    }
+
+    document.addEventListener("vault:change", (e: any) => (e.detail.unlocked ? unlocked() : locked()));
+    if ((window as any).__vault?.unlocked) unlocked();
+
+    new IntersectionObserver(([en]) => {
+      visible = en.isIntersecting;
+      if (!url) return;
+      if (visible && !still) play(); else vid.pause();
+    }, { threshold: 0.5 }).observe(fig);
+
+    fig.querySelector("[data-unlock]")!.addEventListener("click", () => document.getElementById("lockBtn")?.click());
+    pp.addEventListener("click", () => (vid.paused ? play() : vid.pause()));
+    fig.querySelector(".dstage")!.addEventListener("click", e => { if (url && e.target === vid) vid.paused ? play() : vid.pause(); });
+    vid.addEventListener("play", sync); vid.addEventListener("pause", sync);
+    vid.addEventListener("ended", () => { vid.currentTime = 0; play(); });
+    spd.addEventListener("click", () => { vid.playbackRate = vid.playbackRate === 1 ? 1.5 : 1; spd.textContent = `${vid.playbackRate}×`; });
+    chaps.forEach(c => c.addEventListener("click", () => { vid.currentTime = Number(c.dataset.t); play(); }));
+    vid.addEventListener("timeupdate", () => {
+      const d = vid.duration || Number(fig.dataset.duration) || 1;
+      prog.style.width = `${(vid.currentTime / d) * 100}%`;
+      let cur = chaps[0];
+      for (const c of chaps) if (vid.currentTime + 0.05 >= Number(c.dataset.t)) cur = c;
+      chaps.forEach(c => c.setAttribute("aria-current", String(c === cur)));
+    });
+  });
+</script>
+
+<style>
+  .demo { margin: 0; }
+  .dstage { position: relative; border-radius: var(--r-lg); overflow: hidden; background: #0b0c0e; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); aspect-ratio: 1600 / 1110; }
+  .poster, .dvid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .dvid { cursor: pointer; }
+  .live .poster { visibility: hidden; }
+  .dlock { position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 12px; text-align: center; padding: 24px; background: rgba(11,12,14,.55); color: #fff; }
+  .dlock[hidden], .dvid[hidden], .dbar[hidden], .dload[hidden] { display: none; }
+  .dlock p { max-width: 40ch; color: rgba(255,255,255,.85); }
+  .dlock .mono { color: #FFCA33; }
+  .dlock .btn { background: #FFCA33; color: #111; border-color: #FFCA33; }
+  .dload { position: absolute; left: 16px; bottom: 16px; color: #fff; background: rgba(0,0,0,.6); padding: 6px 10px; border-radius: 999px; }
+  .dbar { display: flex; align-items: center; gap: 12px; margin-top: 14px; flex-wrap: wrap; }
+  .dbtn { border: 0; background: color-mix(in srgb, currentColor 14%, transparent); color: inherit; min-width: 40px; height: 40px; border-radius: 999px; padding: 0 12px; font: 600 13px var(--mono); cursor: pointer; }
+  .dbtn:hover { background: color-mix(in srgb, currentColor 24%, transparent); }
+  .dchap { display: flex; gap: 6px; flex-wrap: wrap; }
+  .dchap button { border: 1px solid color-mix(in srgb, currentColor 22%, transparent); background: transparent; color: inherit; font: 500 13px var(--font); padding: 7px 12px; border-radius: 999px; cursor: pointer; transition: background var(--t-micro), color var(--t-micro), border-color var(--t-micro); }
+  .dchap button:hover { border-color: currentColor; }
+  .dchap button[aria-current="true"] { background: #FFCA33; color: #111; border-color: #FFCA33; }
+  .dprog { flex: 1 1 160px; height: 4px; border-radius: 4px; background: color-mix(in srgb, currentColor 18%, transparent); overflow: hidden; }
+  .dprog i { display: block; height: 100%; width: 0; background: #FFCA33; transition: width .25s linear; }
+  .demo :global(figcaption) { margin-top: 10px; text-transform: none; letter-spacing: 0; font-size: 13px; }
+  @media (max-width: 640px) { .dchap button { padding: 6px 10px; font-size: 12px; } }
+</style>

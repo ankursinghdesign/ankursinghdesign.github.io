@@ -1,0 +1,17 @@
+{
+  "name": "ankur-portfolio-v3",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "images": "node scripts/prepare-images.mjs",
+    "dev": "npm run images && astro dev",
+    "build": "npm run images && astro build && node scripts/leak-check.mjs",
+    "build:ci": "astro build && node scripts/leak-check.mjs",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "5.7.10",
+    "sharp": "0.34.1",
+    "three": "0.160.0"
+  }
+}

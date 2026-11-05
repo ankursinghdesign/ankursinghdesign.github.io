@@ -1,0 +1,189 @@
+---
+import Base from "../../layouts/Base.astro";
+import Shot from "../../components/Shot.astro";
+import Compare from "../../components/Compare.astro";
+import P from "../../components/P.astro";
+
+const S = "waste-platform";
+const iterations = [
+  { id: "dash-v1", label: "01 · KPI tiles + hex map" },
+  { id: "dash-v2", label: "02 · Billing + choropleth" },
+  { id: "dash-shipped", label: "03 · Shipped, white-labelled" },
+  { id: "dash-dark", label: "04 · Dark theme" },
+];
+---
+<Base title="Waste management platform · Ankur Singh" description="Case study: designing a white-label operations platform for waste haulers, solo, in three months.">
+  <article>
+    <header class="hero wrap">
+      <p class="mono reveal"><a href="/">Work</a> / 02 · Enterprise B2B · Shipped</p>
+      <h1 class="reveal">One platform to run a waste-hauling business.</h1>
+      <p class="lede reveal">I designed it solo, in about three months, from the first SME conversation to developer handoff. It replaced hundreds of hours of manual work with a couple of hours, and won a Customer Delight Award.</p>
+      <dl class="meta reveal">
+        <div><dt class="mono">Client</dt><dd><P slug={S} field="client" /></dd></div>
+        <div><dt class="mono">My role</dt><dd>Sole product designer: research, IA, interaction, visual, system, handoff</dd></div>
+        <div><dt class="mono">Timeline</dt><dd>~3 months · 2022–2023</dd></div>
+        <div><dt class="mono">Outcome</dt><dd>Shipped · Customer Delight Award</dd></div>
+      </dl>
+    </header>
+
+    <div class="wrap reveal">
+      <Shot slug={S} id="dash-shipped" eager caption="The shipped operations dashboard. Tap the numbers for notes."
+        spots={[
+          { x: 22, y: 21, title: "Customers by service type", text: "Residential, commercial and roll-off side by side, split by status, so problems in one line of business stand out." },
+          { x: 70, y: 23, title: "Billing at a glance", text: "Bills due and generated, with week-on-week change and a one-click path into the list." },
+          { x: 76, y: 66, title: "Where customers are", text: "A state map for regional managers who think in territories." },
+        ]} />
+    </div>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">01 / Context</p><h2>Two products in one.</h2></div>
+      <div class="b reveal">
+        <p>Every waste hauler bills differently: rate codes, bill cycles, liens, dunning letters, bin inventory, dispatch tickets. The platform had to serve two audiences:</p>
+        <ol class="pair">
+          <li><span class="mono">Platform console</span><h3>For <P slug={S} field="client_short" /></h3><p class="muted">Set up each hauler as a client: URL, admin, API access, data retention, branding, numbering rules, schedulers and import alerts.</p></li>
+          <li><span class="mono">Operations app</span><h3>For each hauler's staff</h3><p class="muted">Under the hauler's own brand: customers, billing and payments, bins, dispatch and reports.</p></li>
+        </ol>
+        <p class="muted">Constraints: one designer, about three months, a domain I'd never worked in, and dozens of client-specific rules.</p>
+      </div>
+    </section>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">02 / Research</p><h2>The SMEs were my research partners.</h2></div>
+      <div class="b reveal">
+        <p>I didn't know waste hauling, so I spent the first weeks with subject-matter experts: asking how a customer gets set up, how a bill gets built, and where things go wrong. Then I prototyped, took feedback, and repeated.</p>
+        <p class="muted">Before the platform, this work ran on manual processes.</p>
+        <p>The clearest artefact from that phase is my <strong>field-mapping sheet</strong>. Every setup field is listed with its control type, allowed values and conditional rules ("if real-time API is on, username and password are required"), plus notes on where clients differ.</p>
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">03 / Decision</p><h2>From a spreadsheet to a wizard.</h2></div>
+        <div class="b reveal"><p>The sheet held more than 50 setup fields. Instead of one long form, I grouped them into a four-step wizard (Basic, Setup, Scheduler, Email recipients) and split Setup into tabs: URL, Client admin, API, Data management, Branding and Other. Each tab maps to the person who knows those answers.</p></div>
+      </div>
+      <div class="morph reveal">
+        <Shot slug={S} id="req-sheet" caption="Before: my field-mapping sheet from the SME sessions" />
+        <div class="arrow mono" aria-hidden="true">50+ fields<br />→<br />4 steps · 6 tabs</div>
+        <Shot slug={S} id="setup-tabs" caption="After: the client setup wizard"
+          spots={[
+            { x: 82, y: 10, title: "Four steps to a live client", text: "Basic details, setup, scheduler, then email recipients. Progress is always visible." },
+            { x: 33, y: 16, title: "Setup split into tabs", text: "Six focused groups instead of one 50-field form." },
+            { x: 45, y: 33, title: "Rules you can scan", text: "Yes/no rules in a three-column grid, so a whole client's behaviour fits on one screen." },
+          ]} />
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">04 / Decision</p><h2>A record you return to, not a form you fill once.</h2></div>
+        <div class="b reveal">
+          <p>I explored a three-step, single-column customer form. It was rejected. The shipped Customer File is an eight-step record: customer, billing, service, remarks, options, payment, contract history and an action log, with the account number pinned at the top.</p>
+          <p class="muted">Staff come back to the same customer every day, so the record needed to work as a workspace, not a one-time form.</p>
+          <p class="hand">drag the slider →</p>
+        </div>
+      </div>
+      <div class="reveal"><Compare slug={S} before="cf-concept" after="cf-shipped" beforeLabel="Explored: 3-step form" afterLabel="Shipped: 8-step record" /></div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">05 / Iteration</p><h2>One dashboard, four versions.</h2></div>
+        <div class="b reveal"><p>The dashboard moved from KPI tiles with a hex-tile map, to billing and a choropleth, to the white-labelled version that shipped, plus a dark theme. Each round came out of SME feedback.</p></div>
+      </div>
+      <ol class="strip reveal">
+        {iterations.map(it => <li><Shot slug={S} id={it.id} /><span class="mono">{it.label}</span></li>)}
+      </ol>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">06 / Trust</p><h2>Show what the system did on its own.</h2></div>
+        <div class="b reveal"><p>Much of the platform runs unattended: payment imports, schedulers, emails. So every automated job has success and failure recipients, and there are logs for emails, user actions and logins, and scheduler runs.</p></div>
+      </div>
+      <div class="one reveal">
+        <Shot slug={S} id="email-alerts" caption="Success and failure alerts for every import"
+          spots={[
+            { x: 50, y: 27, title: "Two lists per import", text: "Who hears when it worked, and who must hear when it didn't (required)." },
+            { x: 8, y: 47, title: "Logs for everything", text: "Email, user-action and scheduler history, all one click away." },
+          ]} />
+      </div>
+    </section>
+
+    <section class="wrap sec">
+      <div class="grid12">
+        <div class="h reveal"><p class="mono">07 / System</p><h2>Built on its own component library.</h2></div>
+        <div class="b reveal"><p>Inputs, dropdowns, date pickers, steppers, toggles, toasts, badges, tooltips and a two-tone icon set, built so the developers could assemble screens without waiting for me. I built the library alongside the screens.</p></div>
+      </div>
+      <div class="kit reveal">
+        {["c-textfield", "c-dropdown", "c-datepicker", "c-toast", "c-badges", "c-tooltip"].map(id => <Shot slug={S} id={id} class="mini" />)}
+      </div>
+    </section>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">08 / Impact</p><h2>Shipped, used, recognised.</h2></div>
+      <div class="b">
+        <ul class="stats reveal">
+          <li class="stat"><b>100s → 2</b><span>hours of design, update and fix work, down to a couple, with the Figma library</span></li>
+          <li class="stat"><b>1</b><span>designer, end to end</span></li>
+          <li class="stat"><b>~3</b><span>months from first SME session to handoff</span></li>
+          <li class="stat"><b>🏆</b><span>Customer Delight Award from my employer</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="wrap sec grid12">
+      <div class="h reveal"><p class="mono">09 / Reflection</p><h2>What I'd do differently.</h2></div>
+      <div class="b reveal">
+        <p>I'd bring billing staff into usability tests earlier, not only SMEs, and agree success metrics on day one, so the impact is measured rather than estimated.</p>
+        <p class="next"><a class="btn ghost" href="/">← All work</a></p>
+      </div>
+    </section>
+  </article>
+</Base>
+
+<style>
+  .hero { padding: 88px var(--gutter) 48px; }
+  .hero h1 { max-width: 16ch; margin: 16px 0 24px; }
+  .hero .mono a { text-decoration: none; }
+  .lede { font-size: clamp(18px, 1.6vw, 22px); color: var(--ink-2); max-width: 58ch; }
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 56px; border-top: 1px solid var(--ink); padding-top: 16px; }
+  .meta dd { margin: 6px 0 0; font-size: 15px; }
+
+  .sec { padding-top: 120px; }
+  .sec > .grid12, .sec.grid12 { row-gap: 16px; }
+  .h { grid-column: 1 / 5; }
+  .h h2 { margin-top: 10px; }
+  .b { grid-column: 5 / 13; display: grid; gap: 16px; align-content: start; }
+  .b .hand { margin-top: 4px; }
+
+  .pair { list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .pair li { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 20px; display: grid; gap: 6px; }
+  .pair p { font-size: 15px; }
+
+  .morph { display: grid; grid-template-columns: 1fr auto 1.4fr; gap: 24px; align-items: center; margin-top: 40px; }
+  .arrow { text-align: center; color: var(--accent); font-size: 13px; line-height: 1.8; }
+
+  .strip { list-style: none; padding: 0; margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .strip li { display: grid; gap: 10px; }
+  .strip li .mono { text-transform: none; }
+
+  .one { margin-top: 40px; }
+  .kit { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-top: 40px; align-items: start; }
+  .kit :global(.frame) { padding: 12px; box-shadow: none; }
+
+  .stats { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 22px; display: grid; gap: 6px; }
+  .stat b { font-size: 44px; font-weight: 500; letter-spacing: -.04em; line-height: 1; }
+  .stat span { color: var(--ink-2); font-size: 15px; }
+  .next { margin-top: 24px; }
+
+  @media (max-width: 820px) {
+    .hero { padding-top: 48px; }
+    .meta, .pair, .stats { grid-template-columns: 1fr; }
+    .morph { grid-template-columns: 1fr; }
+    .arrow br { display: none; }
+    .strip { grid-template-columns: 1fr 1fr; }
+    .kit { grid-template-columns: repeat(3, 1fr); }
+    .sec { padding-top: 80px; }
+  }
+</style>

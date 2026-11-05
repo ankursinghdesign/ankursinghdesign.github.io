@@ -1,0 +1,31 @@
+---
+// Before/after slider for two same-size screens.
+interface Props { slug: string; before: string; after: string; beforeLabel: string; afterLabel: string; }
+const { slug, before, after, beforeLabel, afterLabel } = Astro.props;
+const data = (await import(`../data/${slug}.json`)).default;
+const [a, b] = [data.images[before], data.images[after]];
+const vault = (id: string, img: { public: string }) => (img.public !== "clear" ? `${slug}/${id}` : undefined);
+---
+<figure class="compare" style="--pos:50%">
+  <div class="stage">
+    <img src={`/img/${slug}/${before}.webp`} width={a.w} height={a.h} alt={a.alt} loading="lazy" data-vault={vault(before, a)} />
+    <div class="after"><img src={`/img/${slug}/${after}.webp`} width={b.w} height={b.h} alt={b.alt} loading="lazy" data-vault={vault(after, b)} /></div>
+    <span class="tag l mono">{beforeLabel}</span>
+    <span class="tag r mono">{afterLabel}</span>
+    <span class="handle" aria-hidden="true"></span>
+    <input type="range" min="0" max="100" value="50" aria-label={`Compare ${beforeLabel} and ${afterLabel}`} />
+  </div>
+</figure>
+
+<style>
+  .compare { margin: 0; }
+  .stage { position: relative; border-radius: var(--r-md); overflow: hidden; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 24px 48px -28px rgba(15,16,18,.35); }
+  .stage img { width: 100%; }
+  .after { position: absolute; inset: 0; clip-path: inset(0 0 0 var(--pos)); }
+  .handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; background: var(--accent); transform: translateX(-1px); pointer-events: none; }
+  .handle::after { content: "⟷"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: #fff; display: grid; place-items: center; font-size: 18px; box-shadow: 0 8px 20px -6px rgba(47,91,255,.6); }
+  input[type=range] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+  input[type=range]:focus-visible + * , .stage:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .tag { position: absolute; top: 12px; background: var(--ink); color: var(--bg); padding: 5px 9px; border-radius: 999px; font-size: 11px; pointer-events: none; }
+  .tag.l { left: 12px; } .tag.r { right: 12px; background: var(--accent); color: #fff; }
+</style>

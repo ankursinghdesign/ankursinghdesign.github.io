@@ -1,0 +1,3 @@
+#!/bin/sh
+# Blocks a push if a client name or raw image would go public. Needs ../case-studies, so it only runs on this Mac.
+npx astro build --silent >/dev/null && node scripts/leak-check.mjs

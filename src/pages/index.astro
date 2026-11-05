@@ -1,0 +1,156 @@
+---
+import Base from "../layouts/Base.astro";
+
+const work = [
+  { n: "01", title: "From scattered approvals to one pipeline", tags: "B2B platform · Design system · Live", href: "/work/design-portal", preview: "portal/board" },
+  { n: "02", title: "One platform to run a waste-hauling business", tags: "Enterprise B2B · Shipped · Award", href: "/work/waste-platform", preview: "waste-platform/dash-shipped" },
+  { n: "03", title: "Four roles, one source of public money", tags: "Gov-tech bid · Multi-role", href: "/work/edu-funds", preview: "edu/comp-dash" },
+  { n: "04", title: "18 checks, 10 barriers: an accessibility audit", tags: "Accessibility · WCAG 2.1 · Interactive", href: "/work/accessibility-audit" },
+];
+
+// Screens that assemble in the hero (public, blurred images; sharpened in the private view)
+const heroIds = [
+  "portal/board", "portal/kanban", "portal/gantt", "portal/brief", "portal/board-ready", "portal/partial", "portal/complete", "portal/capacity",
+  "portal/retailer-home", "portal/retailer-review", "portal/trend-review", "portal/s-17", "portal/s-19", "portal/s-24", "portal/s-27", "portal/s-33",
+  "portal/roles", "portal/ai-config", "waste-platform/dash-shipped", "waste-platform/dash-v2", "waste-platform/client-admin", "waste-platform/setup-tabs", "waste-platform/email-alerts",
+  "waste-platform/cf-shipped", "edu/comp-dash", "edu/ceao-dash", "edu/esp-dash", "edu/disburse", "edu/auto-setup", "edu/apply",
+];
+---
+<Base title="Ankur Singh · Senior UX Designer">
+  <section class="hero wrap">
+    <div class="fx" id="heroFx" aria-hidden="true"></div>
+    <div class="copy">
+      <p class="mono">Senior UX designer · Jaipur, India</p>
+      <h1>Designing the systems behind <span class="dim">calm, obvious software.</span></h1>
+      <p class="intro">I'm <b>Ankur</b>. For 12 years I've turned messy B2B workflows into products people understand: research with the people who do the work, a design system before the screens, and accessibility as the floor. I lead a team of three designers.</p>
+      <div class="cta"><a class="btn" href="#work">See my work <span aria-hidden="true">↓</span></a><a class="btn ghost" href="#about">About me</a></div>
+    </div>
+    <div class="stage" id="heroStage" data-ids={heroIds.join(",")}>
+      <ul class="still" aria-hidden="true">
+        {heroIds.slice(0, 12).map(id => <li><img src={`/img/${id}.webp`} alt="" loading="lazy" decoding="async" /></li>)}
+      </ul>
+      <span class="mono nda"><span class="pub">Screens blurred for NDA</span><span class="prv">Private view: full screens</span></span>
+    </div>
+  </section>
+
+  <div class="wrap"><dl class="meta" id="about">
+    <div><dt class="mono">Experience</dt><dd>12 years · since 2014</dd></div>
+    <div><dt class="mono">Role</dt><dd>Senior UX · leads 3 designers</dd></div>
+    <div><dt class="mono">Focus</dt><dd>B2B products, research, design systems, accessibility</dd></div>
+    <div><dt class="mono">Based</dt><dd>India · open to remote, UK and EU</dd></div>
+  </dl></div>
+
+  <section class="wrap grid12 work" id="work">
+    <div class="h"><p class="mono">Work</p><h2>Selected case studies</h2></div>
+    <ol class="index">
+      {work.map(w => (
+        <li class="reveal">
+          {w.href
+            ? <a class="row" href={w.href} data-preview={w.preview}><span class="mono">{w.n}</span><h3>{w.title}</h3><span class="mono tags">{w.tags}</span><span class="go" aria-hidden="true">→</span></a>
+            : <div class="row soon"><span class="mono">{w.n}</span><h3>{w.title}</h3><span class="mono tags">{w.tags}</span><span class="mono">Soon</span></div>}
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <div class="preview" id="preview" aria-hidden="true">
+    {work.filter(w => w.preview).map(w => (
+      <img src={`/img/${w.preview}.webp`} data-for={w.preview} data-vault={w.preview} alt="" width="1200" height="838" />
+    ))}
+    <span class="tag mono" id="previewTag">Blurred · NDA</span>
+  </div>
+</Base>
+
+<script>
+  // Hero: assemble the screens in 3D when WebGL is available; otherwise the still grid stays
+  const fx = document.getElementById("heroFx")!, stage = document.getElementById("heroStage")!;
+  const gl = (() => { try { return !!document.createElement("canvas").getContext("webgl2"); } catch { return false; } })();
+  if (gl) {
+    stage.classList.add("live");
+    import("../scripts/hero-cards").then(m => m.heroCards(fx, stage, stage.dataset.ids!.split(",")));
+  }
+
+  // Project preview that follows the cursor (mouse and trackpad only)
+  const preview = document.getElementById("preview")!;
+  const tag = document.getElementById("previewTag")!;
+  const fine = matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let x = 0, y = 0, tx = 0, ty = 0, raf = 0;
+
+  const follow = () => {
+    x += (tx - x) * (still ? 1 : 0.18);
+    y += (ty - y) * (still ? 1 : 0.18);
+    preview.style.transform = `translate(${x}px, ${y}px)`;
+    if (Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5) raf = requestAnimationFrame(follow);
+    else raf = 0;
+  };
+
+  if (fine) {
+    document.querySelectorAll<HTMLElement>(".row[data-preview]").forEach(row => {
+      row.addEventListener("mouseenter", e => {
+        preview.querySelectorAll<HTMLImageElement>("img").forEach(img => img.classList.toggle("on", img.dataset.for === row.dataset.preview));
+        tag.textContent = document.documentElement.classList.contains("private") ? "Full screens" : "Blurred · NDA";
+        tx = x = e.clientX + 28; ty = y = e.clientY - 120;
+        preview.classList.add("on");
+        follow();
+      });
+      row.addEventListener("mousemove", e => {
+        tx = e.clientX + 28; ty = e.clientY - 120;
+        if (!raf) raf = requestAnimationFrame(follow);
+      });
+      row.addEventListener("mouseleave", () => preview.classList.remove("on"));
+    });
+  }
+</script>
+
+<style>
+  .hero { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 32px; align-items: center; min-height: min(calc(100svh - 60px), 820px); padding-top: 48px; padding-bottom: 40px; }
+  .copy { position: relative; z-index: 1; }
+  .copy h1 { font-size: clamp(40px, 5.4vw, 80px); margin: 16px 0 26px; }
+  .dim { color: var(--ink-3); }
+  .intro { font-size: 19px; color: var(--ink-2); max-width: 40ch; }
+  .intro b { color: var(--ink); font-weight: 500; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 30px; }
+  .cta .btn { padding: 13px 20px; border-radius: 999px; }
+  .fx { position: absolute; top: 0; bottom: 0; left: 50%; width: 100vw; transform: translateX(-50%); pointer-events: none; z-index: 0; }
+  .fx :global(canvas) { display: block; width: 100%; height: 100%; }
+  .stage { position: relative; height: min(620px, 72vh); }
+  .stage .nda { position: absolute; right: 0; bottom: -4px; z-index: 1; }
+  .still { list-style: none; padding: 0; height: 100%; display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; align-content: center; transform: perspective(1400px) rotateY(-14deg) rotateX(6deg); }
+  .still img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); }
+  .stage.live .still { display: none; }
+  .nda .prv, :global(html.private) .nda .pub { display: none; }
+  :global(html.private) .nda .prv { display: inline; }
+  .meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; border-top: 1px solid var(--ink); padding-top: 16px; margin-top: 16px; scroll-margin-top: 80px; }
+  .meta dd { margin: 6px 0 0; font-size: 15px; }
+  .work { padding-top: 64px; }
+  .h { grid-column: 1 / 4; }
+  .h h2 { margin-top: 10px; font-size: 32px; }
+  .index { grid-column: 4 / 13; list-style: none; padding: 0; border-top: 1px solid var(--ink); }
+  .row { position: relative; display: grid; grid-template-columns: 48px 1fr auto 40px; gap: 16px; align-items: center; padding: 24px 0; border-bottom: 1px solid var(--line); text-decoration: none; transition: padding .4s var(--ease), color .3s; }
+  .row::before { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--ink); transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease); }
+  .row:hover { padding-left: 12px; }
+  .row:hover::before { transform: scaleX(1); }
+  .row h3 { font-size: clamp(18px, 2vw, 24px); transition: color .3s; }
+  a.row:hover h3 { color: var(--accent); }
+  .go { font-size: 22px; color: var(--accent); transition: transform .3s var(--ease); }
+  a.row:hover .go { transform: translateX(6px); }
+  .soon { color: var(--ink-3); cursor: default; }
+  .soon:hover { color: var(--ink-2); }
+
+  .preview { position: fixed; left: 0; top: 0; width: 340px; aspect-ratio: 1200 / 838; z-index: 60; pointer-events: none; border-radius: var(--r-md); overflow: hidden; background: var(--surface); box-shadow: 0 30px 60px -20px rgba(15, 16, 18, .45); opacity: 0; scale: .92; transition: opacity .25s, scale .35s var(--ease); }
+  .preview.on { opacity: 1; scale: 1; }
+  .preview img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left; opacity: 0; }
+  .preview img.on { opacity: 1; }
+  .preview .tag { position: absolute; left: 10px; bottom: 10px; background: var(--ink); color: var(--bg); padding: 4px 8px; border-radius: 4px; font-size: 11px; }
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: 1fr; min-height: 0; padding-top: 24px; }
+    .stage { order: -1; height: 280px; margin: 0 calc(-1 * var(--gutter)) 20px; }
+    .stage .nda { right: var(--gutter); bottom: -14px; }
+    .copy h1 { font-size: clamp(38px, 11vw, 56px); }
+    .intro { font-size: 17px; }
+    .meta { grid-template-columns: 1fr 1fr; }
+    .row { grid-template-columns: 36px 1fr 24px; }
+    .row .tags { display: none; }
+  }
+</style>
