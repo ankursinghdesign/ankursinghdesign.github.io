@@ -1,0 +1,361 @@
+---
+// Face-first hero: one portrait in three slices (Research / Design / Code). Hover, focus or tap a slice
+// to wipe its style across the face and open its scene card. Each slice links to the case study that shows it.
+
+// Research scene: scattered notes that sort into an affinity map.
+// Standard synthesis headers; notes are illustrative themes from the approvals-portal research, not verbatim quotes.
+const groups = ["Pain points", "Motivations", "Goals"];
+const notes = [
+  { t: "Sign-offs get lost in WhatsApp and email", g: 0, c: "p", sx: 6, sy: 18, r: -7 },
+  { t: "Files re-sent every review round", g: 0, c: "p", sx: 58, sy: 8, r: 5 },
+  { t: "No one knows what stage a style is at", g: 0, c: "p", sx: 30, sy: 62, r: -3 },
+  { t: "Get buyer approval faster", g: 1, c: "y", sx: 66, sy: 52, r: 8 },
+  { t: "Spend time designing, not chasing", g: 1, c: "y", sx: 14, sy: 44, r: 4 },
+  { t: "Look organised to retailers", g: 1, c: "y", sx: 44, sy: 30, r: -9 },
+  { t: "See every style's status at a glance", g: 2, c: "b", sx: 70, sy: 24, r: -4 },
+  { t: "One place for briefs and files", g: 2, c: "b", sx: 4, sy: 72, r: 6 },
+  { t: "A clear owner for every approval", g: 2, c: "b", sx: 50, sy: 76, r: -6 },
+];
+const row = [0, 0, 0];
+const placed = notes.map(n => ({ ...n, i: row[n.g]++ }));
+
+// Code scene: lines type out one after another, then the result renders.
+const src: { html: string; n: number }[] = [
+  { html: '<b class="tg">&lt;button</b> <b class="at">class</b>=<b class="st">"btn"</b><b class="tg">&gt;</b>', n: 20 },
+  { html: '  Approve', n: 9 },
+  { html: '<b class="tg">&lt;/button&gt;</b>', n: 9 },
+  { html: '', n: 0 },
+  { html: '<b class="se">.btn</b> {', n: 6 },
+  { html: '  <b class="pr">background</b>: <b class="va">var(--accent)</b>;', n: 28 },
+  { html: '  <b class="pr">border-radius</b>: <b class="va">999px</b>;', n: 23 },
+  { html: '  <b class="pr">padding</b>: <b class="va">10px 20px</b>;', n: 21 },
+  { html: '}', n: 1 },
+];
+let t = 300;
+const typed = src.map(l => { const d = t; t += l.n * 16 + 70; return { ...l, d }; });
+const rendered = t + 100;
+---
+<section class="hero wrap" aria-labelledby="heroTitle" data-active="">
+  <h1 id="heroTitle" class="hi">Hi, I'm Ankur. <span>I research, design and build.</span></h1>
+  <div class="stage" id="stage">
+    <!-- One face in three slices. Hover or tap a slice: its style wipes across the face and its scene opens beside it. -->
+    <div class="face" aria-hidden="true">
+      <img class="lay sk" src="/portrait/pencil.webp" alt="" />
+      <img class="lay fl" src="/portrait/poster.webp" alt="" />
+      <img class="lay as" src="/portrait/ascii.webp" alt="" />
+    </div>
+    <ul class="slices" aria-label="What I do">
+      <li><a class="slice" data-k="research" href="/work/design-portal"><span class="n">01</span> Research</a></li>
+      <li><a class="slice" data-k="design" href="/work/design-portal#ds-spec"><span class="n">02</span> Design</a></li>
+      <li><a class="slice" data-k="code" href="/work/accessibility-audit"><span class="n">03</span> Code</a></li>
+    </ul>
+    <p class="m-hint mono" aria-hidden="true">Tap a slice of my face</p>
+  <ol class="panels" id="panels">
+    <li class="panel idle">
+      <div class="pa">
+        <span class="mono n">00</span>
+        <h2>One person, three crafts.</h2>
+        <p class="lead">For me research, design and code are one job. I talk to the people doing the work, design the system and every state, then build it.</p>
+        <ul class="legend">
+          <li><b>01 Research</b> Interviews, workshops and affinity mapping</li>
+          <li><b>02 Design</b> Design systems, every screen and state</li>
+          <li><b>03 Code</b> HTML, CSS and JS, prototyped with AI tools</li>
+        </ul>
+        <span class="go mono"><span class="fine">← Hover a slice of my face</span><span class="touch">↑ Tap a slice of my face</span></span>
+      </div>
+    </li>
+    <li class="panel research" data-k="research">
+      <a href="/work/design-portal" class="pa">
+        <span class="mono n">01</span>
+        <h2>Research</h2>
+        <p class="line">I start with the people doing the work.</p>
+        <span class="go mono">See the research →</span>
+      </a>
+      <div class="scene board" aria-hidden="true">
+        {groups.map((g, i) => <span class="gh mono" style={`--gx:${i}`}>{g}</span>)}
+        {placed.map(n => (
+          <span class={`note ${n.c}`} style={`--sx:${n.sx}%; --sy:${n.sy}%; --r:${n.r}deg; --gx:${n.g}; --gy:${n.i}`}>{n.t}</span>
+        ))}
+      </div>
+    </li>
+    <li class="panel design" data-k="design">
+      <a href="/work/design-portal#ds-spec" class="pa">
+        <span class="mono n">02</span>
+        <h2>Design</h2>
+        <p class="line">Systems first, then every screen and state.</p>
+        <span class="go mono">See the design system →</span>
+      </a>
+      <div class="scene ui" aria-hidden="true">
+        <div class="cols"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="canvas">
+          <div class="flbl mono"><span class="fn">◇ Style card / Default</span><span class="sw"><i style="--c: var(--accent); --k: 0"></i><i style="--c: #11703A; --k: 1"></i><i style="--c: #E8A33A; --k: 2"></i><i style="--c: #1F2A44; --k: 3"></i></span></div>
+          <div class="card">
+            <div class="w hd" style="--dx: -16px; --dy: 10px; --dr: -3deg">
+              <span class="knit"></span>
+              <span class="ttl"><b class="tx">Summer knit · Style 2041</b><span class="tx sub">Womenswear · due 14 Jun</span></span>
+              <span class="pill-s tx">In review</span>
+            </div>
+            <div class="w steps" style="--dx: 20px; --dy: -4px; --dr: 2deg">
+              <span class="st done"><i></i><em class="tx">Brief</em></span>
+              <span class="st done"><i></i><em class="tx">Design</em></span>
+              <span class="st now"><i></i><em class="tx">Review</em></span>
+              <span class="st"><i></i><em class="tx">Approved</em></span>
+            </div>
+            <div class="w meta" style="--dx: -10px; --dy: 8px; --dr: -2deg">
+              <span class="tag tx">SS26</span><span class="tag tx">Cotton knit</span><span class="tag tx">XS–XL</span>
+              <span class="cw"><i style="--c: #1F2A44"></i><i style="--c: #E9E1D0"></i><i style="--c: #B5523B"></i></span>
+            </div>
+            <div class="w ft" style="--dx: 14px; --dy: 12px; --dr: 4deg">
+              <span class="stack"><b class="av a1"></b><b class="av a2"></b><b class="av a3"></b></span>
+              <span class="b2 tx">Open brief</span>
+              <span class="b1 tx">Approve<span class="sel"><i></i><i></i><i></i><i></i><em class="mono">96 × 32</em></span></span>
+            </div>
+            <span class="red r-pad mono">16</span>
+            <span class="red r-gap mono">12</span>
+            <span class="call c-type mono" style="--k: 0">type/title-sm</span>
+            <span class="call c-acc mono" style="--k: 1">color/accent</span>
+            <span class="call c-rad mono" style="--k: 2">radius/full</span>
+          </div>
+        </div>
+      </div>
+    </li>
+    <li class="panel code" data-k="code">
+      <a href="/work/accessibility-audit" class="pa">
+        <span class="mono n">03</span>
+        <h2>Code</h2>
+        <p class="line">I build what I design, in HTML, CSS and JS.</p>
+        <span class="go mono">See it in code →</span>
+      </a>
+      <div class="scene ed" aria-hidden="true" style={`--done: ${rendered}ms`}>
+        <pre class="srcc">{typed.map(l => <span class="ln" style={`--n: ${l.n}; --d: ${l.d}ms`} set:html={l.html || " "} />)}<span class="caret"></span></pre>
+        <div class="out"><span class="mono lbl">Preview</span><span class="btn-r">Approve</span></div>
+      </div>
+    </li>
+  </ol>
+  </div>
+</section>
+
+<script>
+  const stage = document.getElementById("stage")!;
+  const hero = stage.closest(".hero") as HTMLElement;
+  const panels = [...stage.querySelectorAll<HTMLElement>(".panel")];
+  const slices = [...stage.querySelectorAll<HTMLAnchorElement>(".slice")];
+  const set = (k: string) => {
+    hero.dataset.active = k;
+    panels.forEach(p => p.classList.toggle("on", p.dataset.k === k));
+    slices.forEach(s => s.classList.toggle("on", s.dataset.k === k));
+  };
+
+  slices.forEach(s => {
+    s.addEventListener("pointerenter", e => { if (e.pointerType !== "touch") set(s.dataset.k!); });
+    // Keyboard focus only; a tap also focuses the link and must not count as the first tap
+    s.addEventListener("focus", () => { if (s.matches(":focus-visible")) set(s.dataset.k!); });
+    // Touch: the first tap opens the slice, the second follows the link
+    s.addEventListener("click", e => { if (hero.dataset.active !== s.dataset.k) { e.preventDefault(); set(s.dataset.k!); } });
+  });
+  stage.addEventListener("pointerleave", e => { if (e.pointerType !== "touch") set(""); });
+  stage.addEventListener("focusout", e => { if (!stage.contains(e.relatedTarget as Node)) set(""); });
+</script>
+
+<style>
+  .hero { padding-top: 28px; padding-bottom: 8px; }
+  .hi { font-size: clamp(30px, 4vw, 52px); letter-spacing: -.04em; line-height: 1.05; margin: 8px 0 20px; }
+  .hi span { color: var(--ink-3); }
+
+  /* Stage: the face sits centred; when a slice is active it moves left and the scene card opens on the right */
+  .stage { --sh: min(74svh, 660px); --lh: 40px; --fw: calc((var(--sh) - var(--lh)) * .8); position: relative; height: var(--sh); }
+  .face, .slices { position: absolute; left: 0; width: var(--fw); }
+  .face { top: var(--lh); height: calc(var(--sh) - var(--lh)); border-radius: var(--r-lg); overflow: hidden; background: var(--surface); box-shadow: 0 30px 60px -36px rgba(15, 16, 18, .45); }
+
+  .lay { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: clip-path .65s var(--ease); }
+  .sk { clip-path: inset(0 66.67% 0 0); }
+  .fl { clip-path: inset(0 33.33% 0 33.33%); }
+  .as { clip-path: inset(0 0 0 66.67%); }
+  .hero[data-active="research"] .sk, .hero[data-active="design"] .fl, .hero[data-active="code"] .as { clip-path: inset(0); z-index: 1; }
+  .face::after { content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none; transition: opacity .3s;
+    background: linear-gradient(90deg, transparent calc(33.33% - 1px), rgba(255,255,255,.9) 0 calc(33.33% + 1px), transparent 0 calc(66.67% - 1px), rgba(255,255,255,.9) 0 calc(66.67% + 1px), transparent 0); }
+  .hero:not([data-active=""]) .face::after { opacity: 0; }
+
+  .slices { top: 0; height: var(--sh); z-index: 3; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .slice { display: block; height: 100%; padding-top: 10px; text-align: center; text-decoration: none; border-radius: var(--r-md);
+    font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); transition: color .3s; }
+  .slice .n { color: var(--ink-3); opacity: .7; }
+  .slice:hover, .slice.on { color: var(--ink); }
+  .slice.on { text-decoration: underline 2px var(--accent); text-underline-offset: 6px; }
+  .slice:focus-visible { outline-offset: -2px; }
+
+  .panels { list-style: none; padding: 0; margin: 0; position: absolute; top: var(--lh); bottom: 0; right: 0; left: calc(var(--fw) + 24px); }
+  .panel { position: absolute; inset: 0; border-radius: var(--r-lg); overflow: hidden; border: 1px solid var(--line); background: var(--surface);
+    opacity: 0; visibility: hidden; translate: 24px 0; transition: opacity .3s, translate .5s var(--ease), visibility 0s .3s; }
+  .hero[data-active=""] .panel.idle, .panel.on { opacity: 1; visibility: visible; translate: 0 0; transition: opacity .4s .2s, translate .6s var(--ease) .15s, visibility 0s; }
+
+  .pa { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; padding: 24px; text-decoration: none; border-radius: inherit; }
+  .pa:focus-visible { outline-offset: -4px; }
+  .n { color: var(--ink-3); }
+  .panel h2 { font-size: clamp(30px, 3vw, 44px); letter-spacing: -.035em; margin-top: 6px; }
+  .line { color: var(--ink-2); font-size: 16px; margin-top: 8px; max-width: 26ch; opacity: 0; transform: translateY(6px); transition: opacity .4s, transform .5s var(--ease); }
+  .go { margin-top: auto; color: var(--accent); opacity: 0; transition: opacity .4s; }
+  .panel.on .line { opacity: 1; transform: none; transition-delay: .35s; }
+  .panel.on .go { opacity: 1; transition-delay: .45s; }
+
+  .idle .lead { color: var(--ink-2); font-size: 18px; margin-top: 14px; max-width: 40ch; }
+  .legend { list-style: none; padding: 0; margin-top: 28px; display: grid; gap: 0; border-top: 1px solid var(--line); max-width: 46ch; }
+  .legend li { display: grid; grid-template-columns: 110px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 15px; color: var(--ink-2); }
+  .legend b { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); padding-top: 3px; }
+  .idle .go { opacity: 1; }
+  .go .touch { display: none; }
+  .m-hint { display: none; }
+
+  .scene { position: absolute; left: 0; right: 0; top: 34%; bottom: 0; z-index: 1; pointer-events: none; }
+
+  /* Design: a wireframe snaps to the grid, picks up tokens and gets annotated like a Figma selection */
+  .ui { margin: 0 22px 56px; display: grid; place-items: center; container-type: inline-size; }
+  .cols { position: absolute; inset: -10px 0; display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; opacity: 0; transition: opacity .5s; }
+  .cols i { background: color-mix(in srgb, #FF3D6E 6%, transparent); border-inline: 1px solid color-mix(in srgb, #FF3D6E 20%, transparent); }
+  .canvas { position: relative; width: 340px; }
+  .flbl { display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: var(--ink-3); margin-bottom: 6px; }
+  .fn { transition: color .4s .3s; }
+  .sw { display: flex; gap: 4px; }
+  .sw i { width: 12px; height: 12px; border-radius: 50%; background: var(--c); scale: 0; transition: scale .45s var(--ease); transition-delay: calc(.4s + var(--k) * 70ms); }
+
+  .card { position: relative; display: grid; gap: 12px; padding: 16px; border-radius: 14px; border: 1.5px dashed var(--line-strong);
+    transition: background .5s .3s, border-color .5s .3s, box-shadow .5s .3s; }
+  .w { translate: var(--dx) var(--dy); rotate: var(--dr); transition: translate .7s var(--ease), rotate .7s var(--ease); }
+  .tx { color: transparent; border-radius: 4px; background: var(--surface-2); transition: color .4s .45s, background .4s .45s, box-shadow .4s .45s; }
+
+  .hd { display: flex; gap: 10px; align-items: center; }
+  .knit { width: 44px; height: 44px; flex: none; border-radius: 8px; background: var(--surface-2); transition: background .5s .4s; }
+  .ttl { display: grid; gap: 3px; min-width: 0; }
+  .ttl b { font-size: 13px; line-height: 18px; font-weight: 600; white-space: nowrap; }
+  .sub { font-size: 11px; line-height: 14px; justify-self: start; }
+  .pill-s { margin-left: auto; align-self: start; font: 500 10px var(--font); padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+
+  .steps { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); padding-top: 2px; }
+  .steps::before, .steps::after { content: ""; position: absolute; top: 6px; left: 12.5%; height: 2px; border-radius: 2px; }
+  .steps::before { right: 12.5%; background: var(--surface-2); }
+  .steps::after { width: 0; background: var(--accent); transition: width .6s var(--ease) .6s; }
+  .st { position: relative; z-index: 1; display: grid; justify-items: center; gap: 5px; }
+  .st i { width: 12px; height: 12px; border-radius: 50%; background: var(--surface-2); box-shadow: 0 0 0 3px var(--surface); transition: background .4s .5s; }
+  .st em { font: 500 10px var(--font); font-style: normal; padding: 0 2px; }
+
+  .meta { display: flex; gap: 6px; align-items: center; }
+  .tag { font: 500 11px var(--font); line-height: 16px; padding: 3px 8px; border-radius: 6px; }
+  .cw { display: flex; margin-left: auto; }
+  .cw i { width: 16px; height: 16px; border-radius: 50%; background: var(--surface-2); box-shadow: 0 0 0 2px var(--surface); transition: background .4s .5s; }
+  .cw i + i { margin-left: -4px; }
+  .av { width: 24px; height: 24px; border-radius: 50%; flex: none; background: var(--surface-2); transition: background .4s .45s; }
+  .ft { display: flex; align-items: center; gap: 8px; }
+  .stack { display: flex; margin-right: auto; }
+  .stack .av { width: 22px; height: 22px; box-shadow: 0 0 0 2px var(--surface); }
+  .stack .av + .av { margin-left: -6px; }
+  .b1, .b2 { position: relative; font: 500 12px var(--font); height: 32px; display: inline-grid; place-items: center; padding: 0 14px; border-radius: 999px; white-space: nowrap; }
+  .b1 { width: 96px; padding: 0; }
+  .sel { position: absolute; inset: -4px; border: 1px solid var(--accent); border-radius: 3px; opacity: 0; transition: opacity .3s 1s; }
+  .sel i { position: absolute; width: 6px; height: 6px; background: var(--surface); border: 1px solid var(--accent); }
+  .sel i:nth-child(1) { left: -3px; top: -3px; } .sel i:nth-child(2) { right: -3px; top: -3px; }
+  .sel i:nth-child(3) { left: -3px; bottom: -3px; } .sel i:nth-child(4) { right: -3px; bottom: -3px; }
+  .sel em { position: absolute; top: calc(100% + 5px); left: 50%; translate: -50% 0; font-style: normal; font-size: 9px; color: #fff; background: var(--accent); padding: 1px 5px; border-radius: 3px; white-space: nowrap; }
+
+  .red { position: absolute; font-size: 9px; color: #FF3D6E; opacity: 0; transition: opacity .4s .9s; display: grid; place-items: center; }
+  .r-pad { left: 0; top: 30px; width: 16px; height: 12px; border-top: 1px solid #FF3D6E; padding-top: 10px; }
+  .r-gap { left: -22px; top: 60px; height: 12px; width: 18px; border-right: 1px solid #FF3D6E; padding-right: 4px; }
+  .call { position: absolute; left: calc(100% + 18px); white-space: nowrap; font-size: 9.5px; color: #FF3D6E; background: color-mix(in srgb, #FF3D6E 9%, var(--surface)); border: 1px solid color-mix(in srgb, #FF3D6E 35%, transparent);
+    padding: 2px 6px; border-radius: 4px; opacity: 0; translate: -6px 0; transition: opacity .4s, translate .5s var(--ease); transition-delay: calc(1.05s + var(--k) * 120ms); }
+  .call::before { content: ""; position: absolute; right: 100%; top: 50%; width: 18px; border-top: 1px dashed #FF3D6E; }
+  .c-type { top: 22px; }
+  .c-acc { top: 70px; }
+  .c-rad { bottom: 20px; }
+
+  .design.on .cols { opacity: 1; }
+  .design.on .fn { color: var(--accent); }
+  .design.on .sw i { scale: 1; }
+  .design.on .w { translate: 0 0; rotate: 0deg; }
+  .design.on .card { border: 1.5px solid var(--line); background: var(--surface); box-shadow: 0 24px 48px -24px rgba(15, 16, 18, .4); }
+  .design.on .tx { color: var(--ink); background: transparent; }
+  .design.on .sub, .design.on .st em { color: var(--ink-3); }
+  .design.on .knit { background: repeating-linear-gradient(45deg, #1F2A44 0 4px, #2C3A5C 4px 8px), #1F2A44; background-blend-mode: normal;
+    box-shadow: inset 0 -10px 0 #E9E1D0; }
+  .design.on .pill-s { background: color-mix(in srgb, #E8A33A 22%, transparent); color: #8A5A0E; }
+  :global(html.is-dark) .design.on .pill-s { color: #F3C27A; }
+  .design.on .steps::after { width: 50%; }
+  .design.on .st.done i, .design.on .st.now i { background: var(--accent); }
+  .design.on .st.now i { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5px color-mix(in srgb, var(--accent) 30%, transparent); }
+  .design.on .tag { background: var(--surface-2); color: var(--ink-2); }
+  .design.on .cw i { background: var(--c); }
+  .design.on .a1 { background: linear-gradient(135deg, #F7B267, #F25F5C); }
+  .design.on .a2 { background: linear-gradient(135deg, var(--accent), #8FA6FF); }
+  .design.on .a3 { background: linear-gradient(135deg, #43AA8B, #90BE6D); }
+  .design.on .b1 { background: var(--accent); color: var(--accent-ink); }
+  .design.on .b2 { background: transparent; color: var(--ink); box-shadow: inset 0 0 0 1px var(--line-strong); }
+  .design.on .sel, .design.on .red { opacity: 1; }
+  .design.on .call { opacity: 1; translate: 0 0; }
+
+  /* Narrow panels: no room for callouts; shrink the component to fit */
+  @container (max-width: 560px) { .call { display: none; } }
+  @container (max-width: 380px) { .canvas { zoom: .82; } }
+  @container (max-width: 300px) { .canvas { zoom: .66; } }
+
+  /* Code: an editor that types itself, then renders */
+  .code { background: #111318; border-color: #23262D; color: #E9EAEC; --accent-c: #7E9BFF; }
+  .code h2 { color: #F4F4F2; }
+  .code .n, .code .line { color: #9097A3; }
+  .code .go { color: var(--accent-c); }
+  .ed { margin: 0 18px 56px; display: grid; grid-template-rows: 1fr auto; gap: 14px; }
+  .srcc { margin: 0; padding: 14px; border-radius: 10px; background: #0A0B0E; border: 1px solid #23262D; font: 400 12.5px/1.65 var(--mono); color: #D5D8DE; overflow: hidden; }
+  .ln { display: block; width: 0; height: 1.65em; overflow: hidden; white-space: pre; }
+  /* set:html content isn't scoped, so the token colours need :global */
+  .ln :global(b) { font-weight: 400; }
+  .ln :global(.tg) { color: #FF8A9A; } .ln :global(.at) { color: #FFC66B; } .ln :global(.st) { color: #9BE38F; }
+  .ln :global(.se) { color: #7E9BFF; } .ln :global(.pr) { color: #8FD4FF; } .ln :global(.va) { color: #FFC66B; }
+  .caret { display: inline-block; width: 7px; height: 14px; background: #7E9BFF; vertical-align: -2px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .out { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 10px; border: 1px dashed #2E323A; }
+  .lbl { color: #7C8390; }
+  .btn-r { font: 500 14px var(--font); color: #0A0B0E; background: #7E9BFF; border-radius: 999px; padding: 10px 20px; scale: .6; opacity: 0; transition: scale .5s var(--ease), opacity .3s; }
+  .code.on .ln { width: calc(var(--n) * 1ch + 1px); transition: width calc(var(--n) * 16ms) steps(var(--n)) var(--d); }
+  .code.on .btn-r { scale: 1; opacity: 1; transition-delay: var(--done); }
+
+  /* Research: affinity board */
+  .research { background: color-mix(in srgb, #F5E9C8 22%, var(--surface)); }
+  :global(html.is-dark) .research { background: color-mix(in srgb, #F5E9C8 5%, var(--surface)); }
+  .board { --cw: 31%; margin: 0 18px 54px; }
+  .board::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle, var(--line-strong) 1px, transparent 1.2px) 0 0 / 18px 18px; opacity: .6; }
+  .gh { position: absolute; top: 0; left: calc(var(--gx) * (var(--cw) + 3.5%)); width: var(--cw); color: var(--ink-2); font-size: 10px;
+    border-bottom: 1px solid var(--line-strong); padding-bottom: 4px; opacity: 0; transition: opacity .4s; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .note { position: absolute; width: clamp(96px, 30%, 150px); height: 28%; min-height: 0; overflow: hidden; padding: 8px 9px; font: 500 17px/1.15 var(--hand);
+    color: #2A2A22; border-radius: 2px; box-shadow: 0 1px 1px rgba(0,0,0,.06), 0 8px 16px -8px rgba(0,0,0,.25);
+    left: var(--sx); top: var(--sy); rotate: var(--r); transition: left .8s var(--ease), top .8s var(--ease), rotate .8s var(--ease), width .8s var(--ease);
+    transition-delay: calc(var(--gy) * 60ms + var(--gx) * 40ms); }
+  .note.y { background: #FFE58A; }
+  .note.p { background: #FFC2D1; }
+  .note.b { background: #BFE3FF; }
+  .research.on .gh { opacity: 1; transition-delay: .5s; }
+  .research.on .note { left: calc(var(--gx) * (var(--cw) + 3.5%)); top: calc(24px + var(--gy) * 31%); width: var(--cw); max-width: none; rotate: calc(var(--r) / 5); }
+
+
+  @media (hover: none) {
+    .go .fine { display: none; }
+    .go .touch { display: inline; }
+  }
+  @media (max-width: 820px) {
+    /* Phones: the face on top, the chosen scene card below it */
+    .stage { --fw: min(calc(100vw - 2 * var(--gutter)), 340px); height: auto; padding-top: var(--lh); }
+    .face { position: relative; top: 0; margin: 0 auto; height: calc(var(--fw) * 1.25); }
+    .slices { left: 50%; translate: -50% 0; height: calc(var(--fw) * 1.25 + var(--lh)); }
+    .panels { position: relative; inset: auto; height: 530px; margin-top: 14px; display: none; }
+    .hero:not([data-active=""]) .panels { display: block; }
+    .panel.idle { display: none; }
+    .m-hint { display: block; text-align: center; color: var(--ink-3); font-size: 11px; margin-top: 12px; }
+    .hero:not([data-active=""]) .m-hint { display: none; }
+    .board { margin: 0 14px 48px; }
+    .note { font-size: 14px; padding: 6px 7px; }
+    .ui, .ed { margin-left: 14px; margin-right: 14px; }
+    .srcc { font-size: 11px; padding: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .research .note { left: calc(var(--gx) * (var(--cw) + 3.5%)); top: calc(26px + var(--gy) * 31%); width: var(--cw); max-width: none; rotate: 0deg; }
+    .research .gh, .line, .go { opacity: 1; transform: none; }
+    .ln { width: auto; }
+    .btn-r { scale: 1; opacity: 1; }
+  }
+</style>

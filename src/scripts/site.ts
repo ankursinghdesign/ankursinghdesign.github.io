@@ -91,7 +91,8 @@ async function applyPrivate(key: CryptoKey) {
   }));
   const btn = $("#lockBtn");
   btn?.setAttribute("aria-pressed", "true");
-  const lbl = $(".lbl", btn!); if (lbl) lbl.textContent = "Private: on";
+  const lbl = $(".lbl", btn!); if (lbl) lbl.textContent = "Unlocked";
+  btn?.classList.remove("pop"); void btn?.offsetWidth; btn?.classList.add("pop");
   announce();
 }
 
@@ -155,3 +156,21 @@ $("#unlockForm")?.addEventListener("submit", async e => {
     await applyPrivate(vaultKey);
   } catch { sessionStorage.removeItem(KEY_STORE); }
 })();
+
+// Light / dark theme toggle. With no saved choice, the system setting decides.
+const themeBtn = $<HTMLButtonElement>("#themeBtn");
+const systemDark = matchMedia("(prefers-color-scheme: dark)");
+const isDark = () => (document.documentElement.dataset.theme || (systemDark.matches ? "dark" : "light")) === "dark";
+const syncTheme = () => {
+  const dark = isDark();
+  document.documentElement.classList.toggle("is-dark", dark);
+  themeBtn?.setAttribute("aria-label", dark ? "Switch to light theme" : "Switch to dark theme");
+};
+themeBtn?.addEventListener("click", () => {
+  const next = isDark() ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem("theme", next); } catch {}
+  syncTheme();
+});
+systemDark.addEventListener("change", syncTheme);
+syncTheme();
