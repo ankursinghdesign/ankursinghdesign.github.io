@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Hero from "../components/Hero.astro";
 import StepArt from "../components/StepArt.astro";
+import WorkThumb from "../components/WorkThumb.astro";
 
 const experience = [
   { dates: "2014 — Present", title: "Senior User Experience Designer", org: "Pratham Software (PSI), Jaipur",
@@ -13,32 +14,41 @@ const experience = [
     tags: ["E-learning", "Animation", "Presentations"] },
 ];
 
-const work = [
-  { title: "From scattered approvals to one pipeline", href: "/work/design-portal", img: "portal/board",
+const work: { title: string; href: string; thumb: "portal" | "waste" | "edu" | "a11y"; what: string; outcome: string; tags: string[] }[] = [
+  { title: "From scattered approvals to one pipeline", href: "/work/design-portal", thumb: "portal",
     what: "A design-approval portal for a UK apparel supplier, its designers and its retail buyers, replacing phone calls, WhatsApp and email. Includes a voice-to-brief feature with 37 designed failure states.",
     outcome: "Live, thousands of users, 300%+ productivity (client-reported)",
     tags: ["B2B SaaS", "Design system", "Voice UI", "AI features"] },
-  { title: "One platform to run a waste-hauling business", href: "/work/waste-platform", img: "waste-platform/dash-shipped",
+  { title: "One platform to run a waste-hauling business", href: "/work/waste-platform", thumb: "waste",
     what: "Customer setup, billing and operations for a US waste-management software provider. A 50+ field spreadsheet became a four-step wizard.",
     outcome: "Shipped, Customer Delight Award",
     tags: ["Enterprise SaaS", "Information architecture", "Dashboards"] },
-  { title: "Four roles, one source of public money", href: "/work/edu-funds", img: "edu/comp-dash",
+  { title: "Four roles, one source of public money", href: "/work/edu-funds", thumb: "edu",
     what: "An education-funds platform for a state programme: oversight, administrators, providers and families on one record. Designed for a bid that didn't win, and why that still mattered.",
     outcome: "Bid design, not awarded",
     tags: ["Gov-tech", "Multi-role UX", "Workflows"] },
-  { title: "18 checks, 10 barriers: an accessibility audit", href: "/work/accessibility-audit", img: "",
+  { title: "18 checks, 10 barriers: an accessibility audit", href: "/work/accessibility-audit", thumb: "a11y",
     what: "A WCAG 2.1 audit of a live consumer web app, with each finding rebuilt as a working lab you can try.",
     outcome: "10 of 18 checks failed, each with an owner and a fix",
     tags: ["Accessibility", "WCAG 2.1 AA", "Usability"] },
 ];
 
-const caps = [
-  { title: "UX research and discovery", text: "User interviews, SME workshops and usability testing. About ten interviews across five roles on the design portal.", link: "See the research", href: "/work/design-portal" },
-  { title: "Information architecture and interaction design", text: "Complex, multi-role workflows, data-heavy dashboards and forms that people finish.", link: "See the setup wizard", href: "/work/waste-platform#setup-tabs" },
-  { title: "Design systems", text: "Tokens, a component library and written specs, built from scratch, so engineering ships what was designed.", link: "See the design system", href: "/work/design-portal#ds-spec" },
-  { title: "Accessibility", text: "WCAG 2.2 AA from the first sketch: contrast, focus, target size, keyboard, and colour never the only signal.", link: "See the audit", href: "/work/accessibility-audit" },
-  { title: "AI-assisted product design", text: "Voice to brief, AI suggestions people review before anything is saved, and AI tools in my own production workflow.", link: "See Voice to brief", href: "/work/design-portal#voice-title" },
-  { title: "Leading designers", text: "I lead a team of three designers and work every day with product managers and engineers.", link: "About me", href: "#about" },
+// Expertise across my career, not tied to the four case studies (they are a sample of the work)
+const expertise = [
+  { title: "UX research and discovery", text: "I talk to the people who do the work before designing anything, then turn what I learn into clear problems, priorities and a shared picture of the workflow.",
+    tags: ["User interviews", "SME workshops", "Usability testing", "Affinity mapping"] },
+  { title: "Information architecture and interaction design", text: "I untangle complex, multi-role workflows into structures people can learn: clear navigation, sensible states, and forms people actually finish.",
+    tags: ["Information architecture", "User flows", "Wireframes", "Prototyping"] },
+  { title: "Design systems and visual design", text: "Tokens, components and written specs, so teams ship consistent, polished UI and engineering builds what was designed.",
+    tags: ["Design tokens", "Component libraries", "Figma", "Developer handoff"] },
+  { title: "Accessibility", text: "Accessible by default, not as an afterthought: WCAG 2.2 AA from the first sketch, and audits for products that are already live.",
+    tags: ["WCAG 2.2 AA", "Accessibility audits", "Keyboard and focus", "Colour contrast"] },
+  { title: "AI-assisted product design", text: "Designing AI features people can trust and review, and using AI tools in my own work to prototype and test ideas faster.",
+    tags: ["AI features", "Claude", "Lovable", "Rapid prototyping"] },
+  { title: "Front-end code", text: "I build what I design: HTML, CSS and JavaScript prototypes that prove an idea works and make handoff to engineering easier.",
+    tags: ["HTML", "CSS", "JavaScript"] },
+  { title: "Design leadership", text: "I lead a team of three designers, help hire, train and mentor them, and work every day with product managers and engineers.",
+    tags: ["Mentoring", "Hiring", "Design reviews", "Cross-functional teams"] },
 ];
 
 const steps: { art: "research" | "flow" | "system" | "states"; title: string; text: string }[] = [
@@ -63,6 +73,8 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
           <a href="#about" data-sec="about"><i></i>About</a>
           <a href="#experience" data-sec="experience"><i></i>Experience</a>
           <a href="#work" data-sec="work"><i></i>Work</a>
+          <a href="#expertise" data-sec="expertise"><i></i>Expertise</a>
+          <a href="#process" data-sec="process"><i></i>How I work</a>
         </nav>
       </div>
       <ul class="social">
@@ -100,16 +112,10 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
 
       <section id="work" class="sec" aria-label="Selected work">
         <h2 class="sec-h">Work</h2>
-        <ol class="list">
+        <ol class="list works">
           {work.map(w => (
             <li class="item">
-              {w.img
-                ? <img class="thumb" src={`/img/${w.img}.webp`} data-vault={w.img} alt="" loading="lazy" decoding="async" />
-                : <div class="thumb a11y" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="6.4" r="1.7"/><path d="M6.5 9.2l5.5 1.2 5.5-1.2.4 1.6-4.2 1.1v2.4l1.9 5.1-1.6.6L12 14.9l-2 4.9-1.6-.6 1.9-5.1v-2.4L6.1 10.8z"/></svg>
-                    <span class="ring">Submit</span>
-                    <span class="aa">Aa <i>✓</i></span>
-                  </div>}
+              <div class="thumb"><WorkThumb kind={w.thumb} /></div>
               <div>
                 <h3><a class="stretch" href={w.href}>{w.title} <span class="arr" aria-hidden="true">→</span></a></h3>
                 <p class="txt">{w.what}</p>
@@ -119,30 +125,43 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
             </li>
           ))}
         </ol>
-        <p class="nda muted">Client screens are blurred for NDA. Interviewers can ask for the passphrase to the private view.</p>
+        <p class="nda muted">Client screens inside the case studies are blurred for NDA. Interviewers can ask for the passphrase to the private view.</p>
+      </section>
+
+      <section id="expertise" class="sec" aria-label="Expertise">
+        <h2 class="sec-h">Expertise</h2>
+        <ol class="list">
+          {expertise.map((x, i) => (
+            <li class="item">
+              <span class="when mono">{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3>{x.title}</h3>
+                <p class="txt">{x.text}</p>
+                <ul class="chips">{x.tags.map(t => <li>{t}</li>)}</ul>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section id="process" class="sec" aria-label="How I work">
+        <h2 class="sec-h">How I work</h2>
+        <p class="intro">Four steps on every project, from the first interview to developer handoff.</p>
+        <ol class="list steps">
+          {steps.map((st, i) => (
+            <li class="item">
+              <StepArt kind={st.art} />
+              <div>
+                <span class="when mono">Step {String(i + 1).padStart(2, "0")}</span>
+                <h3>{st.title}</h3>
+                <p class="txt">{st.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </section>
     </div>
   </div>
-
-  <section class="wrap s" id="capabilities">
-    <div class="sh reveal"><div><p class="mono">What I do</p><h2>The work behind the screens.</h2></div>
-      <p>What I bring to a product team, each with the case study that shows it.</p></div>
-    <div class="caps">
-      {caps.map((c, i) => (
-        <div class="cap reveal"><p class="mono">{String(i + 1).padStart(2, "0")}</p><h3>{c.title}</h3><p>{c.text}</p><a class="ev" href={c.href}>{c.link} →</a></div>
-      ))}
-    </div>
-  </section>
-
-  <section class="wrap s" id="process">
-    <div class="sh reveal"><div><p class="mono">How I work</p><h2>Four steps, on every project.</h2></div>
-      <p>The same approach every time, from the first interview to developer handoff.</p></div>
-    <ol class="steps">
-      {steps.map((st, i) => (
-        <li class="reveal"><StepArt kind={st.art} /><span class="n mono">{String(i + 1).padStart(2, "0")}</span><h3>{st.title}</h3><p>{st.text}</p></li>
-      ))}
-    </ol>
-  </section>
 </Base>
 
 <script>
@@ -221,33 +240,16 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
   .item:hover .arr { transform: translateX(4px); }
   .item:hover h3 a { color: var(--accent); }
 
-  .thumb { width: 120px; aspect-ratio: 16 / 10; object-fit: cover; object-position: top left; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); margin-top: 4px; }
-  .a11y { position: relative; background: color-mix(in srgb, var(--accent) 9%, var(--surface)); color: var(--accent); overflow: hidden; }
-  .a11y svg { position: absolute; left: 10px; top: 50%; translate: 0 -50%; width: 34px; height: 34px; fill: currentColor; }
-  .a11y .ring { position: absolute; right: 9px; top: 12px; font: 600 9px var(--font); color: #fff; background: var(--accent); border-radius: 999px; padding: 3px 8px;
-    outline: 2px solid var(--ink); outline-offset: 2px; }
-  .a11y .aa { position: absolute; right: 9px; bottom: 10px; font: 700 10px var(--font); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; }
-  .a11y .aa i { font-style: normal; color: #11703A; }
+  .works .item { grid-template-columns: 200px minmax(0, 1fr); }
+  .thumb { width: 200px; margin-top: 4px; }
 
   .more { display: inline-flex; gap: 6px; margin-top: 28px; font-weight: 500; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color var(--t-micro); }
   .more:hover { border-color: var(--accent); }
   .nda { font-size: 14px; margin-top: 24px; }
 
-  .s { padding-top: 64px; scroll-margin-top: 40px; }
-  .sh { display: grid; grid-template-columns: 1fr 2.2fr; gap: 40px; align-items: end; margin-bottom: 36px; }
-  .sh h2 { font-size: clamp(30px, 3.4vw, 46px); line-height: 1.04; margin-top: 10px; }
-  .sh > p { color: var(--ink-2); max-width: 52ch; }
-  .caps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  .cap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 24px; display: grid; gap: 10px; align-content: start; }
-  .cap h3 { font-size: 21px; letter-spacing: -.02em; }
-  .cap p:not(.mono) { color: var(--ink-2); font-size: 15px; }
-  .ev { font-size: 14px; color: var(--accent); text-decoration: none; margin-top: 4px; }
-  .ev:hover { text-decoration: underline; }
-  .steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-  .steps li { display: grid; gap: 12px; align-content: start; }
-  .steps h3 { font-size: 19px; letter-spacing: -.015em; }
-  .steps p { font-size: 15px; color: var(--ink-2); }
-  .steps .n { color: var(--accent); }
+  .intro { color: var(--ink-2); margin: -8px 0 16px; }
+  .steps .item { grid-template-columns: 200px minmax(0, 1fr); }
+  .steps .when { display: block; padding: 0 0 4px; }
 
   @media (max-width: 1024px) {
     .split { grid-template-columns: 1fr; gap: 0; }
@@ -258,9 +260,8 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
     .sec-h { position: sticky; top: 60px; z-index: 5; margin: 0 calc(-1 * var(--gutter)) 20px; padding: 14px var(--gutter); background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(10px); }
   }
   @media (max-width: 600px) {
-    .item { grid-template-columns: 1fr; gap: 10px; margin: 0; padding: 16px 0; }
-    .sh { grid-template-columns: 1fr; gap: 12px; }
-    .caps { grid-template-columns: 1fr; }
-    .steps { grid-template-columns: 1fr 1fr; }
+    .item, .works .item, .steps .item { grid-template-columns: 1fr; gap: 10px; margin: 0; padding: 16px 0; }
+    .thumb { width: 100%; }
+    .steps .item { grid-template-columns: 1fr; }
   }
 </style>

@@ -1,0 +1,79 @@
+---
+// Work cover for the education-funds platform: four roles connected to one shared record,
+// recreated in code (illustrative content, no client data). Class prefix: ec-
+import Cover from "./Cover.astro";
+const roles = [
+  { k: "ov", t: "Oversight", d: "M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z" },
+  { k: "ad", t: "Administrator", d: "M4 6h16M4 12h16M4 18h10" },
+  { k: "pr", t: "Provider", d: "M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6" },
+  { k: "fa", t: "Family", d: "M8 11a3 3 0 1 0 0-.01M16 12a2.5 2.5 0 1 0 0-.01M3 20c.5-3.5 2.6-5.5 5-5.5s4.5 2 5 5.5M13.5 20c.4-2.6 1.6-4 3.3-4s2.9 1.4 3.2 4" },
+];
+---
+<Cover tone="amber">
+  <svg class="ec-links" viewBox="0 0 400 250">
+    <path d="M92 62 C 118 62, 118 92, 138 96" /><path d="M92 196 C 118 196, 118 166, 138 160" />
+    <path d="M308 62 C 284 62, 284 92, 264 96" /><path d="M308 196 C 284 196, 284 166, 264 160" />
+  </svg>
+
+  {roles.map(r => (
+    <div class={`ec-role ${r.k}`}>
+      <span class="ec-av"><svg viewBox="0 0 24 24"><path d={r.d} /></svg></span>
+      <b>{r.t}</b>
+    </div>
+  ))}
+
+  <div class="ec-rec">
+    <div class="ec-rh"><span class="ec-doc">▤</span><span><strong>Student record</strong><em>Application #A-2041</em></span><span class="ec-ok">Approved</span></div>
+    <div class="ec-row"><em>Programme</em><span>Education savings account</span></div>
+    <div class="ec-row"><em>Funds disbursed</em><span class="ec-pct">68%</span></div>
+    <div class="ec-prog"><i></i></div>
+    <div class="ec-time"><span class="d"><i></i>Applied</span><span class="d"><i></i>Verified</span><span class="d"><i></i>Funded</span><span><i></i>Reported</span></div>
+  </div>
+
+  <div class="ec-note"><span class="ec-ic">✓</span><span><b>Payment sent to provider</b><em>Shared with family and oversight</em></span></div>
+</Cover>
+
+<style>
+  .ec-links { position: absolute; inset: 0; width: 400px; height: 250px; }
+  .ec-links path { fill: none; stroke: rgba(255,255,255,.7); stroke-width: 1.5; stroke-dasharray: 4 4; }
+
+  .ec-role { position: absolute; display: flex; align-items: center; gap: 5px; padding: 5px 9px 5px 5px; border-radius: 99px; background: #fff;
+    box-shadow: 0 2px 4px rgba(60,20,0,.2), 0 16px 26px -12px rgba(60,20,0,.7); transition: translate .6s var(--ease); }
+  .ec-role b { font-size: 7.5px; color: #2A1405; }
+  .ec-av { width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; }
+  .ec-av svg { width: 11px; height: 11px; fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .ov { left: 22px; top: 50px; transform: rotateZ(-3deg); } .ov .ec-av { background: #7C3AED; }
+  .ad { left: 18px; top: 184px; transform: rotateZ(2deg); } .ad .ec-av { background: #2563EB; }
+  .pr { right: 26px; top: 50px; transform: rotateZ(3deg); } .pr .ec-av { background: #DB2777; }
+  .fa { right: 30px; top: 184px; transform: rotateZ(-2deg); } .fa .ec-av { background: #059669; }
+
+  .ec-rec { position: absolute; left: 128px; top: 50px; width: 146px; padding: 9px; border-radius: 11px; background: #fff; display: grid; gap: 6px;
+    transform: rotateX(4deg) rotateZ(-1deg); transition: translate .6s var(--ease);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.7), 0 2px 4px rgba(60,20,0,.25), 0 34px 50px -18px rgba(60,20,0,.85); }
+  .ec-rh { display: flex; align-items: center; gap: 5px; }
+  .ec-doc { width: 16px; height: 16px; border-radius: 5px; display: grid; place-items: center; font-size: 9px; color: #B45309; background: #FEF3C7; }
+  .ec-rh strong { display: block; font-size: 7.5px; color: #2A1405; white-space: nowrap; }
+  .ec-rh em { display: block; font-style: normal; font-size: 5px; color: #8A6A55; }
+  .ec-ok { margin-left: auto; font-size: 4.5px; font-weight: 700; color: #0B7A55; background: #D9F5EA; border-radius: 99px; padding: 1.5px 4px; }
+  .ec-row { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; }
+  .ec-row em { font-style: normal; font-size: 5px; font-weight: 600; color: #8A6A55; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+  .ec-row span { font-size: 5.5px; color: #2A1405; text-align: right; }
+  .ec-pct { font-size: 9px !important; font-weight: 700; }
+  .ec-prog { height: 5px; border-radius: 99px; background: #F6E7D8; overflow: hidden; }
+  .ec-prog i { display: block; width: 68%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #F59E0B, #EA580C); }
+  .ec-time { display: grid; grid-template-columns: repeat(4, 1fr); position: relative; padding-top: 2px; }
+  .ec-time::before { content: ""; position: absolute; top: 4.5px; left: 12%; right: 12%; height: 1.5px; background: linear-gradient(90deg, #EA580C 0 66%, #F0DCC9 66%); }
+  .ec-time span { position: relative; display: grid; justify-items: center; gap: 2px; font-size: 4.2px; color: #8A6A55; }
+  .ec-time i { width: 6px; height: 6px; border-radius: 50%; background: #F0DCC9; box-shadow: 0 0 0 1.5px #fff; }
+  .ec-time .d i { background: #EA580C; }
+
+  .ec-note { position: absolute; left: 118px; bottom: 14px; display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 6px; border-radius: 10px; background: #fff;
+    transform: rotateZ(1.5deg); transition: translate .6s var(--ease); z-index: 3; box-shadow: 0 2px 4px rgba(60,20,0,.2), 0 18px 30px -12px rgba(60,20,0,.75); }
+  .ec-ic { width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; font-weight: 700; color: #fff; background: #1F9D57; }
+  .ec-note b { display: block; font-size: 7.5px; color: #2A1405; }
+  .ec-note em { display: block; font-style: normal; font-size: 5.5px; color: #8A6A55; }
+
+  :global(.item:hover) .ec-rec { translate: 0 -2px; }
+  :global(.item:hover) .ec-role { translate: 0 -1px; }
+  :global(.item:hover) .ec-note { translate: 0 -2px; }
+</style>

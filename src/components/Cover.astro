@@ -1,0 +1,29 @@
+---
+// Shared frame for the work covers: art-directed at 400×250 and scaled to the thumbnail's width.
+// Gives every cover the same finish: tinted backdrop with two soft lights, a faint grid, grain and a top-left sheen.
+interface Props { tone: "indigo" | "green" | "amber" | "blue"; }
+const { tone } = Astro.props;
+---
+<div class={`cv ${tone}`} aria-hidden="true">
+  <div class="cv-stage"><slot /></div>
+</div>
+
+<script>
+  const ro = new ResizeObserver(entries => entries.forEach(e => (e.target as HTMLElement).style.setProperty("--s", String(e.contentRect.width / 400))));
+  document.querySelectorAll<HTMLElement>(".cv").forEach(el => ro.observe(el));
+</script>
+
+<style>
+  .cv { position: relative; width: 100%; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; isolation: isolate; }
+  .cv-stage { position: absolute; left: 0; top: 0; width: 400px; height: 250px; transform-origin: 0 0; scale: var(--s, .5); font-family: var(--font); perspective: 900px;
+    background: radial-gradient(170px 140px at 12% 8%, var(--l1), transparent 70%), radial-gradient(220px 160px at 100% 100%, var(--l2), transparent 70%), linear-gradient(160deg, var(--b1), var(--b2) 70%); }
+  .cv-stage::before { content: ""; position: absolute; inset: 0; opacity: .09; pointer-events: none;
+    background: linear-gradient(#fff 1px, transparent 1px) 0 0 / 20px 20px, linear-gradient(90deg, #fff 1px, transparent 1px) 0 0 / 20px 20px; }
+  .cv-stage::after { content: ""; position: absolute; inset: 0; z-index: 20; pointer-events: none; mix-blend-mode: overlay;
+    background: linear-gradient(135deg, rgba(255,255,255,.16), transparent 42%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E"); }
+  .indigo { --l1: rgba(150, 146, 255, .9); --l2: rgba(255, 122, 182, .55); --b1: #3326C9; --b2: #1A1270; }
+  .green  { --l1: rgba(126, 240, 196, .8); --l2: rgba(56, 189, 248, .45); --b1: #0E8A69; --b2: #063B30; }
+  .amber  { --l1: rgba(255, 214, 140, .9); --l2: rgba(244, 114, 182, .5); --b1: #E07B0B; --b2: #6B2405; }
+  .blue   { --l1: rgba(147, 197, 253, .9); --l2: rgba(167, 139, 250, .55); --b1: #2F5BFF; --b2: #13246E; }
+</style>

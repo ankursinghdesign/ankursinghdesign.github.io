@@ -1,0 +1,128 @@
+---
+// Work cover for the design-approvals portal: recreated UI drawn in code (no client screens or data).
+// Class names use a pc- prefix to avoid clashing with global styles.
+import Cover from "./Cover.astro";
+const columns = [
+  { name: "Brief", n: 4, cards: [{ s: "navy", t: "Summer knit" }, { s: "sage", t: "Linen shirt" }] },
+  { name: "Design", n: 6, cards: [{ s: "terra", t: "Wrap dress" }, { s: "cream", t: "Cable jumper" }] },
+  { name: "Review", n: 3, cards: [{ s: "mustard", t: "Utility jacket" }] },
+  { name: "Approved", n: 9, cards: [{ s: "navy", t: "Style 2041", ok: true }, { s: "rose", t: "Midi skirt", ok: true }] },
+];
+const list = [
+  { s: "navy", t: "Knit top", c: "Review" },
+  { s: "terra", t: "Dress", c: "Design" },
+  { s: "sage", t: "Shirt", c: "Brief" },
+];
+---
+<Cover tone="indigo">
+    <div class="pc-win">
+      <div class="pc-bar"><i></i><i></i><i></i><span class="pc-url"></span></div>
+      <div class="pc-body">
+        <div class="pc-side"><b class="on"></b><b></b><b></b><b></b><b></b></div>
+        <div class="pc-main">
+          <div class="pc-head"><strong>Style board</strong><span class="pc-faces"><i></i><i></i><i></i></span><span class="pc-new">+ New brief</span></div>
+          <div class="pc-cols">
+            {columns.map(col => (
+              <div class="pc-col">
+                <div class="pc-colh">{col.name}<em>{col.n}</em></div>
+                {col.cards.map(c => (
+                  <div class="pc-card">
+                    <span class={`pc-sw ${c.s}`}></span>
+                    <span class="pc-t">{c.t}</span>
+                    <span class={`pc-chip ${c.ok ? "ok" : ""}`}>{c.ok ? "✓ Approved" : "SS26"}</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc-phone">
+      <div class="pc-screen">
+        <span class="pc-notch"></span>
+        <div class="pc-ph-h">Briefs</div>
+        {list.map(l => (
+          <div class="pc-row"><span class={`pc-sw sq ${l.s}`}></span><span class="pc-rt"><b>{l.t}</b><i></i></span><span class={`pc-dot ${l.c.toLowerCase()}`}></span></div>
+        ))}
+        <div class="pc-tabs"><i class="on"></i><i></i><i></i><i></i></div>
+      </div>
+    </div>
+
+    <div class="pc-note">
+      <span class="pc-check">✓</span>
+      <span><b>Approved by buyer</b><em>Summer knit · Style 2041</em></span>
+    </div>
+</Cover>
+
+
+<style>
+
+  /* Browser window with the style board */
+  .pc-win { position: absolute; left: 22px; top: 40px; width: 266px; height: 172px; border-radius: 9px; background: #fff; overflow: hidden;
+    transform: rotateY(13deg) rotateX(4deg) rotateZ(-1.5deg); transition: translate .6s var(--ease);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.7), 0 2px 4px rgba(10,6,60,.25), 0 30px 50px -18px rgba(8,5,50,.75); }
+  .pc-bar { display: flex; align-items: center; gap: 3px; height: 14px; padding: 0 7px; background: #F1F1F6; border-bottom: 1px solid #E6E6EF; }
+  .pc-bar > i { width: 5px; height: 5px; border-radius: 50%; background: #FF5F57; }
+  .pc-bar > i:nth-child(2) { background: #FEBC2E; } .pc-bar > i:nth-child(3) { background: #28C840; }
+  .pc-url { margin-left: 40px; width: 110px; height: 7px; border-radius: 4px; background: #E3E3EC; }
+  .pc-body { display: flex; height: calc(100% - 14px); }
+  .pc-side { width: 22px; padding: 7px 0; display: grid; justify-items: center; align-content: start; gap: 7px; background: #F7F7FB; border-right: 1px solid #EEEEF4; }
+  .pc-side b { width: 9px; height: 9px; border-radius: 3px; background: #D9D9E6; }
+  .pc-side b.on { background: #4F46E5; }
+  .pc-main { flex: 1; padding: 7px 8px; min-width: 0; }
+  .pc-head { display: flex; align-items: center; gap: 6px; margin-bottom: 7px; }
+  .pc-head strong { font-size: 9px; font-weight: 700; color: #15132B; letter-spacing: -.01em; }
+  .pc-faces { display: flex; margin-left: auto; }
+  .pc-faces i { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid #fff; margin-left: -3px; background: #F7B267; }
+  .pc-faces i:nth-child(2) { background: #7C83FF; } .pc-faces i:nth-child(3) { background: #43AA8B; }
+  .pc-new { font-size: 6px; font-weight: 600; color: #fff; background: #4F46E5; border-radius: 99px; padding: 3px 6px; }
+  .pc-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+  .pc-col { background: #F6F6FA; border-radius: 5px; padding: 4px; display: grid; gap: 4px; align-content: start; min-height: 128px; }
+  .pc-colh { display: flex; justify-content: space-between; font-size: 5.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #6B6A85; padding: 0 1px; }
+  .pc-colh em { font-style: normal; color: #A3A2BA; }
+  .pc-card { background: #fff; border-radius: 4px; padding: 3px; display: grid; gap: 3px; box-shadow: 0 1px 2px rgba(20,16,70,.08), inset 0 0 0 1px #ECECF4; }
+  .pc-t { font-size: 5.5px; font-weight: 600; color: #22203A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pc-chip { justify-self: start; font-size: 4.5px; font-weight: 700; color: #4F46E5; background: #ECEBFF; border-radius: 99px; padding: 1px 4px; }
+  .pc-chip.ok { color: #0F7A45; background: #DDF5E8; }
+
+  /* Fabric swatches */
+  .pc-sw { display: block; height: 20px; border-radius: 3px; }
+  .pc-sw.sq { width: 20px; height: 20px; flex: none; border-radius: 4px; }
+  .navy { background: repeating-linear-gradient(45deg, #1F2A44 0 3px, #2E3B5E 3px 6px); }
+  .terra { background: radial-gradient(circle, #F2C6A9 1px, transparent 1.6px) 0 0 / 5px 5px, #C2603F; }
+  .sage { background: repeating-linear-gradient(0deg, rgba(255,255,255,.35) 0 1px, transparent 1px 5px), repeating-linear-gradient(90deg, rgba(255,255,255,.35) 0 1px, transparent 1px 5px), #8FA98A; }
+  .cream { background: repeating-linear-gradient(90deg, #EDE3CF 0 2px, #E1D4B9 2px 4px); }
+  .mustard { background: linear-gradient(135deg, #E8B23A, #C98E1C); }
+  .rose { background: repeating-linear-gradient(-45deg, #E9A3B5 0 3px, #F3C2CF 3px 6px); }
+
+  /* Phone */
+  .pc-phone { position: absolute; right: 26px; top: 54px; width: 86px; height: 176px; padding: 4px; border-radius: 17px; background: linear-gradient(145deg, #2A2A36, #0B0B12);
+    transform: rotateY(-12deg) rotateZ(3deg); transition: translate .6s var(--ease);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 30px 40px -16px rgba(8,5,50,.8); }
+  .pc-screen { position: relative; height: 100%; border-radius: 13px; background: #F7F7FB; padding: 15px 6px 0; overflow: hidden; display: grid; gap: 5px; align-content: start; }
+  .pc-notch { position: absolute; top: 4px; left: 50%; translate: -50% 0; width: 22px; height: 6px; border-radius: 4px; background: #0B0B12; }
+  .pc-ph-h { font-size: 9px; font-weight: 700; color: #15132B; margin-bottom: 1px; }
+  .pc-row { display: flex; align-items: center; gap: 4px; background: #fff; border-radius: 6px; padding: 4px; box-shadow: 0 1px 2px rgba(20,16,70,.08); }
+  .pc-rt { display: grid; gap: 2px; min-width: 0; flex: 1; }
+  .pc-rt b { font-size: 5.5px; color: #22203A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pc-rt i { height: 3px; width: 70%; border-radius: 2px; background: #E4E4EE; }
+  .pc-dot { width: 5px; height: 5px; border-radius: 50%; flex: none; background: #A3A2BA; }
+  .pc-dot.review { background: #E8A33A; } .pc-dot.design { background: #4F46E5; } .pc-dot.brief { background: #A3A2BA; }
+  .pc-tabs { position: absolute; left: 0; right: 0; bottom: 0; height: 18px; display: flex; justify-content: space-around; align-items: center; background: #fff; border-top: 1px solid #EEEEF4; }
+  .pc-tabs i { width: 7px; height: 7px; border-radius: 2px; background: #D9D9E6; }
+  .pc-tabs i.on { background: #4F46E5; }
+
+  /* The moment: a buyer approval lands */
+  .pc-note { position: absolute; left: 132px; bottom: 18px; display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 6px; border-radius: 11px; background: #fff;
+    transform: rotateZ(-2deg); transition: translate .6s var(--ease);
+    box-shadow: 0 2px 4px rgba(10,6,60,.2), 0 18px 30px -12px rgba(8,5,50,.7); }
+  .pc-check { width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; font-size: 9px; font-weight: 700; color: #fff; background: #1F9D57; }
+  .pc-note b { display: block; font-size: 7.5px; color: #15132B; }
+  .pc-note em { display: block; font-style: normal; font-size: 5.5px; color: #6B6A85; }
+
+  :global(.item:hover) .pc-win { translate: -2px 0; }
+  :global(.item:hover) .pc-phone { translate: 2px -2px; }
+  :global(.item:hover) .pc-note { translate: 0 -2px; }
+</style>

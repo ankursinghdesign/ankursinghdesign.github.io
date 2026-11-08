@@ -1,0 +1,77 @@
+---
+// Work cover for the accessibility audit: a contrast checker, a visible focus ring, keyboard keys and
+// what a screen reader announces, recreated in code. Class prefix: ac-
+import Cover from "./Cover.astro";
+---
+<Cover tone="blue">
+  <div class="ac-check">
+    <div class="ac-h"><span class="ac-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10.5" /><circle cx="12" cy="6.6" r="1.6" class="f" /><path d="M7 9.6l5 1 5-1M12 10.6v3.4l-2.2 4.6M12 14l2.2 4.6" /></svg></span><strong>Contrast checker</strong></div>
+    <div class="ac-sw">
+      <div><i style="background:#1E293B"></i><em>Text</em><b>#1E293B</b></div>
+      <div><i style="background:#FFFFFF"></i><em>Background</em><b>#FFFFFF</b></div>
+    </div>
+    <div class="ac-sample"><span>Aa</span><span class="small">The quick brown fox</span></div>
+    <div class="ac-res"><b>14.6:1</b><span class="p">AA ✓</span><span class="p">AAA ✓</span></div>
+  </div>
+
+  <div class="ac-form">
+    <em>Email address</em>
+    <div class="ac-input">name@company.com<i></i></div>
+    <div class="ac-submit"><span>Submit</span></div>
+    <span class="ac-tag">:focus-visible</span>
+  </div>
+
+  <div class="ac-sr">
+    <span class="ac-spk"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9zM16 9a4 4 0 0 1 0 6M18.5 6.5a7.5 7.5 0 0 1 0 11" /></svg></span>
+    <span><em>Screen reader</em><b>“Submit, button”</b></span>
+  </div>
+
+  <div class="ac-keys"><span class="w">Tab ⇥</span><span>⇧</span><span class="w">Enter ↵</span></div>
+</Cover>
+
+<style>
+  .ac-check { position: absolute; left: 22px; top: 34px; width: 150px; padding: 10px; border-radius: 11px; background: #fff; display: grid; gap: 7px;
+    transform: rotateY(12deg) rotateX(4deg) rotateZ(-2deg); transition: translate .6s var(--ease);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.7), 0 2px 4px rgba(10,20,80,.25), 0 30px 50px -18px rgba(8,14,60,.85); }
+  .ac-h { display: flex; align-items: center; gap: 5px; }
+  .ac-h strong { font-size: 8px; color: #0F172A; }
+  .ac-badge { width: 16px; height: 16px; border-radius: 5px; display: grid; place-items: center; background: #E0E8FF; }
+  .ac-badge svg { width: 12px; height: 12px; fill: none; stroke: #2F5BFF; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .ac-badge .f { fill: #2F5BFF; stroke: none; }
+  .ac-sw { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+  .ac-sw div { display: grid; grid-template-columns: auto 1fr; column-gap: 4px; align-items: center; padding: 4px; border-radius: 5px; box-shadow: inset 0 0 0 1px #E2E8F0; }
+  .ac-sw i { grid-row: span 2; width: 12px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 0 1px #CBD5E1; }
+  .ac-sw em { font-style: normal; font-size: 4.5px; color: #64748B; text-transform: uppercase; letter-spacing: .04em; }
+  .ac-sw b { font-size: 5.5px; color: #0F172A; font-family: var(--mono); font-weight: 500; }
+  .ac-sample { display: flex; align-items: baseline; gap: 6px; padding: 6px 8px; border-radius: 6px; box-shadow: inset 0 0 0 1px #E2E8F0; color: #1E293B; }
+  .ac-sample span { font-size: 22px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+  .ac-sample .small { font-size: 6px; font-weight: 500; letter-spacing: 0; }
+  .ac-res { display: flex; align-items: center; gap: 4px; }
+  .ac-res b { font-size: 12px; color: #0F172A; letter-spacing: -.02em; margin-right: auto; }
+  .ac-res .p { font-size: 5px; font-weight: 700; color: #0B7A55; background: #D9F5EA; border-radius: 99px; padding: 2px 5px; }
+
+  .ac-form { position: absolute; right: 24px; top: 84px; width: 148px; padding: 10px; border-radius: 11px; background: #fff; display: grid; gap: 5px; z-index: 2;
+    transform: rotateY(-10deg) rotateZ(2deg); transition: translate .6s var(--ease);
+    box-shadow: 0 2px 4px rgba(10,20,80,.2), 0 30px 44px -16px rgba(8,14,60,.85); }
+  .ac-form em { font-style: normal; font-size: 5.5px; font-weight: 600; color: #334155; }
+  .ac-input { position: relative; font-size: 6.5px; color: #0F172A; padding: 5px 6px; border-radius: 5px; box-shadow: inset 0 0 0 1px #94A3B8; }
+  .ac-input i { display: inline-block; vertical-align: -1.5px; margin-left: 1px; width: 1px; height: 8px; background: #0F172A; }
+  .ac-submit { margin-top: 3px; padding: 3px; border-radius: 99px; outline: 2px solid #0F172A; outline-offset: 0; box-shadow: 0 0 0 4px #FFD43B; justify-self: start; }
+  .ac-submit span { display: block; font-size: 7px; font-weight: 600; color: #fff; background: #2F5BFF; border-radius: 99px; padding: 4px 14px; }
+  .ac-tag { position: absolute; right: 8px; bottom: 12px; font-family: var(--mono); font-size: 5px; color: #9A6700; background: #FFF4CC; border-radius: 4px; padding: 2px 4px; }
+
+  .ac-sr { position: absolute; right: 44px; top: 30px; display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 6px; border-radius: 10px 10px 10px 3px; background: #0F172A; color: #fff; z-index: 3;
+    transform: rotateZ(-2deg); transition: translate .6s var(--ease); box-shadow: 0 18px 30px -12px rgba(8,14,60,.8); }
+  .ac-spk { width: 16px; height: 16px; border-radius: 50%; display: grid; place-items: center; background: #2F5BFF; }
+  .ac-spk svg { width: 10px; height: 10px; fill: none; stroke: #fff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .ac-sr em { display: block; font-style: normal; font-size: 4.5px; color: #94A3B8; text-transform: uppercase; letter-spacing: .06em; }
+  .ac-sr b { display: block; font-size: 7.5px; }
+
+  .ac-keys { position: absolute; left: 150px; bottom: 18px; display: flex; gap: 5px; z-index: 3; transform: rotateZ(3deg); transition: translate .6s var(--ease); }
+  .ac-keys span { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 6px; display: grid; place-items: center; font: 600 7px var(--font); color: #0F172A;
+    background: linear-gradient(#FFFFFF, #E9EEF6); box-shadow: inset 0 -2.5px 0 #C5CFDD, 0 10px 18px -8px rgba(8,14,60,.8); }
+
+  :global(.item:hover) .ac-check { translate: -2px 0; }
+  :global(.item:hover) .ac-form { translate: 2px -2px; }
+  :global(.item:hover) .ac-sr, :global(.item:hover) .ac-keys { translate: 0 -2px; }
+</style>

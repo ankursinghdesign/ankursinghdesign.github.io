@@ -1,0 +1,115 @@
+---
+// Work cover for the waste-management platform: an operations dashboard, the four-step setup wizard
+// and a success toast, recreated in code (illustrative figures, no client data). Class prefix: wc-
+import Cover from "./Cover.astro";
+const bars = [62, 80, 45, 92, 70, 55, 86];
+---
+<Cover tone="green">
+  <div class="wc-win">
+    <div class="wc-bar"><i></i><i></i><i></i><span class="wc-url"></span></div>
+    <div class="wc-body">
+      <div class="wc-side"><b class="on"></b><b></b><b></b><b></b><b></b></div>
+      <div class="wc-main">
+        <div class="wc-head"><strong>Operations</strong><span class="wc-pill">This week</span></div>
+        <div class="wc-kpis">
+          <div><em>Pickups</em><b>2,418</b><span class="up">▲ 6%</span></div>
+          <div><em>Routes</em><b>42</b><span class="up">▲ 2</span></div>
+          <div><em>Overdue</em><b>17</b><span class="down">▼ 4</span></div>
+        </div>
+        <div class="wc-charts">
+          <div class="wc-card">
+            <em>Pickups by day</em>
+            <div class="wc-bars">{bars.map(h => <i style={`--h:${h}%`}></i>)}</div>
+          </div>
+          <div class="wc-card wc-donut-card">
+            <em>Service mix</em>
+            <div class="wc-donut"><span>68%</span></div>
+            <div class="wc-legend"><i class="a"></i>Waste <i class="b"></i>Recycling <i class="c"></i>Bulk</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wc-wizard">
+    <strong>New customer setup</strong>
+    <div class="wc-steps">
+      <span class="done"><i>✓</i>Account</span><span class="done"><i>✓</i>Sites</span><span class="now"><i>3</i>Services</span><span><i>4</i>Billing</span>
+    </div>
+    <div class="wc-field"><em>Service type</em><span>Weekly collection <b>▾</b></span></div>
+    <div class="wc-badges"><span class="g">Active</span><span class="a">Paused</span><span class="r">Overdue</span></div>
+    <div class="wc-cta">Continue</div>
+  </div>
+
+  <div class="wc-toast">
+    <span class="wc-ic">✓</span>
+    <span><b>Customer created</b><em>Setup finished in 4 steps</em></span>
+  </div>
+</Cover>
+
+<style>
+  .wc-win { position: absolute; left: 20px; top: 34px; width: 250px; height: 176px; border-radius: 9px; background: #fff; overflow: hidden;
+    transform: rotateY(13deg) rotateX(4deg) rotateZ(-1.5deg); transition: translate .6s var(--ease);
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.7), 0 2px 4px rgba(2,40,30,.25), 0 30px 50px -18px rgba(2,30,22,.8); }
+  .wc-bar { display: flex; align-items: center; gap: 3px; height: 14px; padding: 0 7px; background: #F1F4F3; border-bottom: 1px solid #E3EAE7; }
+  .wc-bar > i { width: 5px; height: 5px; border-radius: 50%; background: #FF5F57; }
+  .wc-bar > i:nth-child(2) { background: #FEBC2E; } .wc-bar > i:nth-child(3) { background: #28C840; }
+  .wc-url { margin-left: 36px; width: 100px; height: 7px; border-radius: 4px; background: #E2E8E6; }
+  .wc-body { display: flex; height: calc(100% - 14px); }
+  .wc-side { width: 22px; padding: 7px 0; display: grid; justify-items: center; align-content: start; gap: 7px; background: #0E3B31; }
+  .wc-side b { width: 9px; height: 9px; border-radius: 3px; background: rgba(255,255,255,.22); }
+  .wc-side b.on { background: #5EE6B5; }
+  .wc-main { flex: 1; padding: 7px 8px; min-width: 0; display: grid; gap: 6px; align-content: start; }
+  .wc-head { display: flex; align-items: center; justify-content: space-between; }
+  .wc-head strong { font-size: 9px; font-weight: 700; color: #0F2A23; }
+  .wc-pill { font-size: 5.5px; font-weight: 600; color: #3C5A52; background: #EEF3F1; border-radius: 99px; padding: 2px 6px; }
+  .wc-kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+  .wc-kpis div { border-radius: 5px; padding: 4px 5px; box-shadow: inset 0 0 0 1px #E6EDEA; display: grid; gap: 1px; }
+  .wc-kpis em, .wc-card em { font-style: normal; font-size: 5px; font-weight: 600; color: #6B7F79; text-transform: uppercase; letter-spacing: .04em; }
+  .wc-kpis b { font-size: 10px; color: #0F2A23; letter-spacing: -.02em; }
+  .wc-kpis span { font-size: 4.5px; font-weight: 700; }
+  .up { color: #0F9D6E; } .down { color: #D9534F; }
+  .wc-charts { display: grid; grid-template-columns: 1.25fr 1fr; gap: 5px; }
+  .wc-card { border-radius: 5px; padding: 5px; box-shadow: inset 0 0 0 1px #E6EDEA; display: grid; gap: 4px; align-content: start; }
+  .wc-bars { height: 58px; display: flex; align-items: flex-end; gap: 4px; padding-top: 2px; border-bottom: 1px solid #E6EDEA; }
+  .wc-bars i { flex: 1; height: var(--h); border-radius: 2px 2px 0 0; background: linear-gradient(#34D399, #0E8A69); }
+  .wc-bars i:nth-child(4) { background: linear-gradient(#0E8A69, #075E48); }
+  .wc-donut { width: 44px; height: 44px; border-radius: 50%; justify-self: center; display: grid; place-items: center;
+    background: conic-gradient(#0E8A69 0 68%, #38BDF8 68% 88%, #F59E0B 88% 100%); }
+  .wc-donut span { width: 30px; height: 30px; border-radius: 50%; background: #fff; display: grid; place-items: center; font-size: 7px; font-weight: 700; color: #0F2A23; }
+  .wc-legend { display: flex; align-items: center; gap: 2px; font-size: 4.5px; color: #6B7F79; justify-content: center; }
+  .wc-legend i { width: 4px; height: 4px; border-radius: 1px; margin-left: 2px; }
+  .wc-legend .a { background: #0E8A69; } .wc-legend .b { background: #38BDF8; } .wc-legend .c { background: #F59E0B; }
+
+  /* Setup wizard: the 50-field sheet turned into four steps */
+  .wc-wizard { position: absolute; right: 18px; top: 52px; width: 136px; padding: 10px; border-radius: 10px; background: #fff; display: grid; gap: 7px;
+    transform: rotateY(-10deg) rotateZ(2deg); transition: translate .6s var(--ease);
+    box-shadow: 0 2px 4px rgba(2,40,30,.2), 0 30px 40px -16px rgba(2,30,22,.8); }
+  .wc-wizard strong { font-size: 8px; color: #0F2A23; }
+  .wc-steps { display: grid; grid-template-columns: repeat(4, 1fr); position: relative; }
+  .wc-steps::before { content: ""; position: absolute; top: 5px; left: 12%; right: 12%; height: 2px; background: linear-gradient(90deg, #0E8A69 0 62%, #E3EAE7 62%); }
+  .wc-steps span { position: relative; display: grid; justify-items: center; gap: 2px; font-size: 4.5px; color: #6B7F79; }
+  .wc-steps i { width: 11px; height: 11px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 5.5px; font-weight: 700; background: #EEF3F1; color: #6B7F79; box-shadow: 0 0 0 2px #fff; }
+  .wc-steps .done i { background: #0E8A69; color: #fff; }
+  .wc-steps .now i { background: #fff; color: #0E8A69; box-shadow: 0 0 0 2px #fff, inset 0 0 0 1.5px #0E8A69; }
+  .wc-steps .now { color: #0F2A23; font-weight: 700; }
+  .wc-field { display: grid; gap: 2px; }
+  .wc-field em { font-style: normal; font-size: 5px; font-weight: 600; color: #6B7F79; }
+  .wc-field span { display: flex; justify-content: space-between; font-size: 6px; color: #0F2A23; padding: 4px 5px; border-radius: 4px; box-shadow: inset 0 0 0 1px #D5E0DC; }
+  .wc-field b { color: #6B7F79; font-size: 5px; }
+  .wc-badges { display: flex; gap: 3px; }
+  .wc-badges span { font-size: 4.5px; font-weight: 700; border-radius: 99px; padding: 1.5px 5px; }
+  .wc-badges .g { color: #0B7A55; background: #D9F5EA; } .wc-badges .a { color: #9A5B00; background: #FDEFD3; } .wc-badges .r { color: #B42318; background: #FDE2E0; }
+  .wc-cta { justify-self: end; font-size: 6px; font-weight: 600; color: #fff; background: #0E8A69; border-radius: 99px; padding: 4px 10px; }
+
+  .wc-toast { position: absolute; left: 112px; bottom: 16px; display: flex; align-items: center; gap: 6px; padding: 6px 10px 6px 6px; border-radius: 9px; background: #fff;
+    border-top: 2px solid #22C55E; transform: rotateZ(-2deg); transition: translate .6s var(--ease); z-index: 3;
+    box-shadow: 0 2px 4px rgba(2,40,30,.2), 0 18px 30px -12px rgba(2,30,22,.75); }
+  .wc-ic { width: 16px; height: 16px; border-radius: 5px; display: grid; place-items: center; font-size: 9px; font-weight: 700; color: #0B7A55; background: #D9F5EA; box-shadow: inset 0 0 0 1px #9BE3C6; }
+  .wc-toast b { display: block; font-size: 7.5px; color: #0F2A23; }
+  .wc-toast em { display: block; font-style: normal; font-size: 5.5px; color: #6B7F79; }
+
+  :global(.item:hover) .wc-win { translate: -2px 0; }
+  :global(.item:hover) .wc-wizard { translate: 2px -2px; }
+  :global(.item:hover) .wc-toast { translate: 0 -2px; }
+</style>

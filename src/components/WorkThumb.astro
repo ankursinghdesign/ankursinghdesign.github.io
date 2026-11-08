@@ -1,0 +1,13 @@
+---
+// Work covers: art-directed, recreated UI drawn in code (no client screens or data), one idea per project.
+import CoverPortal from "./CoverPortal.astro";
+import CoverWaste from "./CoverWaste.astro";
+import CoverEdu from "./CoverEdu.astro";
+import CoverA11y from "./CoverA11y.astro";
+interface Props { kind: "portal" | "waste" | "edu" | "a11y"; }
+const { kind } = Astro.props;
+---
+{kind === "portal" && <CoverPortal />}
+{kind === "waste" && <CoverWaste />}
+{kind === "edu" && <CoverEdu />}
+{kind === "a11y" && <CoverA11y />}
