@@ -7,9 +7,10 @@ import WorkThumb from "../components/WorkThumb.astro";
 const experience = [
   { dates: "2014 — Present", title: "Senior User Experience Designer", org: "Pratham Software (PSI), Jaipur",
     earlier: ["User Experience Lead", "Senior Software Engineer"],
-    text: "I lead a team of three designers and design B2B products for clients in the UK and the US: a design-approval portal now used by thousands, a waste-management platform and an education-funds platform. I run the research, shape the information architecture, build the design systems and design every state through to developer handoff.",
+    text: "I lead a team of three designers and design B2B products for clients in the UK and the US: a design-approval portal now used by thousands, a waste-management platform and an education-funds platform. I run the research, shape the information architecture, build the design systems and design every state through to developer handoff. Earlier projects include front ends I designed and built in HTML, CSS and JavaScript (2014–16), research-led mobile apps for clients in Australia, the US and India (2017–18), enterprise tools for consulting and lab-management firms (2019–20), and design systems for software providers in fashion and packaging (2022–now).",
+    recognition: "Pratham awards: Quality and Delivery Excellence (2016, 2024), Emerging Employee of the Year (2015) and Customer Delight.",
     tags: ["UX research", "Interaction design", "Design systems", "Accessibility", "AI features", "HTML & CSS"] },
-  { dates: "2011 — 2014", title: "Media Designer", org: "Enhance Systems Pvt. Ltd., New Delhi", earlier: [],
+  { dates: "2012 — 2014", title: "Media Designer", org: "Enhance Systems Pvt. Ltd., New Delhi", earlier: [], recognition: "",
     text: "E-learning modules, simulations, animation and presentation design.",
     tags: ["E-learning", "Animation", "Presentations"] },
 ];
@@ -23,14 +24,14 @@ const work: { title: string; href: string; thumb: "portal" | "waste" | "edu" | "
     what: "Customer setup, billing and operations for a US waste-management software provider. A 50+ field spreadsheet became a four-step wizard.",
     outcome: "Shipped, Customer Delight Award",
     tags: ["Enterprise SaaS", "Information architecture", "Dashboards"] },
-  { title: "Four roles, one source of public money", href: "/work/edu-funds", thumb: "edu",
-    what: "An education-funds platform for a state programme: oversight, administrators, providers and families on one record. Designed for a bid that didn't win, and why that still mattered.",
-    outcome: "Bid design, not awarded",
-    tags: ["Gov-tech", "Multi-role UX", "Workflows"] },
   { title: "18 checks, 10 barriers: an accessibility audit", href: "/work/accessibility-audit", thumb: "a11y",
     what: "A WCAG 2.1 audit of a live consumer web app, with each finding rebuilt as a working lab you can try.",
     outcome: "10 of 18 checks failed, each with an owner and a fix",
     tags: ["Accessibility", "WCAG 2.1 AA", "Usability"] },
+  { title: "Four roles, one source of public money", href: "/work/edu-funds", thumb: "edu",
+    what: "An education-funds platform for a state programme: oversight, administrators, providers and families on one record. Designed for a bid that didn't win, and why that still mattered.",
+    outcome: "Bid design, not awarded",
+    tags: ["Gov-tech", "Multi-role UX", "Workflows"] },
 ];
 
 // Expertise across my career, not tied to the four case studies (they are a sample of the work)
@@ -88,7 +89,7 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
         <h2 class="sec-h">About</h2>
         <p>I'm Ankur, a senior product designer with <em>14+ years in design</em>, 12 of them in UX. I design B2B products for complex, multi-role workflows, the kind of software people use all day to get real work done.</p>
         <p>My work covers the whole journey: <em>user research</em> with the people doing the job, information architecture and interaction design, <em>design systems</em> and accessible interfaces, and the <em>front-end code</em> to prove it works. I lead a team of three designers and work every day with product managers and engineers, using AI tools to prototype and test ideas faster.</p>
-        <p>I started in 2011 as a media designer making e-learning, animation and presentations, and moved into UX in 2014.</p>
+        <p>I trained in animation and web design at Arena Animation, started in 2012 as a media designer making e-learning, animation and presentations, and moved into UX in 2014, first designing and building front ends, then leading research-led projects for clients in the UK, the US and Australia.</p>
         <p>Off the screen I'm an active person. I play cricket, badminton, table tennis and pickleball, love watching sport as much as playing it, and have recently gone back to the gym after a few years away.</p>
       </section>
 
@@ -102,6 +103,7 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
                 <h3>{x.title} <span class="org">· {x.org}</span></h3>
                 {x.earlier.map(t => <p class="earlier">{t}</p>)}
                 <p class="txt">{x.text}</p>
+                {x.recognition && <p class="outcome">{x.recognition}</p>}
                 <ul class="chips">{x.tags.map(t => <li>{t}</li>)}</ul>
               </div>
             </li>
