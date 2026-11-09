@@ -7,11 +7,17 @@ import WorkThumb from "../components/WorkThumb.astro";
 const experience = [
   // Titles and dates match LinkedIn exactly; recruiters compare the two
   { dates: "2014 — Present", title: "Senior User Experience Designer", titleDates: "Oct 2021 – Present", org: "Pratham Software (PSI), Jaipur",
-    earlier: [{ title: "User Experience Lead", dates: "Oct 2016 – Present" }, { title: "Senior Software Engineer", dates: "Aug 2014 – Sep 2016" }],
-    text: "I lead a team of three designers and design B2B products for clients in the UK and the US: a design-approval portal now used by about 1,000 people, a waste-management platform and an education-funds platform. I run the research, shape the information architecture, build the design systems and design every state through to developer handoff. Earlier projects include front ends I designed and built in HTML, CSS and JavaScript (2014–16), research-led mobile apps for clients in Australia, the US and India (2017–18), enterprise tools for consulting and lab-management firms (2019–20), and design systems for software providers in fashion and packaging (2022–now).",
+    earlier: [{ title: "User Experience Lead", dates: "Oct 2016 – Sep 2021" }, { title: "Senior Software Engineer", dates: "Aug 2014 – Sep 2016" }],
+    text: "I lead a team of three designers and design B2B products for clients in the UK and the US, from the first interview and the information architecture to the design system and every state at developer handoff.",
+    projects: [
+      { when: "2022 — now", what: "Design systems for software providers in fashion and packaging" },
+      { when: "2019 — 20", what: "Enterprise tools for consulting and lab-management firms" },
+      { when: "2017 — 18", what: "Research-led mobile apps for clients in Australia, the US and India" },
+      { when: "2014 — 16", what: "Front ends I designed and built in HTML, CSS and JavaScript" },
+    ],
     recognition: "Pratham awards: Quality and Delivery Excellence (2016, 2024), Emerging Employee of the Year (2015) and Customer Delight.",
     tags: ["UX research", "Interaction design", "Design systems", "Accessibility", "AI features", "HTML & CSS"] },
-  { dates: "2012 — 2014", title: "Media Designer", titleDates: "Mar 2012 – Jul 2014", org: "Enhance Systems Pvt. Ltd., New Delhi", earlier: [], recognition: "",
+  { dates: "2012 — 2014", title: "Media Designer", titleDates: "Mar 2012 – Jul 2014", org: "Enhance Systems Pvt. Ltd., New Delhi", earlier: [], projects: [], recognition: "",
     text: "E-learning modules, simulations, animation and presentation design.",
     tags: ["E-learning", "Animation", "Presentations"] },
 ];
@@ -19,7 +25,7 @@ const experience = [
 const work: { title: string; href: string; thumb: "portal" | "waste" | "edu" | "a11y"; what: string; outcome: string; tags: string[] }[] = [
   { title: "From scattered approvals to one pipeline", href: "/work/design-portal", thumb: "portal",
     what: "A design-approval portal for a UK apparel supplier, its designers and its retail buyers, replacing phone calls, WhatsApp and email. Includes a voice-to-brief feature with 37 designed failure states.",
-    outcome: "Live, about 1,000 users, 300%+ productivity (measured by the client)",
+    outcome: "Live, about 1,000 users, workflow email cut from 1,000+ a day to zero, 300%+ productivity (measured by the client)",
     tags: ["B2B SaaS", "Design system", "Voice UI", "AI features"] },
   { title: "One platform to run a waste-hauling business", href: "/work/waste-platform", thumb: "waste",
     what: "Customer setup, billing and operations for a US waste-management software provider. A 50+ field spreadsheet became a four-step wizard.",
@@ -105,6 +111,11 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
                 <p class="earlier">{x.titleDates}</p>
                 {x.earlier.map(t => <p class="earlier">{t.title} · {t.dates}</p>)}
                 <p class="txt">{x.text}</p>
+                {x.projects.length > 0 && (
+                  <ul class="proj" aria-label="Other projects at this company">
+                    {x.projects.map(p => <li><span class="mono">{p.when}</span><span>{p.what}</span></li>)}
+                  </ul>
+                )}
                 {x.recognition && <p class="outcome">{x.recognition}</p>}
                 <ul class="chips">{x.tags.map(t => <li>{t}</li>)}</ul>
               </div>
@@ -233,6 +244,9 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
   .earlier { color: var(--ink-3); font-size: 15px; line-height: 1.5; }
   .txt { color: var(--ink-2); font-size: 15px; margin-top: 8px; }
   .outcome { font-size: 14px; margin-top: 8px; }
+  .proj { list-style: none; padding: 0; margin-top: 12px; display: grid; gap: 6px; }
+  .proj li { display: grid; grid-template-columns: 88px 1fr; gap: 12px; color: var(--ink-2); font-size: 14px; line-height: 1.45; }
+  .proj .mono { color: var(--ink-3); font-size: 11px; padding-top: 3px; white-space: nowrap; }
   .chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .chips li { font: 500 12px var(--font); color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); border-radius: 999px; padding: 4px 12px; }
 
