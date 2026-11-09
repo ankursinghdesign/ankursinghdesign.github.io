@@ -36,7 +36,8 @@ for (const slug of existsSync(STUDIES) ? await readdir(STUDIES) : []) {
 
 for await (const file of walk(DIST)) {
   const rel = path.relative(DIST, file);
-  if (/\.(png|jpe?g|fig)$/i.test(file) && !rel.startsWith("favicon")) problems.push(`raw image in output: ${rel}`);
+  // Site icons ("AS" initials) are the only PNGs allowed
+  if (/\.(png|jpe?g|fig)$/i.test(file) && !/^(favicon|apple-touch-icon|icon-\d+)/.test(rel)) problems.push(`raw image in output: ${rel}`);
   if (/\.(html|js|css|json|xml|txt|svg)$/i.test(file)) {
     const text = await readFile(file, "utf8");
     for (const s of secrets) if (new RegExp(`\\b${s}\\b`).test(text)) problems.push(`private word "${s}" in ${rel}`);

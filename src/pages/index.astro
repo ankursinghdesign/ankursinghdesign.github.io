@@ -5,12 +5,13 @@ import StepArt from "../components/StepArt.astro";
 import WorkThumb from "../components/WorkThumb.astro";
 
 const experience = [
-  { dates: "2014 — Present", title: "Senior User Experience Designer", org: "Pratham Software (PSI), Jaipur",
-    earlier: ["User Experience Lead", "Senior Software Engineer"],
+  // Titles and dates match LinkedIn exactly; recruiters compare the two
+  { dates: "2014 — Present", title: "Senior User Experience Designer", titleDates: "Oct 2021 – Present", org: "Pratham Software (PSI), Jaipur",
+    earlier: [{ title: "User Experience Lead", dates: "Oct 2016 – Present" }, { title: "Senior Software Engineer", dates: "Aug 2014 – Sep 2016" }],
     text: "I lead a team of three designers and design B2B products for clients in the UK and the US: a design-approval portal now used by thousands, a waste-management platform and an education-funds platform. I run the research, shape the information architecture, build the design systems and design every state through to developer handoff. Earlier projects include front ends I designed and built in HTML, CSS and JavaScript (2014–16), research-led mobile apps for clients in Australia, the US and India (2017–18), enterprise tools for consulting and lab-management firms (2019–20), and design systems for software providers in fashion and packaging (2022–now).",
     recognition: "Pratham awards: Quality and Delivery Excellence (2016, 2024), Emerging Employee of the Year (2015) and Customer Delight.",
     tags: ["UX research", "Interaction design", "Design systems", "Accessibility", "AI features", "HTML & CSS"] },
-  { dates: "2012 — 2014", title: "Media Designer", org: "Enhance Systems Pvt. Ltd., New Delhi", earlier: [], recognition: "",
+  { dates: "2012 — 2014", title: "Media Designer", titleDates: "Mar 2012 – Jul 2014", org: "Enhance Systems Pvt. Ltd., New Delhi", earlier: [], recognition: "",
     text: "E-learning modules, simulations, animation and presentation design.",
     tags: ["E-learning", "Animation", "Presentations"] },
 ];
@@ -101,7 +102,8 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
               <span class="when mono">{x.dates}</span>
               <div>
                 <h3>{x.title} <span class="org">· {x.org}</span></h3>
-                {x.earlier.map(t => <p class="earlier">{t}</p>)}
+                <p class="earlier">{x.titleDates}</p>
+                {x.earlier.map(t => <p class="earlier">{t.title} · {t.dates}</p>)}
                 <p class="txt">{x.text}</p>
                 {x.recognition && <p class="outcome">{x.recognition}</p>}
                 <ul class="chips">{x.tags.map(t => <li>{t}</li>)}</ul>
