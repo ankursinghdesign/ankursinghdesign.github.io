@@ -63,8 +63,8 @@ const phoneBars = {
 <Base title="Design approvals portal · Ankur Singh" description="Case study: replacing a design-approval lifecycle run over WhatsApp, email and phone with one portal and a design system built from scratch.">
   <article>
     <header class="hero wrap">
-      <p class="mono reveal"><a href="/">Work</a> / 01 · B2B platform · Design system · Live</p>
-      <h1 class="reveal">From scattered approvals to one pipeline.</h1>
+      <p class="mono reveal"><a href="/">Work</a> · B2B platform · Design system · Live</p>
+      <h1 class="reveal">Design-approval portal</h1>
       <p class="lede reveal">
         My client, <P slug={S} field="client" />, ran its whole design-approval lifecycle over phone calls, WhatsApp, email and conversations.
         I designed the portal that replaced it: 64 screens across two connected portals, built on a design system I created from scratch.
@@ -87,7 +87,7 @@ const phoneBars = {
     </div>
 
     <section class="wrap sec grid12">
-      <div class="h reveal"><p class="mono">01 / The problem</p><h2>Approvals lived in people's phones.</h2></div>
+      <div class="h reveal"><p class="mono">The problem</p><h2>Approvals ran on phone, WhatsApp and email</h2></div>
       <div class="b reveal">
         <p>A single licensed-apparel brief moves through designers, account managers, design heads, retailer buyers and the licensor. Each hand-off happened in a different channel: the global design head alone wrote, replied to or forwarded about 500 emails a day, and the calls and WhatsApp messages were never recorded anywhere. So nobody could answer three basic questions: <em>where is this brief, who is waiting on whom, and who has too much on?</em></p>
         <p class="muted small">Diagram reconstructed from my interviews, for this case study.</p>
@@ -123,7 +123,7 @@ const phoneBars = {
     </section>
 
     <section class="wrap sec grid12">
-      <div class="h reveal"><p class="mono">02 / Research</p><h2>Ten people, five roles, several rounds.</h2></div>
+      <div class="h reveal"><p class="mono">Research</p><h2>Interviews and review rounds</h2></div>
       <div class="b reveal">
         <p>I interviewed about ten people: fashion designers, apparel designers, department heads, the global head of design and retailer buyers. Then I went back to real users in several rounds while designing.</p>
         <p>Each round ended with a design presentation to the client's head of design, who signed it off. I checked every pattern with the development architect, so what I designed could be built.</p>
@@ -139,7 +139,7 @@ const phoneBars = {
 
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">03 / Decision</p><h2>One lifecycle, four statuses, one manual move.</h2></div>
+        <div class="h reveal"><p class="mono">Decision</p><h2>Brief statuses</h2></div>
         <div class="b reveal">
           <p>A brief has four statuses everywhere: To Do, In Progress, In Selection, Complete. People make only one move by hand, To Do to In Progress, and only once the brief has a designer, a start date and the expected boards. Everything after that is set by what actually happens: sharing a board, the retailer locking a selection.</p>
           <p>Licensor approval runs on its own lane, design by design, and never sends a brief backwards.</p>
@@ -165,7 +165,7 @@ const phoneBars = {
     <section class="focus" aria-labelledby="voice-title">
       <div class="wrap">
         <div class="grid12">
-          <div class="h reveal"><p class="mono kick">Focus · Voice to brief</p><h2 id="voice-title">Speak a brief. The portal fills it in.</h2></div>
+          <div class="h reveal"><p class="mono kick">Focus · Voice to brief</p><h2 id="voice-title">Voice to brief</h2></div>
           <div class="b reveal">
             <p>Briefs often start as a conversation: a call with a buyer, a quick chat after a meeting. Typing nine fields from memory afterwards is where details get lost. So I designed a way to speak the brief instead. You talk the way you would to a colleague, the form fills itself in as you go, and the portal asks about whatever you left out.</p>
           </div>
@@ -176,7 +176,7 @@ const phoneBars = {
         </div>
 
         <div class="grid12 vblock">
-          <div class="h reveal"><p class="mono">Decision</p><h3>Three ways in. One recommended.</h3></div>
+          <div class="h reveal"><p class="mono">Decision</p><h3>Where voice starts</h3></div>
           <div class="b reveal">
             <ul class="opts">
               <li><b>1a · Mic inside the form</b><span class="tag">Chosen</span><p>New brief opens the usual drawer, and the first thing in it is "Speak it instead". Nobody has to learn a new entry point, and people who prefer the form never meet an extra step.</p></li>
@@ -188,7 +188,7 @@ const phoneBars = {
         <div class="reveal vimg"><Shot slug={S} id="v-entry" caption="The three explored entry points" /></div>
 
         <div class="grid12 vblock">
-          <div class="h reveal"><p class="mono">The flow</p><h3>Listen, ask what's missing, review, create.</h3></div>
+          <div class="h reveal"><p class="mono">The flow</p><h3>Listen, ask, review, create</h3></div>
           <div class="b reveal"><p>Step through it. Every screen here is from the working prototype, recorded while playing a sample call.</p></div>
         </div>
         <div class="vflow reveal">
@@ -217,7 +217,7 @@ const phoneBars = {
         </div>
 
         <div class="grid12 vblock">
-          <div class="h reveal"><p class="mono">Principles</p><h3>Fast, but never a black box.</h3></div>
+          <div class="h reveal"><p class="mono">Principles</p><h3>Rules for the voice feature</h3></div>
           <div class="b reveal">
             <ul class="vrules">
               <li><b>Asked once, then flagged</b><p>No interrogation. One question per gap; skipped answers become a visible to-do.</p></li>
@@ -231,7 +231,7 @@ const phoneBars = {
           <Shot slug={S} id="v-phone" class="phone" caption="On a phone: the same flow as a bottom sheet, primary action under the thumb" />
           <div>
             <p class="mono">Edge cases</p>
-            <h3 class="big3">37 ways it can go wrong, each one designed.</h3>
+            <h3 class="big3">37 failure states</h3>
             <p>Voice fails in ways forms don't: a blocked microphone, a headset unplugged mid-sentence, a laptop that sleeps, a dropped connection after "I'm done", two people with the same first name, a licence that has expired. I mapped every failure from the test list into six groups and designed what the user sees for each, so a broken moment always ends with a clear next step and nothing said is lost.</p>
             <p class="muted">Open any state below to see it full size.</p>
           </div>
@@ -261,7 +261,7 @@ const phoneBars = {
 
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">04 / Decision</p><h2>Three views, one truth.</h2></div>
+        <div class="h reveal"><p class="mono">Decision</p><h2>Table, Kanban and timeline</h2></div>
         <div class="b reveal"><p>Design heads plan in timelines, designers work in columns, account managers scan tables. Rather than pick one, the same briefs show three ways, with filters that follow you between them.</p></div>
       </div>
       <div class="views reveal" data-view="board">
@@ -280,7 +280,7 @@ const phoneBars = {
 
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">05 / Decision</p><h2>Close the loop with the retailer.</h2></div>
+        <div class="h reveal"><p class="mono">Decision</p><h2>The retailer portal</h2></div>
         <div class="b reveal">
           <p>The biggest leak in the old process was the retailer's answer: it came back as an email, a call or a meeting. So I designed a second, connected portal for buyers. They approve everything in one tap, make a partial selection with comments on individual designs, or reject with required feedback.</p>
           <p>On the supplier side, a partial answer lets the designer lock what was approved and revise the rest at the same time, instead of waiting for one before starting the other.</p>
@@ -303,7 +303,7 @@ const phoneBars = {
 
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">06 / Iteration</p><h2>Team Capacity answers one question.</h2></div>
+        <div class="h reveal"><p class="mono">Iteration</p><h2>Team Capacity</h2></div>
         <div class="b reveal">
           <p>The first version had six equal KPI cards, and they answered nothing. I reframed the page around one question, <em>who is overloaded this week, and how do we fix it</em>, and explored three directions for the top of the page: exceptions first, three action cards, or a sentence with two lists.</p>
           <p>Three action cards won. Hours lead and percentages follow. Each designer's bar carries a <strong>peak-week marker</strong>, because 60/60/190/60 averages to about 92% and reads as healthy when one week is nearly double. The page never changes the board by itself: it proposes a move, and the brief owner approves it.</p>
@@ -322,7 +322,7 @@ const phoneBars = {
 
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">07 / AI</p><h2>AI that suggests, never decides.</h2></div>
+        <div class="h reveal"><p class="mono">AI</p><h2>Trend extraction with review</h2></div>
         <div class="b reveal">
           <p>Trend reports arrive as long PDFs. The portal reads them page by page and pulls out every image with a suggested title, tags and category. Designers then confirm in batches, while a focus mode walks them through only the low-confidence ones. Duplicates start excluded. Nothing is published until a person says so.</p>
           <p>Every AI feature can be switched off by an admin, with a monthly query limit and a budget alert. And in visualisation, the rule is written into the screen: <em>the artwork itself is never generated, only the world around it.</em></p>
@@ -340,7 +340,7 @@ const phoneBars = {
 
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">08 / System</p><h2>A design system I built from scratch.</h2></div>
+        <div class="h reveal"><p class="mono">System</p><h2>The design system</h2></div>
         <div class="b reveal">
           <p>I wrote the system before the screens: one brand yellow held back for actions, cool slate neutrals, Poppins, a 4px grid, pill-shaped controls and a single easing curve. Components only use semantic tokens, so re-theming is a token change. That's how dark mode arrived later as a remap, not a rewrite.</p>
         </div>
@@ -356,7 +356,7 @@ const phoneBars = {
 
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">09 / Craft</p><h2>Every state, every screen size.</h2></div>
+        <div class="h reveal"><p class="mono">Craft</p><h2>States and phone layouts</h2></div>
         <div class="b reveal"><p>I specified 41 app states (empty, loading, error, offline, permission) and a loading skeleton for every view at both desktop and phone widths. Every screen works on a phone: drag-and-drop becomes tap-to-place, and wide tables become cards.</p></div>
       </div>
       <div class="craft reveal">
@@ -367,7 +367,7 @@ const phoneBars = {
     </section>
 
     <section class="wrap sec grid12">
-      <div class="h reveal"><p class="mono">10 / Process</p><h2>AI as my production tool.</h2></div>
+      <div class="h reveal"><p class="mono">Process</p><h2>How I used AI tools</h2></div>
       <div class="b reveal">
         <p>I wrote the design system and a detailed spec for every screen, then used Claude Design to build them as working, clickable prototypes. A living rules file recorded every decision, from the overlay rule to how a filter applies, so each new screen followed the ones before it.</p>
         <p>Three review cycles with the client went through that file, and every change was logged and rolled into the live screens in the same pass. AI did the production; the research, the system, the specs and every decision were mine.</p>
@@ -376,7 +376,7 @@ const phoneBars = {
 
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">11 / Every screen</p><h2>The whole product.</h2></div>
+        <div class="h reveal"><p class="mono">Every screen</p><h2>All screens</h2></div>
         <div class="b reveal"><p>The story above uses the screens that carry each decision. Here is everything, grouped by area: 64 screens across both portals, every state and every setting. Open any screen to see it full size, and use the arrow keys to move through them.</p></div>
       </div>
       <Gallery slug={S} groups={[
@@ -406,20 +406,15 @@ const phoneBars = {
     </section>
 
     <section class="wrap sec grid12">
-      <div class="h reveal"><p class="mono">12 / Impact</p><h2>Live, and it moved the numbers.</h2></div>
+      <div class="h reveal"><p class="mono">Impact</p><h2>Results</h2></div>
       <div class="b">
-        <ul class="stats reveal">
-          <li class="stat"><b>1,000+ → 0</b><span>workflow emails a day across designers and account managers, about 500 of them the design head's alone</span></li>
-          <li class="stat"><b>300%+</b><span>productivity gain in six months, measured by the client's global design lead with the account managers</span></li>
-          <li class="stat"><b>64</b><span>screens across two connected portals</span></li>
-          <li class="stat"><b>41</b><span>app states specified, plus mobile for every screen</span></li>
-        </ul>
-        <p class="muted small reveal">With approvals and feedback inside the portal, the design head and account managers spend their time on the quality of the work, not on chasing it.</p>
+        <p class="result reveal">About 1,000 people use the portal. Workflow email went from <strong>more than 1,000 a day to zero</strong>, about 500 of them the design head's alone, and the client's global design lead measured a <strong>300%+ productivity gain</strong> in six months. The design head and account managers now spend their time on the quality of the work, not on chasing approvals.</p>
+        <p class="muted small reveal">The work covered 64 screens across two connected portals and 41 specified app states, each with a phone layout.</p>
       </div>
     </section>
 
     <section class="wrap sec grid12">
-      <div class="h reveal"><p class="mono">13 / Reflection</p><h2>What I'd do differently.</h2></div>
+      <div class="h reveal"><p class="mono">Reflection</p><h2>What I'd do differently</h2></div>
       <div class="b reveal">
         <p>I'd build measurement into the product from day one, so productivity comes from the portal's own data rather than a report, and I'd bring licensors into the research as early as the buyers.</p>
         <p class="next"><a class="btn ghost" href="/">← All work</a></p>
@@ -554,6 +549,8 @@ const phoneBars = {
   .mob { margin-top: 96px; padding-top: 40px; border-top: 1px solid var(--line); }
   .mob-h { font-size: clamp(26px, 2.6vw, 34px); letter-spacing: -.025em; margin-top: 10px; }
 
+  .result { font-size: clamp(18px, 1.5vw, 21px); line-height: 1.55; color: var(--ink-2); max-width: 60ch; }
+  .result strong { color: var(--ink); font-weight: 500; }
   .stats { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .stat { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 22px; display: grid; gap: 6px; }
   .stat b { font-size: 44px; font-weight: 500; letter-spacing: -.04em; line-height: 1; }

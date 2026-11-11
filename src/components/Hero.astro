@@ -45,9 +45,9 @@ const rendered = t + 100;
       <img class="lay as" src="/portrait/ascii.webp" alt="" />
     </div>
     <ul class="slices" aria-label="What I do">
-      <li><a class="slice" data-k="research" href="/work/design-portal"><span class="n">01</span> Research</a></li>
-      <li><a class="slice" data-k="design" href="/work/design-portal#ds-spec"><span class="n">02</span> Design</a></li>
-      <li><a class="slice" data-k="code" href="/work/accessibility-audit"><span class="n">03</span> Code</a></li>
+      <li><a class="slice" data-k="research" href="/work/design-portal">Research</a></li>
+      <li><a class="slice" data-k="design" href="/work/design-portal#ds-spec">Design</a></li>
+      <li><a class="slice" data-k="code" href="/work/accessibility-audit">Code</a></li>
     </ul>
     <p class="m-hint mono" aria-hidden="true">Tap a slice of my face</p>
   <ol class="panels" id="panels">
@@ -56,16 +56,15 @@ const rendered = t + 100;
         <h2>From interview to build.</h2>
         <p class="lead">For me research, design and code are one job. I talk to the people doing the work, design the system and every state, then build it.</p>
         <ul class="legend">
-          <li><b>01 Research</b> Interviews, workshops and affinity mapping</li>
-          <li><b>02 Design</b> Design systems, every screen and state</li>
-          <li><b>03 Code</b> HTML, CSS and JS, prototyped with AI tools</li>
+          <li><b>Research</b> Interviews, workshops and affinity mapping</li>
+          <li><b>Design</b> Design systems, every screen and state</li>
+          <li><b>Code</b> HTML, CSS and JS, prototyped with AI tools</li>
         </ul>
         <span class="go mono"><span class="fine">← Hover a slice of my face</span><span class="touch">↑ Tap a slice of my face</span></span>
       </div>
     </li>
     <li class="panel research" data-k="research">
       <a href="/work/design-portal" class="pa">
-        <span class="mono n">01</span>
         <h2>Research</h2>
         <p class="line">I start with the people doing the work.</p>
         <span class="go mono">See the research →</span>
@@ -79,7 +78,6 @@ const rendered = t + 100;
     </li>
     <li class="panel design" data-k="design">
       <a href="/work/design-portal#ds-spec" class="pa">
-        <span class="mono n">02</span>
         <h2>Design</h2>
         <p class="line">Systems first, then every screen and state.</p>
         <span class="go mono">See the design system →</span>
@@ -87,7 +85,7 @@ const rendered = t + 100;
       <div class="scene ui" aria-hidden="true">
         <div class="cols"><i></i><i></i><i></i><i></i><i></i><i></i></div>
         <div class="canvas">
-          <div class="flbl mono"><span class="fn">◇ Style card / Default</span><span class="sw"><i style="--c: var(--accent); --k: 0"></i><i style="--c: #11703A; --k: 1"></i><i style="--c: #E8A33A; --k: 2"></i><i style="--c: #1F2A44; --k: 3"></i></span></div>
+          <div class="flbl tok"><span class="fn">◇ Style card / Default</span><span class="sw"><i style="--c: var(--accent); --k: 0"></i><i style="--c: #11703A; --k: 1"></i><i style="--c: #E8A33A; --k: 2"></i><i style="--c: #1F2A44; --k: 3"></i></span></div>
           <div class="card">
             <div class="w hd" style="--dx: -16px; --dy: 10px; --dr: -3deg">
               <span class="knit"></span>
@@ -107,20 +105,19 @@ const rendered = t + 100;
             <div class="w ft" style="--dx: 14px; --dy: 12px; --dr: 4deg">
               <span class="stack"><b class="av a1"></b><b class="av a2"></b><b class="av a3"></b></span>
               <span class="b2 tx">Open brief</span>
-              <span class="b1 tx">Approve<span class="sel"><i></i><i></i><i></i><i></i><em class="mono">96 × 32</em></span></span>
+              <span class="b1 tx">Approve<span class="sel"><i></i><i></i><i></i><i></i><em class="tok">96 × 32</em></span></span>
             </div>
-            <span class="red r-pad mono">16</span>
-            <span class="red r-gap mono">12</span>
-            <span class="call c-type mono" style="--k: 0">type/title-sm</span>
-            <span class="call c-acc mono" style="--k: 1">color/accent</span>
-            <span class="call c-rad mono" style="--k: 2">radius/full</span>
+            <span class="red r-pad tok">16</span>
+            <span class="red r-gap tok">12</span>
+            <span class="call c-type tok" style="--k: 0">type/title-sm</span>
+            <span class="call c-acc tok" style="--k: 1">color/accent</span>
+            <span class="call c-rad tok" style="--k: 2">radius/full</span>
           </div>
         </div>
       </div>
     </li>
     <li class="panel code" data-k="code">
       <a href="/work/accessibility-audit" class="pa">
-        <span class="mono n">03</span>
         <h2>Code</h2>
         <p class="line">I build what I design, in HTML, CSS and JS.</p>
         <span class="go mono">See it in code →</span>
@@ -177,7 +174,7 @@ const rendered = t + 100;
 
   .slices { top: 0; height: var(--sh); z-index: 3; list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(3, 1fr); }
   .slice { display: block; height: 100%; padding-top: 10px; text-align: center; text-decoration: none; border-radius: var(--r-md);
-    font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); transition: color .3s; }
+    font: 500 14px var(--font); color: var(--ink-3); transition: color .3s; }
   .slice .n { color: var(--ink-3); opacity: .7; }
   .slice:hover, .slice.on { color: var(--ink); }
   .slice.on { text-decoration: underline 2px var(--accent); text-underline-offset: 6px; }
@@ -200,7 +197,7 @@ const rendered = t + 100;
   .idle .lead { color: var(--ink-2); font-size: 18px; margin-top: 14px; max-width: 40ch; }
   .legend { list-style: none; padding: 0; margin-top: 28px; display: grid; gap: 0; border-top: 1px solid var(--line); max-width: 46ch; }
   .legend li { display: grid; grid-template-columns: 110px 1fr; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 15px; color: var(--ink-2); }
-  .legend b { font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); padding-top: 3px; }
+  .legend b { font: 600 15px var(--font); color: var(--ink); }
   .idle .go { opacity: 1; }
   .go .touch { display: none; }
   .m-hint { display: none; }

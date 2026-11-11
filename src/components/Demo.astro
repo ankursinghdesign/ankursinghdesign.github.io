@@ -15,7 +15,7 @@ const fmt = (t: number) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).p
     <div class="dlock">
       <span class="mono">Recorded from the working prototype · {fmt(v.duration)}</span>
       <p>This demo shows client screens, so it plays in the private view.</p>
-      <button type="button" class="btn" data-unlock>🔒 Unlock to watch</button>
+      <button type="button" class="btn" data-unlock><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6.5 9V6.6a3.5 3.5 0 0 1 7 0V9"/><rect x="4" y="9" width="12" height="9" rx="2.4"/></svg> Unlock to watch</button>
     </div>
     <span class="dload mono" hidden>Decrypting…</span>
   </div>

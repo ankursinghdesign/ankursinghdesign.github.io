@@ -43,8 +43,8 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
 <Base title="Accessibility audit · Ankur Singh" description="Case study: an 18-point WCAG 2.1 audit of a live web app, rebuilt as interactive demos.">
   <article>
     <header class="hero wrap">
-      <p class="mono reveal"><a href="/">Work</a> / 03 · Accessibility · Audit</p>
-      <h1 class="reveal">18 checks. 10 barriers. One honest scorecard.</h1>
+      <p class="mono reveal"><a href="/">Work</a> · Accessibility · Audit</p>
+      <h1 class="reveal">Accessibility audit</h1>
       <p class="lede reveal">I audited a live consumer web app against WCAG 2.1 to answer one question: can everyone use it? Every screen below is rebuilt in code, so you can try the problems, and the fixes, yourself.</p>
       <dl class="meta reveal">
         <div><dt class="mono">My role</dt><dd>Sole auditor: method, testing, findings and recommendations</dd></div>
@@ -56,7 +56,7 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
 
     <!-- 01 Scorecard -->
     <section class="wrap sec grid12">
-      <div class="h reveal"><p class="mono">01 / Scorecard</p><h2>More than half failed.</h2></div>
+      <div class="h reveal"><p class="mono">Scorecard</p><h2>10 of 18 checks failed</h2></div>
       <div class="b reveal score">
         <figure class="donut" aria-label={`${nFail} failed and ${nPass} passed, of ${checks.length} checks`}>
           <svg viewBox="0 0 180 180" aria-hidden="true">
@@ -79,7 +79,7 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
     <!-- 02 The board -->
     <section class="wrap sec">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">02 / The audit board</p><h2>Every check, on one wall.</h2></div>
+        <div class="h reveal"><p class="mono">The audit board</p><h2>All 18 checks</h2></div>
         <div class="b reveal">
           <p>Here's the whole audit from a distance. Pick a card to zoom in and see what I found and what I recommended. Use the filters to see only the failures.</p>
           <div class="filters" role="group" aria-label="Filter checks">
@@ -135,7 +135,7 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
     <!-- 03 Contrast lab -->
     <section class="wrap sec" id="contrast">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">03 / Contrast lab</p><h2>1.16:1 is almost invisible.</h2></div>
+        <div class="h reveal"><p class="mono">Contrast lab</p><h2>Colour contrast</h2></div>
         <div class="b reveal"><p>I measured four foreground and background pairs. The best scored 2.73:1, and the worst 1.16:1. WCAG AA asks for 4.5:1 for body text. Pick a pair, then drag the slider to fix it.</p></div>
       </div>
       <div class="lab reveal" data-lab="contrast">
@@ -172,7 +172,7 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
     <!-- 04 Focus lab -->
     <section class="wrap sec" id="focus">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">04 / Focus lab</p><h2>Where am I?</h2></div>
+        <div class="h reveal"><p class="mono">Focus lab</p><h2>Keyboard focus</h2></div>
         <div class="b reveal"><p>Three of the operable failures had one root cause: you couldn't see keyboard focus. Some buttons showed a faint change and others showed nothing. Click the first button below, then press <kbd>Tab</kbd> to move through the rest. Then switch to the recommended version.</p></div>
       </div>
       <div class="lab reveal">
@@ -202,7 +202,7 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
     <!-- 05 Words -->
     <section class="wrap sec" id="words">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">05 / Words are interface</p><h2>Say what it does, and what it costs.</h2></div>
+        <div class="h reveal"><p class="mono">Copy</p><h2>Button and dialog labels</h2></div>
         <div class="b reveal"><p>Two failures were about copy, not code. A button labelled with its state left people guessing what it would do. A delete dialog asked "Are you sure?" without saying what would be deleted, or whether deleting could be undone.</p></div>
       </div>
       <div class="duo reveal">
@@ -212,12 +212,12 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
             <div class="mini" data-theme-demo="found">
               <span class="mono tag-x bad">As found</span>
               <p class="s-title">Five-ingredient dal</p>
-              <button class="tbtn" data-found>🌙 Dark mode</button>
+              <button class="tbtn" data-found>Dark mode</button>
             </div>
             <div class="mini" data-theme-demo="fixed">
               <span class="mono tag-x good">Recommended</span>
               <p class="s-title">Five-ingredient dal</p>
-              <button class="tbtn" data-fixed aria-pressed="false">🌙 Switch to dark mode</button>
+              <button class="tbtn" data-fixed aria-pressed="false">Switch to dark mode</button>
             </div>
           </div>
           <p class="hand">"Dark mode": is it on, or will it turn it on?</p>
@@ -245,15 +245,15 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
     <!-- 06 Small fixes -->
     <section class="wrap sec" id="small">
       <div class="grid12">
-        <div class="h reveal"><p class="mono">06 / Small fixes</p><h2>Three quick wins.</h2></div>
+        <div class="h reveal"><p class="mono">Small fixes</p><h2>Three small fixes</h2></div>
         <div class="b reveal"><p>Some findings need no new feature, just a rule applied everywhere. Hover or tap each "after" to see why it works.</p></div>
       </div>
       <ol class="wins reveal">
         <li>
           <span class="mono">Target size · 2.5.5</span>
           <div class="ba">
-            <div class="cell"><span class="mono tag-x bad">Before</span><div class="icons tight"><i>♥</i><i>↗</i><i>⋯</i></div></div>
-            <div class="cell zones" tabindex="0"><span class="mono tag-x good">After</span><div class="icons roomy"><i>♥</i><i>↗</i><i>⋯</i></div><span class="pop2">Each target 44px or larger, with 8px between them.</span></div>
+            <div class="cell"><span class="mono tag-x bad">Before</span><div class="icons tight"><i><svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></i><i><svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></i><i><svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></svg></i></div></div>
+            <div class="cell zones" tabindex="0"><span class="mono tag-x good">After</span><div class="icons roomy"><i><svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></i><i><svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></i><i><svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/><circle cx="19" cy="12" r="1.2" fill="currentColor"/></svg></i></div><span class="pop2">Each target 44px or larger, with 8px between them.</span></div>
           </div>
         </li>
         <li>
@@ -267,7 +267,7 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
           <span class="mono">No surprises · predictable</span>
           <div class="ba">
             <div class="cell"><span class="mono tag-x bad">Before</span><div class="vbtn">Watch recipe</div></div>
-            <div class="cell zones" tabindex="0"><span class="mono tag-x good">After</span><div class="vbtn">▶ Watch recipe <small>Video · 2 min</small></div><span class="pop2">The label warns that a video will play before you click.</span></div>
+            <div class="cell zones" tabindex="0"><span class="mono tag-x good">After</span><div class="vbtn"><span class="vrow"><svg viewBox="0 0 24 24" width=".8em" height=".8em" aria-hidden="true"><path d="M7 5v14l12-7z" fill="currentColor"/></svg> Watch recipe</span> <small>Video · 2 min</small></div><span class="pop2">The label warns that a video will play before you click.</span></div>
           </div>
         </li>
       </ol>
@@ -276,14 +276,14 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
 
     <!-- 07 Since -->
     <section class="wrap sec grid12">
-      <div class="h reveal"><p class="mono">07 / Since then</p><h2>Accessibility as a floor, not a fix.</h2></div>
+      <div class="h reveal"><p class="mono">Since then</p><h2>Accessibility in my design system</h2></div>
       <div class="b reveal">
         <p>Auditing someone else's product is the cheapest way to learn what to build in from day one. In the design system I wrote in 2026, the floor is part of the tokens:</p>
-        <ul class="stats">
-          <li class="stat"><b>AA</b><span>contrast for every text and surface pair</span></li>
-          <li class="stat"><b>44px</b><span>minimum touch target</span></li>
-          <li class="stat"><b>3:1</b><span>focus ring contrast, so slate, not yellow</span></li>
-          <li class="stat"><b>≠ colour</b><span>status never shown by colour alone</span></li>
+        <ul class="rules">
+          <li>AA contrast for every text and surface pair</li>
+          <li>Touch targets of at least 44px</li>
+          <li>Focus rings at 3:1 contrast, which is why they're slate, not yellow</li>
+          <li>Status never shown by colour alone</li>
         </ul>
         <p class="muted">The recommendations went to the product team as a checklist with a WCAG reference for every item.</p>
         <p class="next"><a class="btn ghost" href="/">← All work</a></p>
@@ -411,12 +411,12 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
   // Theme buttons: same behaviour, different labels
   $$<HTMLButtonElement>("[data-found]").forEach(b => b.addEventListener("click", () => {
     const m = b.closest(".mini")!, dark = m.classList.toggle("dark");
-    b.textContent = dark ? "☀️ Light mode" : "🌙 Dark mode";
+    b.textContent = dark ? "Light mode" : "Dark mode";
   }));
   $$<HTMLButtonElement>("[data-fixed]").forEach(b => b.addEventListener("click", () => {
     const m = b.closest(".mini")!, dark = m.classList.toggle("dark");
     b.setAttribute("aria-pressed", String(dark));
-    b.textContent = dark ? "☀️ Switch to light mode" : "🌙 Switch to dark mode";
+    b.textContent = dark ? "Switch to light mode" : "Switch to dark mode";
   }));
 </script>
 
@@ -588,6 +588,7 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
   .few span { border-radius: 6px; font-weight: 500; }
   .few .p1 { background: #1F2430; color: #fff; } .few .p2 { border: 1px solid #1F2430; } .few .p3 { text-decoration: underline; }
   .vbtn { font-size: 13px; font-weight: 500; padding: 10px 12px; border-radius: 8px; border: 1px solid #DCDCE4; display: grid; justify-items: start; }
+  .vrow { display: inline-flex; align-items: center; gap: 6px; }
   .vbtn small { font-size: 11px; color: #5E6168; font-weight: 400; }
   .pop2 { position: absolute; left: 8px; right: 8px; bottom: 8px; background: #0F1012; color: #F1F1EE; font-size: 12px; line-height: 1.4; padding: 8px 10px; border-radius: 8px; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .25s var(--ease); pointer-events: none; }
   .zones:is(:hover, :focus-visible) .pop2 { opacity: 1; transform: none; }
@@ -621,4 +622,5 @@ const demoLink = { contrast: "Try the contrast lab", focus: "Try the focus lab",
     .sample { padding: 20px; min-height: 0; }
   }
   @media (max-width: 480px) { .tabs { grid-template-columns: 1fr; } .ba { grid-template-columns: 1fr; } }
+  .rules { margin: 16px 0 20px; padding-left: 20px; display: grid; gap: 8px; color: var(--ink-2); font-size: 17px; }
 </style>

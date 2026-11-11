@@ -23,19 +23,19 @@ const experience = [
 ];
 
 const work: { title: string; href: string; thumb: "portal" | "waste" | "edu" | "a11y"; what: string; outcome: string; tags: string[] }[] = [
-  { title: "From scattered approvals to one pipeline", href: "/work/design-portal", thumb: "portal",
+  { title: "Design-approval portal", href: "/work/design-portal", thumb: "portal",
     what: "A design-approval portal for a UK apparel supplier, its designers and its retail buyers, replacing phone calls, WhatsApp and email. Includes a voice-to-brief feature with 37 designed failure states.",
     outcome: "Live, about 1,000 users, workflow email cut from 1,000+ a day to zero, 300%+ productivity (measured by the client)",
     tags: ["B2B SaaS", "Design system", "Voice UI", "AI features"] },
-  { title: "One platform to run a waste-hauling business", href: "/work/waste-platform", thumb: "waste",
+  { title: "Waste-management platform", href: "/work/waste-platform", thumb: "waste",
     what: "Customer setup, billing and operations for a US waste-management software provider. A 50+ field spreadsheet became a four-step wizard.",
     outcome: "Shipped, Customer Delight Award",
     tags: ["Enterprise SaaS", "Information architecture", "Dashboards"] },
-  { title: "18 checks, 10 barriers: an accessibility audit", href: "/work/accessibility-audit", thumb: "a11y",
+  { title: "Accessibility audit", href: "/work/accessibility-audit", thumb: "a11y",
     what: "A WCAG 2.1 audit of a live consumer web app, with each finding rebuilt as a working lab you can try.",
     outcome: "10 of 18 checks failed, each with an owner and a fix",
     tags: ["Accessibility", "WCAG 2.1 AA", "Usability"] },
-  { title: "Four roles, one source of public money", href: "/work/edu-funds", thumb: "edu",
+  { title: "Education-funds platform", href: "/work/edu-funds", thumb: "edu",
     what: "An education-funds platform for a state programme: oversight, administrators, providers and families on one record. Designed for a bid that didn't win, and why that still mattered.",
     outcome: "Bid design, not awarded",
     tags: ["Gov-tech", "Multi-role UX", "Workflows"] },
@@ -145,10 +145,9 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
 
       <section id="expertise" class="sec" aria-label="Expertise">
         <h2 class="sec-h">Expertise</h2>
-        <ol class="list">
+        <ol class="list plain">
           {expertise.map((x, i) => (
             <li class="item">
-              <span class="when mono">{String(i + 1).padStart(2, "0")}</span>
               <div>
                 <h3>{x.title}</h3>
                 <p class="txt">{x.text}</p>
@@ -167,7 +166,7 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
             <li class="item">
               <StepArt kind={st.art} />
               <div>
-                <span class="when mono">Step {String(i + 1).padStart(2, "0")}</span>
+                <span class="when mono">Step {i + 1}</span>
                 <h3>{st.title}</h3>
                 <p class="txt">{st.text}</p>
               </div>
@@ -216,7 +215,7 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
   .pitch { color: var(--ink-2); margin-top: 14px; max-width: 30ch; }
 
   .toc { display: grid; gap: 4px; margin-top: 56px; width: max-content; }
-  .toc a { display: flex; align-items: center; gap: 16px; padding: 10px 0; text-decoration: none; font: 500 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); transition: color var(--t-micro); }
+  .toc a { display: flex; align-items: center; gap: 16px; padding: 10px 0; text-decoration: none; font: 500 14px var(--font); color: var(--ink-3); transition: color var(--t-micro); }
   .toc i { display: block; width: 32px; height: 1px; background: currentColor; transition: width .3s var(--ease); }
   .toc a:hover, .toc a.on { color: var(--ink); }
   .toc a:hover i, .toc a.on i { width: 64px; }
@@ -228,7 +227,7 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
 
   .right { padding: 88px 0 24px; }
   .sec { scroll-margin-top: 90px; margin-bottom: 112px; }
-  .sec-h { font: 500 12px var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--ink); margin-bottom: 24px; }
+  .sec-h { font: 600 15px var(--font); letter-spacing: -.01em; color: var(--ink); margin-bottom: 24px; }
   #about p { color: var(--ink-2); margin-bottom: 16px; }
   #about em { font-style: normal; color: var(--ink); font-weight: 500; }
 
@@ -238,7 +237,7 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
     .list:hover .item { opacity: .5; }
     .list .item:hover { opacity: 1; background: color-mix(in srgb, var(--surface) 70%, transparent); border-color: var(--line); }
   }
-  .when { padding-top: 4px; color: var(--ink-3); font-size: 11px; }
+  .when { padding-top: 4px; color: var(--ink-3); font-size: 13px; }
   .item h3 { font-size: 17px; font-weight: 500; letter-spacing: -.01em; line-height: 1.35; }
   .org { color: var(--ink-2); }
   .earlier { color: var(--ink-3); font-size: 15px; line-height: 1.5; }
@@ -246,7 +245,7 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
   .outcome { font-size: 14px; margin-top: 8px; }
   .proj { list-style: none; padding: 0; margin-top: 12px; display: grid; gap: 6px; }
   .proj li { display: grid; grid-template-columns: 88px 1fr; gap: 12px; color: var(--ink-2); font-size: 14px; line-height: 1.45; }
-  .proj .mono { color: var(--ink-3); font-size: 11px; padding-top: 3px; white-space: nowrap; }
+  .proj .mono { color: var(--ink-3); white-space: nowrap; }
   .chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
   .chips li { font: 500 12px var(--font); color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); border-radius: 999px; padding: 4px 12px; }
 
@@ -259,6 +258,7 @@ const steps: { art: "research" | "flow" | "system" | "states"; title: string; te
   .item:hover h3 a { color: var(--accent); }
 
   .works .item { grid-template-columns: 200px minmax(0, 1fr); }
+  .plain .item { grid-template-columns: minmax(0, 1fr); }
   .thumb { width: 200px; margin-top: 4px; }
 
   .more { display: inline-flex; gap: 6px; margin-top: 28px; font-weight: 500; text-decoration: none; border-bottom: 1px solid transparent; transition: border-color var(--t-micro); }
