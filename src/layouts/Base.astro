@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { GA_ID } from "../site-config";
 
 interface Props { title: string; description?: string; }
 const { title, description = "Ankur Singh, senior UX and product designer." } = Astro.props;
@@ -12,6 +13,12 @@ const { title, description = "Ankur Singh, senior UX and product designer." } = 
     // GitHub Pages can serve the custom domain over plain http, where the Private view can't decrypt
     // (browsers only allow crypto.subtle on https). Send every http visit to https.
     if (location.protocol === "http:" && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) location.replace("https:" + location.href.slice(5));
+    // One-click link from a résumé: ...#pv=<passphrase>. Take the passphrase out of the address bar before
+    // anything else (analytics included) can see it; site.ts unlocks with it. Fragments never reach the server.
+    else if (/(^#|&)pv=/.test(location.hash)) {
+      try { sessionStorage.setItem("pv-pass", new URLSearchParams(location.hash.slice(1)).get("pv") || ""); } catch {}
+      history.replaceState(null, "", location.pathname + location.search);
+    }
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{title}</title>
@@ -23,6 +30,31 @@ const { title, description = "Ankur Singh, senior UX and product designer." } = 
     // Apply the saved theme before first paint so there's no flash
     try { const t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch {}
   </script>
+  {GA_ID && (
+    <script is:inline define:vars={{ GA_ID }}>
+      // Google Analytics loads only after the visitor accepts in the consent bar (UK/EU privacy rules).
+      // Until then window.__track queues events in memory; nothing leaves the browser.
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () { dataLayer.push(arguments); };
+      const queue = [];
+      let loaded = false;
+      window.__loadGA = () => {
+        if (loaded) return;
+        loaded = true;
+        const s = document.createElement("script");
+        s.async = true;
+        s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA_ID;
+        document.head.appendChild(s);
+        gtag("js", new Date());
+        gtag("config", GA_ID);
+        queue.splice(0).forEach(([n, p]) => gtag("event", n, p));
+      };
+      window.__track = (name, params = {}) => loaded ? gtag("event", name, params) : queue.push([name, params]);
+      let c = null;
+      try { c = localStorage.getItem("analytics-consent"); } catch {}
+      if (c === "yes") window.__loadGA();
+    </script>
+  )}
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Caveat:wght@500&display=swap" rel="stylesheet" />
@@ -57,6 +89,13 @@ const { title, description = "Ankur Singh, senior UX and product designer." } = 
   </footer>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  {GA_ID && (
+    <div class="consent" id="consent" role="region" aria-label="Analytics" hidden>
+      <p>I use Google Analytics to see which work gets read. Cookies are set only if you accept.</p>
+      <div class="row"><button type="button" class="btn ghost" data-consent="no">No thanks</button><button type="button" class="btn" data-consent="yes">Accept</button></div>
+    </div>
+  )}
 
   <dialog id="unlockDlg" aria-labelledby="unlockTitle">
     <form method="dialog" id="unlockForm">
@@ -124,6 +163,16 @@ const { title, description = "Ankur Singh, senior UX and product designer." } = 
 
   .toast { position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 16px); opacity: 0; background: var(--ink); color: var(--bg); font: 500 13px var(--mono); padding: 10px 14px; border-radius: 8px; transition: all .35s var(--ease); z-index: 90; pointer-events: none; }
   .toast.on { opacity: 1; transform: translate(-50%, 0); }
+
+  .consent { position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 80; max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 16px;
+    padding: 12px 12px 12px 18px; background: var(--surface); color: var(--ink); border: 1px solid var(--line-strong); border-radius: var(--r-md); box-shadow: 0 8px 28px rgba(0, 0, 0, .12); }
+  .consent[hidden] { display: none; }
+  body:has(.consent:not([hidden])) .toast { bottom: 100px; }
+  @media (max-width: 560px) { body:has(.consent:not([hidden])) .toast { bottom: 156px; } }
+  .consent p { font-size: 14px; line-height: 1.45; margin: 0; flex: 1; }
+  .consent .row { display: flex; gap: 8px; flex-shrink: 0; }
+  .consent .btn { padding: 8px 14px; font-size: 14px; }
+  @media (max-width: 560px) { .consent { flex-direction: column; align-items: stretch; } .consent .row { justify-content: flex-end; } }
 
   dialog { border: 1px solid var(--line); border-radius: 14px; padding: 28px; max-width: 420px; width: calc(100% - 32px); background: var(--surface); color: var(--ink); }
   dialog::backdrop { background: rgba(15, 16, 18, .4); backdrop-filter: blur(6px); }

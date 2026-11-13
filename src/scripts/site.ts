@@ -139,6 +139,7 @@ $("#unlockForm")?.addEventListener("submit", async e => {
     dlg?.close();
     await applyPrivate(vaultKey);
     toast("Private view unlocked");
+    track("private_view_unlock", { method: "passphrase" });
   } catch {
     $("#unlockErr")!.textContent = "That passphrase didn't work.";
     dlg?.classList.remove("shake"); void dlg?.offsetWidth; dlg?.classList.add("shake");
@@ -147,8 +148,21 @@ $("#unlockForm")?.addEventListener("submit", async e => {
   }
 });
 
-// Stay unlocked across pages in the same tab
+// Stay unlocked across pages in the same tab, or unlock from a résumé's one-click link
+// (Base.astro moves the #pv= passphrase from the address bar into sessionStorage before anything else runs).
 (async () => {
+  const linkPass = sessionStorage.getItem("pv-pass");
+  sessionStorage.removeItem("pv-pass");
+  if (linkPass && !sessionStorage.getItem(KEY_STORE)) {
+    try {
+      vaultKey = await deriveKey(linkPass);
+      sessionStorage.setItem(KEY_STORE, btoa(String.fromCharCode(...new Uint8Array(await crypto.subtle.exportKey("raw", vaultKey)))));
+      await applyPrivate(vaultKey);
+      toast("Private view unlocked");
+      track("private_view_unlock", { method: "link" });
+    } catch { vaultKey = null; } // an old passphrase: the page stays public and the button still works
+    return;
+  }
   const saved = sessionStorage.getItem(KEY_STORE);
   if (!saved) return;
   try {
@@ -156,6 +170,30 @@ $("#unlockForm")?.addEventListener("submit", async e => {
     await applyPrivate(vaultKey);
   } catch { sessionStorage.removeItem(KEY_STORE); }
 })();
+
+// Analytics (only active when GA_ID is set in site-config.ts; events wait in memory until the visitor accepts)
+function track(name: string, params: Record<string, string> = {}) { (window as any).__track?.(name, params); }
+document.addEventListener("click", e => {
+  const a = (e.target as Element).closest?.("a");
+  if (!a) return;
+  const href = a.getAttribute("href") || "";
+  if (/\.pdf($|\?)/i.test(href)) track("resume_download", { file: href });
+  else if (href.startsWith("mailto:")) track("contact_click", { type: "email" });
+  else if (href.includes("linkedin.com")) track("contact_click", { type: "linkedin" });
+});
+const consent = $("#consent");
+if (consent) {
+  let choice: string | null = null;
+  try { choice = localStorage.getItem("analytics-consent"); } catch {}
+  if (!choice) consent.hidden = false;
+  consent.addEventListener("click", e => {
+    const v = (e.target as Element).closest<HTMLElement>("[data-consent]")?.dataset.consent;
+    if (!v) return;
+    try { localStorage.setItem("analytics-consent", v); } catch {}
+    consent.hidden = true;
+    if (v === "yes") (window as any).__loadGA?.();
+  });
+}
 
 // Light / dark theme toggle. With no saved choice, the system setting decides.
 const themeBtn = $<HTMLButtonElement>("#themeBtn");
